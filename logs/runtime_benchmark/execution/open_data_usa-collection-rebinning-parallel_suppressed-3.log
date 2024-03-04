@@ -1,0 +1,11 @@
+2024-01-18 05:28:04 | DEBUG   | {'input': PosixPath('data/open_data_usa/indices/runtime_benchmark/rebinning.zst'), 'input_type': 'index', 'queries': PosixPath('data/open_data_usa/queries/runtime_benchmark.zst'), 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': True, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/open_data_usa-collection-rebinning-parallel_suppressed-3.log')}
+2024-01-18 05:28:04 | DEBUG   | Loading input data from data/open_data_usa/indices/runtime_benchmark/rebinning.zst
+2024-01-18 05:28:05 | DEBUG   | Loading queries from data/open_data_usa/queries/runtime_benchmark.zst
+2024-01-18 05:28:05 | DEBUG   | Starting execution
+2024-01-18 05:28:05 | DEBUG   | Initalizing index worker pool
+2024-01-18 05:30:28 | DEBUG   | Index worker pool initialized
+2024-01-18 05:30:28 | DEBUG   | Raw index-based query execution time: 0.142448s
+2024-01-18 05:30:28 | TRACE   | query_collection_time, 0.142447579652071
+2024-01-18 05:30:28 | DEBUG   | Execution finished
+2024-01-18 05:30:28 | INFO    | Ran 999 queries in 143.9s
+2024-01-18 05:30:28 | TRACE   | execution_time, 143.89609890058637

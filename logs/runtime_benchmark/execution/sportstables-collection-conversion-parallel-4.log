@@ -1,0 +1,11 @@
+2024-01-18 13:05:58 | DEBUG   | {'input': PosixPath('data/sportstables/indices/runtime_benchmark/conversion.zst'), 'input_type': 'index', 'queries': PosixPath('data/sportstables/queries/runtime_benchmark.zst'), 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/sportstables-collection-conversion-parallel-4.log')}
+2024-01-18 13:05:58 | DEBUG   | Loading input data from data/sportstables/indices/runtime_benchmark/conversion.zst
+2024-01-18 13:05:58 | DEBUG   | Loading queries from data/sportstables/queries/runtime_benchmark.zst
+2024-01-18 13:05:58 | DEBUG   | Starting execution
+2024-01-18 13:05:58 | DEBUG   | Initalizing index worker pool
+2024-01-18 13:08:26 | DEBUG   | Index worker pool initialized
+2024-01-18 13:08:30 | DEBUG   | Raw index-based query execution time: 3.954667s
+2024-01-18 13:08:30 | TRACE   | query_collection_time, 3.954666657373309
+2024-01-18 13:08:30 | DEBUG   | Execution finished
+2024-01-18 13:08:30 | INFO    | Ran 999 queries in 152.1s
+2024-01-18 13:08:30 | TRACE   | execution_time, 152.1209145449102

@@ -1,0 +1,10 @@
+2024-01-17 22:45:07 | DEBUG   | {'input': PosixPath('data/open_data_usa/histograms.zst'), 'input_type': 'histograms', 'query': ['0.1', 'lt', '50'], 'estimation_mode': 'over', 'index_mode': None, 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/open_data_usa-query-iterative-single-1.log')}
+2024-01-17 22:45:07 | DEBUG   | Loading input data from data/open_data_usa/histograms.zst
+2024-01-17 22:45:08 | DEBUG   | Starting execution
+2024-01-17 22:45:09 | TRACE   | query_time, 1.0766847431659698
+2024-01-17 22:45:09 | DEBUG   | Raw naive query execution time: 1.076981s
+2024-01-17 22:45:09 | TRACE   | query_collection_time, 1.0769807193428278
+2024-01-17 22:45:09 | DEBUG   | Execution finished
+2024-01-17 22:45:09 | INFO    | Ran query in 1.077s
+2024-01-17 22:45:09 | TRACE   | execution_time, 1.0771813094615936
+2024-01-17 22:45:09 | TRACE   | total_time, 1.8116405867040157

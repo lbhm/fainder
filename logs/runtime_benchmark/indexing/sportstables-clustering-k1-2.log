@@ -1,0 +1,16 @@
+2024-01-18 10:57:43 | DEBUG   | {'input': PosixPath('data/sportstables/histograms.zst'), 'output': 'data/sportstables/clusterings/runtime_benchmark/k1-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [1, 1], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-clustering-k1-2.log')}
+2024-01-18 10:57:43 | DEBUG   | Loading histograms from data/sportstables/histograms.zst
+2024-01-18 10:57:44 | DEBUG   | Computing features
+2024-01-18 10:57:46 | DEBUG   | Computing feature clustering
+2024-01-18 10:57:46 | DEBUG   | Assigning histograms to clusters
+2024-01-18 10:57:46 | DEBUG   | Computing cluster bins
+2024-01-18 10:57:46 | DEBUG   | Number of clusters: 1
+2024-01-18 10:57:46 | DEBUG   | Histograms per cluster: [19862]
+2024-01-18 10:57:46 | DEBUG   | Bins per cluster: [50000]
+2024-01-18 10:57:46 | DEBUG   | Cluster ranges: (-1165, 3.0006e+07)
+2024-01-18 10:57:46 | DEBUG   | Uniform bin widths: 600.14
+2024-01-18 10:57:46 | DEBUG   | Predicted (rebinning) index size: 5958.72 MB
+2024-01-18 10:57:46 | INFO    | Clustered 19862 histograms into 1 clusters in 2.73s
+2024-01-18 10:57:46 | TRACE   | total_time, 2.734980311244726
+2024-01-18 10:57:46 | DEBUG   | Saving output
+2024-01-18 10:57:47 | DEBUG   | Saved clustering to data/sportstables/clusterings/runtime_benchmark/k1-n50000.zst

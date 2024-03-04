@@ -1,0 +1,17 @@
+2024-01-18 10:00:27 | DEBUG   | {'input': PosixPath('data/sportstables/histograms.zst'), 'output': 'data/sportstables/clusterings/runtime_benchmark/k40-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [40, 40], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-clustering-k40-1.log')}
+2024-01-18 10:00:27 | DEBUG   | Loading histograms from data/sportstables/histograms.zst
+2024-01-18 10:00:27 | DEBUG   | Computing features
+2024-01-18 10:00:29 | DEBUG   | Computing feature clustering
+2024-01-18 10:00:30 | DEBUG   | Score for 40 clusters: 31240.00268600304
+2024-01-18 10:00:30 | DEBUG   | Assigning histograms to clusters
+2024-01-18 10:00:30 | DEBUG   | Computing cluster bins
+2024-01-18 10:00:30 | DEBUG   | Number of clusters: 40
+2024-01-18 10:00:30 | DEBUG   | Histograms per cluster: [466, 490, 474, 1043, 667, 159, 655, 922, 661, 477, 433, 561, 174, 256, 833, 255, 493, 240, 483, 752, 574, 754, 250, 649, 1054, 302, 717, 383, 320, 694, 184, 378, 368, 689, 217, 633, 154, 395, 355, 298]
+2024-01-18 10:00:30 | DEBUG   | Bins per cluster: [1173, 1233, 1193, 2622, 1678, 401, 1648, 2318, 1663, 1200, 1090, 1411, 439, 645, 2095, 643, 1241, 605, 1215, 1891, 1444, 1896, 630, 1633, 2650, 761, 1803, 964, 806, 1746, 464, 952, 927, 1733, 547, 1592, 389, 994, 894, 751]
+2024-01-18 10:00:30 | DEBUG   | Cluster ranges: (5, 76.2), (0, 17), (0, 5476), (156, 3.0006e+07), (0, 34), (1.5, 20), (-283.04, 267.7), (0.056, 6.2), (0.82, 943), (0, 93), (0.1, 161), (31, 1488.1), (-14.68, 19.6), (9, 66.4), (0, 6), (-1165, 5477), (1, 37.6), (66, 246.3), (-123.11, 67.7), (0, 20), (1, 12.1), (0, 52), (-19.75, 28), (0, 2.31), (21, 3e+07), (0.1, 67), (0, 213), (9, 200), (0, 13), (0, 25), (9, 8032), (0.1, 30), (2, 26), (4, 96), (4.7, 63.6), (0, 6.3), (-5.9, 4.8), (6, 61), (1, 7755), (0.1, 22)
+2024-01-18 10:00:30 | DEBUG   | Uniform bin widths: 0.0607, 0.0138, 4.5901, 11444, 0.0203, 0.0461, 0.3342, 0.0027, 0.5666, 0.0775, 0.1476, 1.0327, 0.0781, 0.089, 0.0029, 10.33, 0.0295, 0.298, 0.157, 0.0106, 0.0077, 0.0274, 0.0758, 0.0014, 11321, 0.0879, 0.1181, 0.1981, 0.0161, 0.0143, 17.291, 0.0314, 0.0259, 0.0531, 0.1077, 0.004, 0.0275, 0.0553, 8.6734, 0.0292
+2024-01-18 10:00:30 | DEBUG   | Predicted (rebinning) index size: 182.72 MB
+2024-01-18 10:00:30 | INFO    | Clustered 19862 histograms into 40 clusters in 2.87s
+2024-01-18 10:00:30 | TRACE   | total_time, 2.8663808181881905
+2024-01-18 10:00:30 | DEBUG   | Saving output
+2024-01-18 10:00:30 | DEBUG   | Saved clustering to data/sportstables/clusterings/runtime_benchmark/k40-n50000.zst

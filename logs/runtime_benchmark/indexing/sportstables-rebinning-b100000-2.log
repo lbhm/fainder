@@ -1,0 +1,9 @@
+2024-01-18 11:21:06 | DEBUG   | {'input': PosixPath('data/sportstables/clusterings/runtime_benchmark/k10-n100000.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/sportstables/indices/runtime_benchmark'), 'index_file': 'rebinning-n100000.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-rebinning-n100000-2.log')}
+2024-01-18 11:21:06 | DEBUG   | Loading histogram clusters from data/sportstables/clusterings/runtime_benchmark/k10-n100000.zst
+2024-01-18 11:21:06 | DEBUG   | Starting rebinning
+2024-01-18 11:21:15 | DEBUG   | Starting index creation
+2024-01-18 11:21:27 | DEBUG   | Veryfying index
+2024-01-18 11:21:27 | DEBUG   | Index size: 1252.18 MB
+2024-01-18 11:21:27 | INFO    | Created rebinning-based index in 20.81s
+2024-01-18 11:21:27 | TRACE   | total_time, 20.80941592529416
+2024-01-18 11:21:29 | DEBUG   | Saved index to data/sportstables/indices/runtime_benchmark/rebinning-n100000.zst

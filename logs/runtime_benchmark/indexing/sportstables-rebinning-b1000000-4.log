@@ -1,0 +1,18 @@
+2024-01-18 13:48:16 | DEBUG   | {'input': PosixPath('data/sportstables/clusterings/runtime_benchmark/k10-n1000000.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/sportstables/indices/runtime_benchmark'), 'index_file': 'rebinning-n1000000.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-rebinning-n1000000-4.log')}
+2024-01-18 13:48:16 | DEBUG   | Loading histogram clusters from data/sportstables/clusterings/runtime_benchmark/k10-n1000000.zst
+2024-01-18 13:48:17 | DEBUG   | Starting rebinning
+2024-01-18 13:49:04 | DEBUG   | Starting index creation
+2024-01-18 13:51:24 | DEBUG   | Veryfying index
+2024-01-18 13:51:24 | WARNING | 14 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 13:51:24 | WARNING | 110 percentiles do not add up to 1 (maximum deviation: 0.0009765625)
+2024-01-18 13:51:24 | WARNING | 15 percentiles do not add up to 1 (maximum deviation: 0.0009765625)
+2024-01-18 13:51:24 | WARNING | 82 percentiles do not add up to 1 (maximum deviation: 0.0009765625)
+2024-01-18 13:51:24 | WARNING | 15 percentiles do not add up to 1 (maximum deviation: 0.0009765625)
+2024-01-18 13:51:24 | WARNING | 37 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 13:51:24 | WARNING | 5 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 13:51:24 | WARNING | 1 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 13:51:24 | WARNING | 1 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 13:51:24 | DEBUG   | Index size: 12521.28 MB
+2024-01-18 13:51:24 | INFO    | Created rebinning-based index in 187.53s
+2024-01-18 13:51:24 | TRACE   | total_time, 187.5314722135663
+2024-01-18 13:51:35 | DEBUG   | Saved index to data/sportstables/indices/runtime_benchmark/rebinning-n1000000.zst

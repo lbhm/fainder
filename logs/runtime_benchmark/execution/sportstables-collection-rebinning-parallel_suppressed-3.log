@@ -1,0 +1,11 @@
+2024-01-18 12:00:31 | DEBUG   | {'input': PosixPath('data/sportstables/indices/runtime_benchmark/rebinning.zst'), 'input_type': 'index', 'queries': PosixPath('data/sportstables/queries/runtime_benchmark.zst'), 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': True, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/sportstables-collection-rebinning-parallel_suppressed-3.log')}
+2024-01-18 12:00:31 | DEBUG   | Loading input data from data/sportstables/indices/runtime_benchmark/rebinning.zst
+2024-01-18 12:00:32 | DEBUG   | Loading queries from data/sportstables/queries/runtime_benchmark.zst
+2024-01-18 12:00:32 | DEBUG   | Starting execution
+2024-01-18 12:00:32 | DEBUG   | Initalizing index worker pool
+2024-01-18 12:02:57 | DEBUG   | Index worker pool initialized
+2024-01-18 12:02:57 | DEBUG   | Raw index-based query execution time: 0.072039s
+2024-01-18 12:02:57 | TRACE   | query_collection_time, 0.07203931920230389
+2024-01-18 12:02:57 | DEBUG   | Execution finished
+2024-01-18 12:02:57 | INFO    | Ran 999 queries in 145.5s
+2024-01-18 12:02:57 | TRACE   | execution_time, 145.5255804453045

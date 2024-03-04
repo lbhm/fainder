@@ -1,0 +1,10 @@
+2024-01-18 18:10:38 | DEBUG   | {'input': PosixPath('data/open_data_usa/clusterings/runtime_benchmark/k10-n100000.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/open_data_usa/indices/runtime_benchmark'), 'index_file': 'conversion-n100000.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-conversion-n100000-2.log')}
+2024-01-18 18:10:38 | DEBUG   | Loading histogram clusters from data/open_data_usa/clusterings/runtime_benchmark/k10-n100000.zst
+2024-01-18 18:10:39 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-01-18 18:10:39 | DEBUG   | Starting conversion
+2024-01-18 18:11:30 | DEBUG   | Starting index creation
+2024-01-18 18:14:44 | DEBUG   | Veryfying index
+2024-01-18 18:14:44 | DEBUG   | Index size: 9066.88 MB
+2024-01-18 18:14:44 | INFO    | Created conversion-based index in 245.58s
+2024-01-18 18:14:44 | TRACE   | total_time, 245.5803673490882
+2024-01-18 18:14:49 | DEBUG   | Saved index to data/open_data_usa/indices/runtime_benchmark/conversion-n100000.zst

@@ -1,0 +1,165 @@
+2024-01-17 22:36:02 | DEBUG   | {'input': PosixPath('data/sportstables/histograms.zst'), 'output': 'data/sportstables/clusterings/runtime_benchmark/default.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [2, 150], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-clustering.log')}
+2024-01-17 22:36:02 | DEBUG   | Loading histograms from data/sportstables/histograms.zst
+2024-01-17 22:36:02 | DEBUG   | Computing features
+2024-01-17 22:36:05 | DEBUG   | Computing feature clustering
+2024-01-17 22:39:58 | DEBUG   | Score for  2 clusters: 22133.114179950222
+2024-01-17 22:39:58 | DEBUG   | Score for  3 clusters: 23771.964226762564
+2024-01-17 22:39:58 | DEBUG   | Score for  4 clusters: 25826.82572457137
+2024-01-17 22:39:58 | DEBUG   | Score for  5 clusters: 23049.382831593
+2024-01-17 22:39:58 | DEBUG   | Score for  6 clusters: 24474.266723546254
+2024-01-17 22:39:58 | DEBUG   | Score for  7 clusters: 23062.097576182015
+2024-01-17 22:39:58 | DEBUG   | Score for  8 clusters: 25668.573225329106
+2024-01-17 22:39:58 | DEBUG   | Score for  9 clusters: 27033.10629999204
+2024-01-17 22:39:58 | DEBUG   | Score for 10 clusters: 25305.58635279746
+2024-01-17 22:39:58 | DEBUG   | Score for 11 clusters: 24480.748942140548
+2024-01-17 22:39:58 | DEBUG   | Score for 12 clusters: 24490.442287068447
+2024-01-17 22:39:58 | DEBUG   | Score for 13 clusters: 24775.193338638706
+2024-01-17 22:39:58 | DEBUG   | Score for 14 clusters: 24729.50991024639
+2024-01-17 22:39:58 | DEBUG   | Score for 15 clusters: 26944.06465755468
+2024-01-17 22:39:58 | DEBUG   | Score for 16 clusters: 26960.48080316263
+2024-01-17 22:39:58 | DEBUG   | Score for 17 clusters: 27393.568701161315
+2024-01-17 22:39:58 | DEBUG   | Score for 18 clusters: 27317.258295507352
+2024-01-17 22:39:58 | DEBUG   | Score for 19 clusters: 27949.718384407563
+2024-01-17 22:39:58 | DEBUG   | Score for 20 clusters: 27929.184574288276
+2024-01-17 22:39:58 | DEBUG   | Score for 21 clusters: 27894.873075263957
+2024-01-17 22:39:58 | DEBUG   | Score for 22 clusters: 28489.557711182664
+2024-01-17 22:39:58 | DEBUG   | Score for 23 clusters: 29453.1082934469
+2024-01-17 22:39:58 | DEBUG   | Score for 24 clusters: 30935.340367198874
+2024-01-17 22:39:58 | DEBUG   | Score for 25 clusters: 31409.0451304617
+2024-01-17 22:39:58 | DEBUG   | Score for 26 clusters: 30852.62996959773
+2024-01-17 22:39:58 | DEBUG   | Score for 27 clusters: 30869.061890232773
+2024-01-17 22:39:58 | DEBUG   | Score for 28 clusters: 31526.570880908213
+2024-01-17 22:39:58 | DEBUG   | Score for 29 clusters: 31380.247720082883
+2024-01-17 22:39:58 | DEBUG   | Score for 30 clusters: 31382.11311314925
+2024-01-17 22:39:58 | DEBUG   | Score for 31 clusters: 31424.851106839364
+2024-01-17 22:39:58 | DEBUG   | Score for 32 clusters: 31435.252550507237
+2024-01-17 22:39:58 | DEBUG   | Score for 33 clusters: 32420.071521726884
+2024-01-17 22:39:58 | DEBUG   | Score for 34 clusters: 32220.00361280959
+2024-01-17 22:39:58 | DEBUG   | Score for 35 clusters: 32614.686977108184
+2024-01-17 22:39:58 | DEBUG   | Score for 36 clusters: 32242.63070470816
+2024-01-17 22:39:58 | DEBUG   | Score for 37 clusters: 31851.263705330603
+2024-01-17 22:39:58 | DEBUG   | Score for 38 clusters: 31860.983214831173
+2024-01-17 22:39:58 | DEBUG   | Score for 39 clusters: 31733.057491967436
+2024-01-17 22:39:58 | DEBUG   | Score for 40 clusters: 32086.516625192253
+2024-01-17 22:39:58 | DEBUG   | Score for 41 clusters: 32496.25783031915
+2024-01-17 22:39:58 | DEBUG   | Score for 42 clusters: 32405.340539161265
+2024-01-17 22:39:58 | DEBUG   | Score for 43 clusters: 32404.943157435653
+2024-01-17 22:39:58 | DEBUG   | Score for 44 clusters: 33233.54896059558
+2024-01-17 22:39:58 | DEBUG   | Score for 45 clusters: 33040.60803415921
+2024-01-17 22:39:58 | DEBUG   | Score for 46 clusters: 32752.140511191155
+2024-01-17 22:39:58 | DEBUG   | Score for 47 clusters: 32544.71301895303
+2024-01-17 22:39:58 | DEBUG   | Score for 48 clusters: 32619.809219180355
+2024-01-17 22:39:58 | DEBUG   | Score for 49 clusters: 32558.449639003844
+2024-01-17 22:39:58 | DEBUG   | Score for 50 clusters: 32712.084290783827
+2024-01-17 22:39:58 | DEBUG   | Score for 51 clusters: 32254.289474673464
+2024-01-17 22:39:58 | DEBUG   | Score for 52 clusters: 32125.43091019532
+2024-01-17 22:39:58 | DEBUG   | Score for 53 clusters: 31841.350818575727
+2024-01-17 22:39:58 | DEBUG   | Score for 54 clusters: 32503.896584668782
+2024-01-17 22:39:58 | DEBUG   | Score for 55 clusters: 33232.97427592869
+2024-01-17 22:39:58 | DEBUG   | Score for 56 clusters: 33233.5114089194
+2024-01-17 22:39:58 | DEBUG   | Score for 57 clusters: 33145.41341060393
+2024-01-17 22:39:58 | DEBUG   | Score for 58 clusters: 33485.44431184256
+2024-01-17 22:39:58 | DEBUG   | Score for 59 clusters: 33429.20122452502
+2024-01-17 22:39:58 | DEBUG   | Score for 60 clusters: 33184.37377746766
+2024-01-17 22:39:58 | DEBUG   | Score for 61 clusters: 33272.18997020048
+2024-01-17 22:39:58 | DEBUG   | Score for 62 clusters: 32957.31872597714
+2024-01-17 22:39:58 | DEBUG   | Score for 63 clusters: 33288.7460809821
+2024-01-17 22:39:58 | DEBUG   | Score for 64 clusters: 33737.37320537517
+2024-01-17 22:39:58 | DEBUG   | Score for 65 clusters: 33874.01895425481
+2024-01-17 22:39:58 | DEBUG   | Score for 66 clusters: 34140.30562864974
+2024-01-17 22:39:58 | DEBUG   | Score for 67 clusters: 34327.620964504786
+2024-01-17 22:39:58 | DEBUG   | Score for 68 clusters: 34336.54653031294
+2024-01-17 22:39:58 | DEBUG   | Score for 69 clusters: 34310.03553799723
+2024-01-17 22:39:58 | DEBUG   | Score for 70 clusters: 34491.3272456509
+2024-01-17 22:39:58 | DEBUG   | Score for 71 clusters: 34445.54322378562
+2024-01-17 22:39:58 | DEBUG   | Score for 72 clusters: 34154.71688054601
+2024-01-17 22:39:58 | DEBUG   | Score for 73 clusters: 34077.48566921954
+2024-01-17 22:39:58 | DEBUG   | Score for 74 clusters: 33903.677858828654
+2024-01-17 22:39:58 | DEBUG   | Score for 75 clusters: 33800.77914971282
+2024-01-17 22:39:58 | DEBUG   | Score for 76 clusters: 33800.85444772861
+2024-01-17 22:39:58 | DEBUG   | Score for 77 clusters: 33576.65523848794
+2024-01-17 22:39:58 | DEBUG   | Score for 78 clusters: 33723.98393274192
+2024-01-17 22:39:58 | DEBUG   | Score for 79 clusters: 33729.64237653581
+2024-01-17 22:39:58 | DEBUG   | Score for 80 clusters: 33609.712282124114
+2024-01-17 22:39:58 | DEBUG   | Score for 81 clusters: 33574.88263444515
+2024-01-17 22:39:58 | DEBUG   | Score for 82 clusters: 33295.31216366299
+2024-01-17 22:39:58 | DEBUG   | Score for 83 clusters: 33262.752270461744
+2024-01-17 22:39:58 | DEBUG   | Score for 84 clusters: 33246.52764288192
+2024-01-17 22:39:58 | DEBUG   | Score for 85 clusters: 33167.4389117553
+2024-01-17 22:39:58 | DEBUG   | Score for 86 clusters: 32984.75225761529
+2024-01-17 22:39:58 | DEBUG   | Score for 87 clusters: 33128.668459598564
+2024-01-17 22:39:58 | DEBUG   | Score for 88 clusters: 33008.2308188461
+2024-01-17 22:39:58 | DEBUG   | Score for 89 clusters: 32928.487916475286
+2024-01-17 22:39:58 | DEBUG   | Score for 90 clusters: 33415.9419709648
+2024-01-17 22:39:58 | DEBUG   | Score for 91 clusters: 33171.8079116198
+2024-01-17 22:39:58 | DEBUG   | Score for 92 clusters: 33120.261864166794
+2024-01-17 22:39:58 | DEBUG   | Score for 93 clusters: 32915.28880274731
+2024-01-17 22:39:58 | DEBUG   | Score for 94 clusters: 33127.526757616026
+2024-01-17 22:39:58 | DEBUG   | Score for 95 clusters: 32992.27541737376
+2024-01-17 22:39:58 | DEBUG   | Score for 96 clusters: 33252.92492540577
+2024-01-17 22:39:58 | DEBUG   | Score for 97 clusters: 33353.47249978792
+2024-01-17 22:39:58 | DEBUG   | Score for 98 clusters: 33243.88534038936
+2024-01-17 22:39:58 | DEBUG   | Score for 99 clusters: 32951.59613500247
+2024-01-17 22:39:58 | DEBUG   | Score for 100 clusters: 32938.2376454814
+2024-01-17 22:39:58 | DEBUG   | Score for 101 clusters: 32945.33840932105
+2024-01-17 22:39:58 | DEBUG   | Score for 102 clusters: 32905.44426263951
+2024-01-17 22:39:58 | DEBUG   | Score for 103 clusters: 33867.87315331449
+2024-01-17 22:39:58 | DEBUG   | Score for 104 clusters: 33316.304243203536
+2024-01-17 22:39:58 | DEBUG   | Score for 105 clusters: 33602.02720810779
+2024-01-17 22:39:58 | DEBUG   | Score for 106 clusters: 33407.95705681534
+2024-01-17 22:39:58 | DEBUG   | Score for 107 clusters: 33663.33903002107
+2024-01-17 22:39:58 | DEBUG   | Score for 108 clusters: 33888.93078768473
+2024-01-17 22:39:58 | DEBUG   | Score for 109 clusters: 33421.563991048395
+2024-01-17 22:39:58 | DEBUG   | Score for 110 clusters: 33164.88581256154
+2024-01-17 22:39:58 | DEBUG   | Score for 111 clusters: 33264.0208981997
+2024-01-17 22:39:58 | DEBUG   | Score for 112 clusters: 33588.03575506241
+2024-01-17 22:39:58 | DEBUG   | Score for 113 clusters: 33802.855222924736
+2024-01-17 22:39:58 | DEBUG   | Score for 114 clusters: 33862.60861602207
+2024-01-17 22:39:58 | DEBUG   | Score for 115 clusters: 33578.65719500686
+2024-01-17 22:39:58 | DEBUG   | Score for 116 clusters: 33423.51587322164
+2024-01-17 22:39:58 | DEBUG   | Score for 117 clusters: 33784.92810449058
+2024-01-17 22:39:58 | DEBUG   | Score for 118 clusters: 33140.90809542711
+2024-01-17 22:39:58 | DEBUG   | Score for 119 clusters: 32930.713014997025
+2024-01-17 22:39:58 | DEBUG   | Score for 120 clusters: 32938.79346057582
+2024-01-17 22:39:58 | DEBUG   | Score for 121 clusters: 33311.407781305425
+2024-01-17 22:39:58 | DEBUG   | Score for 122 clusters: 33708.381063765366
+2024-01-17 22:39:58 | DEBUG   | Score for 123 clusters: 33231.18999820067
+2024-01-17 22:39:58 | DEBUG   | Score for 124 clusters: 33780.890271460084
+2024-01-17 22:39:58 | DEBUG   | Score for 125 clusters: 33971.519417828495
+2024-01-17 22:39:58 | DEBUG   | Score for 126 clusters: 33198.31876835957
+2024-01-17 22:39:58 | DEBUG   | Score for 127 clusters: 33607.75177046492
+2024-01-17 22:39:58 | DEBUG   | Score for 128 clusters: 32930.832642862326
+2024-01-17 22:39:58 | DEBUG   | Score for 129 clusters: 33379.83595363634
+2024-01-17 22:39:58 | DEBUG   | Score for 130 clusters: 33083.09562178338
+2024-01-17 22:39:58 | DEBUG   | Score for 131 clusters: 33080.729428575054
+2024-01-17 22:39:58 | DEBUG   | Score for 132 clusters: 33515.17813235301
+2024-01-17 22:39:58 | DEBUG   | Score for 133 clusters: 33544.10285368156
+2024-01-17 22:39:58 | DEBUG   | Score for 134 clusters: 33219.531532332825
+2024-01-17 22:39:58 | DEBUG   | Score for 135 clusters: 33670.06148298788
+2024-01-17 22:39:58 | DEBUG   | Score for 136 clusters: 33499.5273727694
+2024-01-17 22:39:58 | DEBUG   | Score for 137 clusters: 33811.26852813813
+2024-01-17 22:39:58 | DEBUG   | Score for 138 clusters: 33216.946231288646
+2024-01-17 22:39:58 | DEBUG   | Score for 139 clusters: 33310.844084120676
+2024-01-17 22:39:58 | DEBUG   | Score for 140 clusters: 33392.70067977536
+2024-01-17 22:39:58 | DEBUG   | Score for 141 clusters: 33639.55986934736
+2024-01-17 22:39:58 | DEBUG   | Score for 142 clusters: 33401.741667792834
+2024-01-17 22:39:58 | DEBUG   | Score for 143 clusters: 33534.62749911765
+2024-01-17 22:39:58 | DEBUG   | Score for 144 clusters: 33291.72269215897
+2024-01-17 22:39:58 | DEBUG   | Score for 145 clusters: 33742.35537135598
+2024-01-17 22:39:58 | DEBUG   | Score for 146 clusters: 33307.970365031775
+2024-01-17 22:39:58 | DEBUG   | Score for 147 clusters: 33360.551758145615
+2024-01-17 22:39:58 | DEBUG   | Score for 148 clusters: 33511.25167660751
+2024-01-17 22:39:58 | DEBUG   | Score for 149 clusters: 33307.60552394366
+2024-01-17 22:39:58 | DEBUG   | Score for 150 clusters: 33124.96261666847
+2024-01-17 22:39:58 | DEBUG   | Assigning histograms to clusters
+2024-01-17 22:39:58 | DEBUG   | Computing cluster bins
+2024-01-17 22:39:58 | DEBUG   | Number of clusters: 70
+2024-01-17 22:39:58 | DEBUG   | Histograms per cluster: [458, 248, 393, 514, 189, 739, 331, 104, 339, 219, 231, 339, 317, 437, 322, 645, 114, 340, 281, 178, 239, 226, 266, 253, 495, 272, 171, 296, 760, 151, 261, 440, 283, 315, 284, 622, 444, 182, 132, 298, 357, 91, 224, 105, 175, 212, 177, 104, 183, 252, 243, 46, 343, 539, 142, 354, 315, 261, 486, 196, 168, 306, 112, 191, 147, 220, 330, 174, 116, 165]
+2024-01-17 22:39:58 | DEBUG   | Bins per cluster: [1151, 624, 988, 1291, 476, 1856, 832, 263, 852, 551, 581, 852, 797, 1098, 810, 1620, 288, 855, 707, 449, 602, 569, 669, 637, 1244, 684, 431, 745, 1908, 381, 657, 1106, 712, 792, 714, 1562, 1116, 459, 333, 750, 898, 230, 564, 265, 441, 534, 446, 263, 461, 634, 612, 117, 862, 1354, 358, 890, 792, 657, 1221, 494, 423, 770, 283, 481, 371, 554, 830, 438, 293, 416]
+2024-01-17 22:39:58 | DEBUG   | Cluster ranges: (0, 13.2), (2, 82), (0, 115), (39, 6267), (2, 25), (0.056, 1), (0, 49), (-283.04, 376), (0, 29), (-123.11, 66), (1, 7755), (8, 56), (1.03, 16), (0, 3), (34, 260), (0, 2.31), (-18, 26), (0, 613), (0.1, 30), (66, 246.3), (-46, 117.7), (0.1, 317), (0.1, 22.1), (7.7, 63.6), (0, 13), (5, 65), (0, 93), (16, 108), (156, 3.0006e+07), (-5.9, 3.8), (2, 30), (0.82, 906), (0.1, 38), (23, 525), (0.1, 114), (0, 6), (0, 22.9), (-17.4, 20.9), (0, 5476), (2, 36), (0, 20), (0, 10), (0, 30.7), (64, 162), (0.1, 67), (5, 8032), (1, 16), (-11.13, 17.4), (-1165, 5477), (1, 5.65), (0, 59), (473, 3e+07), (0, 224), (0, 9), (3, 186.62), (0, 19.5), (22, 371), (10, 66.4), (140, 2023), (0, 67), (19, 76.2), (0, 38), (0.1, 13), (0.063, 7.9), (2.03, 941), (-172.07, 198), (18, 92), (-193.85, 86), (-18.5, 67.7), (-45, 37)
+2024-01-17 22:39:58 | DEBUG   | Uniform bin widths: 0.0115, 0.1282, 0.1164, 4.8242, 0.0483, 0.0005, 0.0589, 2.5059, 0.034, 0.3432, 13.346, 0.0563, 0.0188, 0.0027, 0.279, 0.0014, 0.1528, 0.717, 0.0423, 0.4016, 0.2719, 0.5569, 0.0329, 0.0878, 0.0105, 0.0877, 0.2158, 0.1235, 15726, 0.0255, 0.0426, 0.8184, 0.0532, 0.6338, 0.1595, 0.0038, 0.0205, 0.0834, 16.444, 0.0453, 0.0223, 0.0435, 0.0544, 0.3698, 0.1517, 15.032, 0.0336, 0.1085, 14.408, 0.0073, 0.0964, 2.5641e+05, 0.2599, 0.0066, 0.5129, 0.0219, 0.4407, 0.0858, 1.5422, 0.1356, 0.1352, 0.0494, 0.0456, 0.0163, 2.5309, 0.668, 0.0892, 0.6389, 0.2942, 0.1971
+2024-01-17 22:39:58 | DEBUG   | Predicted (rebinning) index size: 108.53 MB
+2024-01-17 22:39:58 | INFO    | Clustered 19862 histograms into 70 clusters in 236.04s
+2024-01-17 22:39:58 | TRACE   | total_time, 236.04339801892638
+2024-01-17 22:39:58 | DEBUG   | Saving output
+2024-01-17 22:39:59 | DEBUG   | Saved clustering to data/sportstables/clusterings/runtime_benchmark/default.zst

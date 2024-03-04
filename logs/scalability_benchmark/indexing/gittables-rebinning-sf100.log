@@ -1,0 +1,10 @@
+2024-01-22 23:19:30 | DEBUG   | {'input': PosixPath('data/gittables/clusterings/scalability_benchmark/sf100.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/gittables/indices/scalability_benchmark'), 'index_file': 'rebinning-sf100.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/scalability_benchmark/indexing/gittables-rebinning-sf100.log')}
+2024-01-22 23:19:30 | DEBUG   | Loading histogram clusters from data/gittables/clusterings/scalability_benchmark/sf100.zst
+2024-01-22 23:20:02 | DEBUG   | Starting rebinning
+2024-01-22 23:22:55 | DEBUG   | Starting index creation
+2024-01-22 23:26:22 | DEBUG   | Veryfying index
+2024-01-22 23:26:22 | DEBUG   | Index size: 14784.29 MB
+2024-01-22 23:26:22 | TRACE   | index_size, 14784.28698
+2024-01-22 23:26:22 | INFO    | Created rebinning-based index in 380.40s
+2024-01-22 23:26:22 | TRACE   | total_time, 380.3977236431092
+2024-01-22 23:27:05 | DEBUG   | Saved index to data/gittables/indices/scalability_benchmark/rebinning-sf100.zst

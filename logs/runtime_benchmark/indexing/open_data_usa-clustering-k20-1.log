@@ -1,0 +1,17 @@
+2024-01-17 23:52:18 | DEBUG   | {'input': PosixPath('data/open_data_usa/histograms.zst'), 'output': 'data/open_data_usa/clusterings/runtime_benchmark/k20-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [20, 20], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-clustering-k20-1.log')}
+2024-01-17 23:52:18 | DEBUG   | Loading histograms from data/open_data_usa/histograms.zst
+2024-01-17 23:52:19 | DEBUG   | Computing features
+2024-01-17 23:52:20 | DEBUG   | Computing feature clustering
+2024-01-17 23:52:21 | DEBUG   | Score for 20 clusters: 90116.80117843578
+2024-01-17 23:52:21 | DEBUG   | Assigning histograms to clusters
+2024-01-17 23:52:21 | DEBUG   | Computing cluster bins
+2024-01-17 23:52:21 | DEBUG   | Number of clusters: 20
+2024-01-17 23:52:21 | DEBUG   | Histograms per cluster: [3108, 4504, 4373, 4691, 3651, 2830, 1401, 4983, 4977, 4825, 4408, 3632, 3866, 2492, 1331, 3298, 3960, 1015, 2489, 2479]
+2024-01-17 23:52:21 | DEBUG   | Bins per cluster: [2274, 3296, 3200, 3433, 2672, 2071, 1025, 3646, 3642, 3531, 3226, 2658, 2829, 1824, 974, 2413, 2898, 743, 1821, 1814]
+2024-01-17 23:52:21 | DEBUG   | Cluster ranges: (0, 8.9526e+15), (0.002, 68), (5, 3.0769e+09), (-2250, 86.2), (-6.6667e+08, 16318), (5.08, 19193), (204, 7.0424e+06), (0, 19.8), (-8.8791e+07, 318), (0.0001, 26.8), (0.0042, 313), (8, 9e+15), (8, 2.1125e+08), (2.2, 551), (-1.9999e+10, 8.7422e+15), (0.001, 4281), (-9.8039e+07, 2018), (-138.28, 14), (-3744, 1.6033e+05), (0.01, 4.2e+09)
+2024-01-17 23:52:21 | DEBUG   | Uniform bin widths: 3.9369e+12, 0.0206, 9.6153e+05, 0.6805, 2.4951e+05, 9.2651, 6870.4, 0.0054, 24380, 0.0076, 0.097, 3.386e+12, 74675, 0.3009, 8.9756e+12, 1.7741, 33831, 0.205, 90.101, 2.3153e+06
+2024-01-17 23:52:21 | DEBUG   | Predicted (rebinning) index size: 1154.00 MB
+2024-01-17 23:52:21 | INFO    | Clustered 68313 histograms into 20 clusters in 2.55s
+2024-01-17 23:52:21 | TRACE   | total_time, 2.5515009723603725
+2024-01-17 23:52:21 | DEBUG   | Saving output
+2024-01-17 23:52:23 | DEBUG   | Saved clustering to data/open_data_usa/clusterings/runtime_benchmark/k20-n50000.zst

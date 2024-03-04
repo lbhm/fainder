@@ -1,0 +1,17 @@
+2024-01-18 09:58:51 | DEBUG   | {'input': PosixPath('data/sportstables/histograms.zst'), 'output': 'data/sportstables/clusterings/runtime_benchmark/k20-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [20, 20], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-clustering-k20-1.log')}
+2024-01-18 09:58:51 | DEBUG   | Loading histograms from data/sportstables/histograms.zst
+2024-01-18 09:58:51 | DEBUG   | Computing features
+2024-01-18 09:58:52 | DEBUG   | Computing feature clustering
+2024-01-18 09:58:53 | DEBUG   | Score for 20 clusters: 26495.521845016494
+2024-01-18 09:58:53 | DEBUG   | Assigning histograms to clusters
+2024-01-18 09:58:53 | DEBUG   | Computing cluster bins
+2024-01-18 09:58:53 | DEBUG   | Number of clusters: 20
+2024-01-18 09:58:53 | DEBUG   | Histograms per cluster: [1101, 989, 602, 851, 1454, 697, 521, 1531, 1095, 1304, 1506, 604, 1188, 393, 1628, 964, 721, 250, 1145, 1318]
+2024-01-18 09:58:53 | DEBUG   | Bins per cluster: [2771, 2489, 1516, 2142, 3659, 1755, 1312, 3852, 2756, 3281, 3789, 1521, 2990, 990, 4096, 2426, 1815, 631, 2882, 3317]
+2024-01-18 09:58:53 | DEBUG   | Cluster ranges: (1, 69), (-1.4, 20), (0, 5476), (16.97, 3e+07), (0, 28.7), (-193.85, 95), (4.7, 63.6), (0.056, 12.25), (0.82, 7755), (-6.2, 5.29), (0.1, 36), (0.1, 177), (0, 59), (-18, 28), (21, 3.0006e+07), (0, 158.3), (-1165, 5477), (50.9, 246.3), (0, 9), (5, 206)
+2024-01-18 09:58:53 | DEBUG   | Uniform bin widths: 0.0245, 0.0086, 3.6121, 14006, 0.0078, 0.1646, 0.0449, 0.0032, 2.8136, 0.0035, 0.0095, 0.1163, 0.0197, 0.0465, 7325.7, 0.0653, 3.6595, 0.3097, 0.0031, 0.0606
+2024-01-18 09:58:53 | DEBUG   | Predicted (rebinning) index size: 344.40 MB
+2024-01-18 09:58:53 | INFO    | Clustered 19862 histograms into 20 clusters in 2.10s
+2024-01-18 09:58:53 | TRACE   | total_time, 2.103011457249522
+2024-01-18 09:58:53 | DEBUG   | Saving output
+2024-01-18 09:58:53 | DEBUG   | Saved clustering to data/sportstables/clusterings/runtime_benchmark/k20-n50000.zst

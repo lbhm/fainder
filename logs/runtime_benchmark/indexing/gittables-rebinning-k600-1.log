@@ -1,0 +1,10 @@
+2024-02-01 19:21:33 | DEBUG   | {'input': PosixPath('data/gittables/clusterings/runtime_benchmark/k600-n50000.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/gittables/indices/runtime_benchmark'), 'index_file': 'rebinning-k600.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/gittables-rebinning-k600-1.log')}
+2024-02-01 19:21:33 | DEBUG   | Loading histogram clusters from data/gittables/clusterings/runtime_benchmark/k600-n50000.zst
+2024-02-01 19:22:05 | DEBUG   | Starting rebinning
+2024-02-01 19:25:08 | DEBUG   | Starting index creation
+2024-02-01 19:26:03 | DEBUG   | Veryfying index
+2024-02-01 19:26:03 | DEBUG   | Index size: 4690.34 MB
+2024-02-01 19:26:03 | TRACE   | index_size, 4690.338432
+2024-02-01 19:26:03 | INFO    | Created rebinning-based index in 238.37s
+2024-02-01 19:26:03 | TRACE   | total_time, 238.3734900020063
+2024-02-01 19:26:16 | DEBUG   | Saved index to data/gittables/indices/runtime_benchmark/rebinning-k600.zst

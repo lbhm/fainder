@@ -1,0 +1,11 @@
+2024-01-23 12:06:31 | DEBUG   | {'input': PosixPath('data/gittables/clusterings/scalability_benchmark/sf200.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/gittables/indices/scalability_benchmark'), 'index_file': 'conversion-sf200.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/scalability_benchmark/indexing/gittables-conversion-sf200.log')}
+2024-01-23 12:06:31 | DEBUG   | Loading histogram clusters from data/gittables/clusterings/scalability_benchmark/sf200.zst
+2024-01-23 12:07:32 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-01-23 12:07:32 | DEBUG   | Starting conversion
+2024-01-23 12:15:12 | DEBUG   | Starting index creation
+2024-01-23 12:41:55 | DEBUG   | Veryfying index
+2024-01-23 12:41:55 | DEBUG   | Index size: 58435.71 MB
+2024-01-23 12:41:55 | TRACE   | index_size, 58435.706196
+2024-01-23 12:41:55 | INFO    | Created conversion-based index in 2062.99s
+2024-01-23 12:41:55 | TRACE   | total_time, 2062.994868764654
+2024-01-23 12:43:05 | DEBUG   | Saved index to data/gittables/indices/scalability_benchmark/conversion-sf200.zst

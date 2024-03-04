@@ -1,0 +1,11 @@
+2024-02-14 10:38:23 | DEBUG   | {'input': PosixPath('data/open_data_usa/clusterings/microbenchmarks/k100-b500000.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/open_data_usa/indices/microbenchmarks'), 'index_file': 'conversion-b500000.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/microbenchmarks/indexing/open_data_usa-conversion-b500000.log')}
+2024-02-14 10:38:23 | DEBUG   | Loading histogram clusters from data/open_data_usa/clusterings/microbenchmarks/k100-b500000.zst
+2024-02-14 10:38:23 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-02-14 10:38:23 | DEBUG   | Starting conversion
+2024-02-14 10:39:01 | DEBUG   | Starting index creation
+2024-02-14 10:41:02 | DEBUG   | Veryfying index
+2024-02-14 10:41:02 | DEBUG   | Index size: 5928.94 MB
+2024-02-14 10:41:02 | TRACE   | index_size, 5928.944268
+2024-02-14 10:41:02 | INFO    | Created conversion-based index in 158.48s
+2024-02-14 10:41:02 | TRACE   | total_time, 158.48282676376402
+2024-02-14 10:41:05 | DEBUG   | Saved index to data/open_data_usa/indices/microbenchmarks/conversion-b500000.zst

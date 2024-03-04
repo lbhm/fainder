@@ -1,0 +1,17 @@
+2024-01-18 20:05:31 | DEBUG   | {'input': PosixPath('data/open_data_usa/histograms.zst'), 'output': 'data/open_data_usa/clusterings/runtime_benchmark/k10-n10000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [10, 10], 'n_global_bins': 10000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-clustering-n10000-3.log')}
+2024-01-18 20:05:31 | DEBUG   | Loading histograms from data/open_data_usa/histograms.zst
+2024-01-18 20:05:31 | DEBUG   | Computing features
+2024-01-18 20:05:32 | DEBUG   | Computing feature clustering
+2024-01-18 20:05:33 | DEBUG   | Score for 10 clusters: 89809.79203014883
+2024-01-18 20:05:33 | DEBUG   | Assigning histograms to clusters
+2024-01-18 20:05:33 | DEBUG   | Computing cluster bins
+2024-01-18 20:05:33 | DEBUG   | Number of clusters: 10
+2024-01-18 20:05:33 | DEBUG   | Histograms per cluster: [6112, 8789, 10283, 5629, 6390, 9047, 1824, 5847, 6755, 7637]
+2024-01-18 20:05:33 | DEBUG   | Bins per cluster: [894, 1286, 1505, 824, 935, 1324, 267, 855, 988, 1117]
+2024-01-18 20:05:33 | DEBUG   | Cluster ranges: (-1.9999e+10, 8.9526e+15), (0.02, 373), (1.1, 9e+15), (-15000, 94.7), (-6.6667e+08, 33342), (0.01, 1.058e+05), (76.67, 7.0424e+06), (-138.28, 19.8), (-8.8791e+07, 990), (0.0001, 72.8)
+2024-01-18 20:05:33 | DEBUG   | Uniform bin widths: 1.0014e+13, 0.29, 5.9801e+12, 18.319, 7.1305e+05, 79.912, 26376, 0.1849, 89870, 0.0652
+2024-01-18 20:05:33 | DEBUG   | Predicted (rebinning) index size: 453.56 MB
+2024-01-18 20:05:33 | INFO    | Clustered 68313 histograms into 10 clusters in 1.81s
+2024-01-18 20:05:33 | TRACE   | total_time, 1.8090266771614552
+2024-01-18 20:05:33 | DEBUG   | Saving output
+2024-01-18 20:05:34 | DEBUG   | Saved clustering to data/open_data_usa/clusterings/runtime_benchmark/k10-n10000.zst

@@ -1,0 +1,13 @@
+2024-01-22 13:47:29 | DEBUG   | {'input': PosixPath('data/gittables/indices/runtime_benchmark/conversion.zst'), 'input_type': 'index', 'queries': PosixPath('data/gittables/queries/runtime_benchmark.zst'), 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/gittables-collection-conversion-parallel-5.log')}
+2024-01-22 13:47:29 | DEBUG   | Loading input data from data/gittables/indices/runtime_benchmark/conversion.zst
+2024-01-22 13:47:47 | DEBUG   | Loading queries from data/gittables/queries/runtime_benchmark.zst
+2024-01-22 13:47:47 | TRACE   | bootstrap_time, 18.460510596632957
+2024-01-22 13:47:47 | DEBUG   | Starting execution
+2024-01-22 13:48:09 | DEBUG   | Initalizing index worker pool
+2024-01-22 13:50:36 | DEBUG   | Index worker pool initialized
+2024-01-22 14:04:40 | DEBUG   | Raw index-based query execution time: 843.763573s
+2024-01-22 14:04:40 | TRACE   | query_collection_time, 843.7635730952024
+2024-01-22 14:04:44 | DEBUG   | Execution finished
+2024-01-22 14:04:44 | INFO    | Ran 999 queries in 1017s
+2024-01-22 14:04:44 | TRACE   | execution_time, 1016.90803126432
+2024-01-22 14:04:44 | TRACE   | total_time, 1035.3692467790097

@@ -1,0 +1,11 @@
+2024-02-02 06:54:22 | DEBUG   | {'input': PosixPath('data/gittables/clusterings/runtime_benchmark/k160-n50000.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/gittables/indices/runtime_benchmark'), 'index_file': 'conversion-k160.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/gittables-conversion-k160-3.log')}
+2024-02-02 06:54:22 | DEBUG   | Loading histogram clusters from data/gittables/clusterings/runtime_benchmark/k160-n50000.zst
+2024-02-02 06:54:55 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-02-02 06:54:55 | DEBUG   | Starting conversion
+2024-02-02 06:58:42 | DEBUG   | Starting index creation
+2024-02-02 07:11:38 | DEBUG   | Veryfying index
+2024-02-02 07:11:38 | DEBUG   | Index size: 26957.47 MB
+2024-02-02 07:11:38 | TRACE   | index_size, 26957.47146
+2024-02-02 07:11:38 | INFO    | Created conversion-based index in 1003.26s
+2024-02-02 07:11:38 | TRACE   | total_time, 1003.2607507202774
+2024-02-02 07:12:07 | DEBUG   | Saved index to data/gittables/indices/runtime_benchmark/conversion-k160.zst

@@ -1,0 +1,17 @@
+2024-01-18 12:29:14 | DEBUG   | {'input': PosixPath('data/open_data_usa/histograms.zst'), 'output': 'data/open_data_usa/clusterings/runtime_benchmark/k40-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [40, 40], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-clustering-k40-5.log')}
+2024-01-18 12:29:14 | DEBUG   | Loading histograms from data/open_data_usa/histograms.zst
+2024-01-18 12:29:15 | DEBUG   | Computing features
+2024-01-18 12:29:16 | DEBUG   | Computing feature clustering
+2024-01-18 12:29:17 | DEBUG   | Score for 40 clusters: 99335.54385221686
+2024-01-18 12:29:17 | DEBUG   | Assigning histograms to clusters
+2024-01-18 12:29:17 | DEBUG   | Computing cluster bins
+2024-01-18 12:29:17 | DEBUG   | Number of clusters: 40
+2024-01-18 12:29:17 | DEBUG   | Histograms per cluster: [3690, 1962, 1278, 3241, 1765, 426, 3188, 1285, 2595, 1071, 2839, 385, 2803, 1811, 2019, 921, 1296, 667, 2669, 1051, 2064, 1883, 183, 964, 3729, 973, 1267, 2995, 1621, 410, 1641, 760, 1366, 3358, 1444, 700, 2842, 468, 324, 2359]
+2024-01-18 12:29:17 | DEBUG   | Bins per cluster: [2699, 1435, 935, 2371, 1291, 312, 2332, 940, 1898, 784, 2077, 282, 2051, 1325, 1477, 674, 948, 488, 1953, 769, 1510, 1378, 134, 705, 2728, 712, 927, 2191, 1186, 300, 1201, 556, 999, 2457, 1057, 512, 2079, 343, 237, 1726]
+2024-01-18 12:29:17 | DEBUG   | Cluster ranges: (0, 8.9526e+15), (0.002, 81), (5167, 2.021e+12), (-4.02, 66.59), (0.001, 11459), (72, 11249), (0, 415), (0, 5.1), (0, 95729), (1.9, 510), (11, 1.9987e+05), (0.001, 18.8), (101, 9e+15), (3.22, 3036), (0.001, 1459), (1.01, 29), (0.001, 200), (0.1, 1.1111e+15), (0, 1594), (-1.9999e+10, 8.7422e+15), (30, 2.207e+10), (4, 155), (-6.6667e+08, 2352), (12.2, 116), (0, 19.8), (-138.28, 14), (204, 6.7246e+05), (0, 7327), (17, 24520), (-15000, 94), (0.0028, 38), (0.01, 1.8044e+06), (0.0001, 1.56), (-1, 116), (1.12, 69654), (1838, 2.1125e+08), (1.05, 135), (-3.292e+08, 1.3046e+05), (-1784, 3728), (0.1, 21)
+2024-01-18 12:29:17 | DEBUG   | Uniform bin widths: 3.317e+12, 0.0564, 2.1615e+09, 0.0298, 8.8761, 35.824, 0.178, 0.0054, 50.437, 0.6481, 96.224, 0.0667, 4.3881e+12, 2.2889, 0.9878, 0.0415, 0.211, 2.2769e+12, 0.8162, 1.1368e+13, 1.4616e+07, 0.1096, 4.9751e+06, 0.1472, 0.0073, 0.2139, 725.2, 3.3441, 20.66, 50.313, 0.0316, 3245.2, 0.0016, 0.0476, 65.897, 4.126e+05, 0.0644, 9.6015e+05, 23.257, 0.0121
+2024-01-18 12:29:17 | DEBUG   | Predicted (rebinning) index size: 690.28 MB
+2024-01-18 12:29:17 | INFO    | Clustered 68313 histograms into 40 clusters in 2.69s
+2024-01-18 12:29:17 | TRACE   | total_time, 2.691006913781166
+2024-01-18 12:29:17 | DEBUG   | Saving output
+2024-01-18 12:29:19 | DEBUG   | Saved clustering to data/open_data_usa/clusterings/runtime_benchmark/k40-n50000.zst

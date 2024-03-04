@@ -1,0 +1,11 @@
+2024-01-18 10:41:06 | DEBUG   | {'input': PosixPath('data/sportstables/indices/runtime_benchmark/rebinning.zst'), 'input_type': 'index', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': True, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/sportstables-query-rebinning-single_suppressed-2.log')}
+2024-01-18 10:41:06 | DEBUG   | Loading input data from data/sportstables/indices/runtime_benchmark/rebinning.zst
+2024-01-18 10:41:06 | DEBUG   | Starting execution
+2024-01-18 10:41:06 | TRACE   | query_time, 0.00046895816922187805
+2024-01-18 10:41:06 | DEBUG   | Raw index-based query execution time: 0.000569s
+2024-01-18 10:41:06 | TRACE   | query_collection_time, 0.0005693472921848297
+2024-01-18 10:41:06 | TRACE   | avg_result_size, 1.0
+2024-01-18 10:41:06 | DEBUG   | Execution finished
+2024-01-18 10:41:06 | INFO    | Ran query in 0.0007394s
+2024-01-18 10:41:06 | TRACE   | execution_time, 0.0007393602281808853
+2024-01-18 10:41:06 | TRACE   | total_time, 0.11897994764149189

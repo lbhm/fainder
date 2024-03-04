@@ -1,0 +1,13 @@
+2024-01-18 18:15:18 | DEBUG   | {'input': PosixPath('data/open_data_usa/clusterings/runtime_benchmark/k10-n500000.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/open_data_usa/indices/runtime_benchmark'), 'index_file': 'rebinning-n500000.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-rebinning-n500000-2.log')}
+2024-01-18 18:15:18 | DEBUG   | Loading histogram clusters from data/open_data_usa/clusterings/runtime_benchmark/k10-n500000.zst
+2024-01-18 18:15:19 | DEBUG   | Starting rebinning
+2024-01-18 18:16:24 | DEBUG   | Starting index creation
+2024-01-18 18:20:17 | DEBUG   | Veryfying index
+2024-01-18 18:20:17 | WARNING | 1 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 18:20:17 | WARNING | 30 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 18:20:17 | WARNING | 10 percentiles do not add up to 1 (maximum deviation: 0.0009765625)
+2024-01-18 18:20:17 | WARNING | 3 percentiles do not add up to 1 (maximum deviation: 0.00048828125)
+2024-01-18 18:20:17 | DEBUG   | Index size: 22668.08 MB
+2024-01-18 18:20:17 | INFO    | Created rebinning-based index in 297.87s
+2024-01-18 18:20:17 | TRACE   | total_time, 297.8694657962769
+2024-01-18 18:20:32 | DEBUG   | Saved index to data/open_data_usa/indices/runtime_benchmark/rebinning-n500000.zst

@@ -1,0 +1,11 @@
+2024-01-18 11:49:11 | DEBUG   | {'input': PosixPath('data/open_data_usa/indices/runtime_benchmark/conversion.zst'), 'input_type': 'index', 'queries': PosixPath('data/open_data_usa/queries/runtime_benchmark.zst'), 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': True, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/open_data_usa-collection-conversion-parallel_suppressed-5.log')}
+2024-01-18 11:49:11 | DEBUG   | Loading input data from data/open_data_usa/indices/runtime_benchmark/conversion.zst
+2024-01-18 11:49:12 | DEBUG   | Loading queries from data/open_data_usa/queries/runtime_benchmark.zst
+2024-01-18 11:49:12 | DEBUG   | Starting execution
+2024-01-18 11:49:12 | DEBUG   | Initalizing index worker pool
+2024-01-18 11:51:39 | DEBUG   | Index worker pool initialized
+2024-01-18 11:51:39 | DEBUG   | Raw index-based query execution time: 0.137736s
+2024-01-18 11:51:39 | TRACE   | query_collection_time, 0.13773605972528458
+2024-01-18 11:51:39 | DEBUG   | Execution finished
+2024-01-18 11:51:39 | INFO    | Ran 999 queries in 147.7s
+2024-01-18 11:51:39 | TRACE   | execution_time, 147.70486174337566

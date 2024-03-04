@@ -1,0 +1,11 @@
+2024-01-18 09:40:21 | DEBUG   | {'input': PosixPath('data/gittables/indices/runtime_benchmark/conversion.zst'), 'input_type': 'index', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/gittables-query-conversion-single-1.log')}
+2024-01-18 09:40:21 | DEBUG   | Loading input data from data/gittables/indices/runtime_benchmark/conversion.zst
+2024-01-18 09:40:39 | DEBUG   | Starting execution
+2024-01-18 09:40:40 | TRACE   | query_time, 0.37386658787727356
+2024-01-18 09:40:40 | DEBUG   | Raw index-based query execution time: 0.374110s
+2024-01-18 09:40:40 | TRACE   | query_collection_time, 0.37410970963537693
+2024-01-18 09:40:40 | TRACE   | avg_result_size, 3055334.0
+2024-01-18 09:40:40 | DEBUG   | Execution finished
+2024-01-18 09:40:40 | INFO    | Ran query in 0.3743s
+2024-01-18 09:40:40 | TRACE   | execution_time, 0.3743158560246229
+2024-01-18 09:40:40 | TRACE   | total_time, 18.417074594646692

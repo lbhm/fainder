@@ -1,0 +1,10 @@
+2024-01-18 12:56:59 | DEBUG   | {'input': PosixPath('data/sportstables/histograms.zst'), 'input_type': 'histograms', 'query': ['0.1', 'lt', '50'], 'estimation_mode': 'over', 'index_mode': None, 'output': None, 'workers': 112, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/sportstables-query-iterative-parallel-4.log')}
+2024-01-18 12:56:59 | DEBUG   | Loading input data from data/sportstables/histograms.zst
+2024-01-18 12:57:00 | DEBUG   | Starting execution
+2024-01-18 12:57:03 | TRACE   | query_time, 2.747463148087263
+2024-01-18 12:57:03 | DEBUG   | Raw naive query execution time: 2.998007s
+2024-01-18 12:57:03 | TRACE   | query_collection_time, 2.998007418587804
+2024-01-18 12:57:03 | DEBUG   | Execution finished
+2024-01-18 12:57:03 | INFO    | Ran query in 3.813s
+2024-01-18 12:57:03 | TRACE   | execution_time, 3.81259174272418
+2024-01-18 12:57:03 | TRACE   | total_time, 4.049095008522272

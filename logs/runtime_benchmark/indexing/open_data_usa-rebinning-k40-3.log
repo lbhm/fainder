@@ -1,0 +1,9 @@
+2024-01-18 06:12:03 | DEBUG   | {'input': PosixPath('data/open_data_usa/clusterings/runtime_benchmark/k40-n50000.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/open_data_usa/indices/runtime_benchmark'), 'index_file': 'rebinning-k40.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-rebinning-k40-3.log')}
+2024-01-18 06:12:03 | DEBUG   | Loading histogram clusters from data/open_data_usa/clusterings/runtime_benchmark/k40-n50000.zst
+2024-01-18 06:12:04 | DEBUG   | Starting rebinning
+2024-01-18 06:12:14 | DEBUG   | Starting index creation
+2024-01-18 06:12:22 | DEBUG   | Veryfying index
+2024-01-18 06:12:22 | DEBUG   | Index size: 690.28 MB
+2024-01-18 06:12:22 | INFO    | Created rebinning-based index in 18.02s
+2024-01-18 06:12:22 | TRACE   | total_time, 18.0168318990618
+2024-01-18 06:12:24 | DEBUG   | Saved index to data/open_data_usa/indices/runtime_benchmark/rebinning-k40.zst

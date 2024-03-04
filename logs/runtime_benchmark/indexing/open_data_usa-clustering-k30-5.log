@@ -1,0 +1,17 @@
+2024-01-18 12:27:33 | DEBUG   | {'input': PosixPath('data/open_data_usa/histograms.zst'), 'output': 'data/open_data_usa/clusterings/runtime_benchmark/k30-n50000.zst', 'feature_output': None, 'algorithm': 'kmeans', 'n_cluster_range': [30, 30], 'n_global_bins': 50000, 'transform': 'quantile', 'quantile_range': (0.25, 0.75), 'use_umap': False, 'alpha': 1.0, 'workers': 112, 'seed': 42, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/open_data_usa-clustering-k30-5.log')}
+2024-01-18 12:27:33 | DEBUG   | Loading histograms from data/open_data_usa/histograms.zst
+2024-01-18 12:27:34 | DEBUG   | Computing features
+2024-01-18 12:27:36 | DEBUG   | Computing feature clustering
+2024-01-18 12:27:36 | DEBUG   | Score for 30 clusters: 98177.50320975443
+2024-01-18 12:27:36 | DEBUG   | Assigning histograms to clusters
+2024-01-18 12:27:36 | DEBUG   | Computing cluster bins
+2024-01-18 12:27:37 | DEBUG   | Number of clusters: 30
+2024-01-18 12:27:37 | DEBUG   | Histograms per cluster: [3698, 2937, 1881, 3971, 2190, 593, 3951, 1320, 2662, 2962, 2702, 4088, 2810, 2149, 2420, 1114, 1752, 1141, 3509, 1133, 2334, 2494, 734, 966, 4431, 974, 1261, 3338, 2363, 435]
+2024-01-18 12:27:37 | DEBUG   | Bins per cluster: [2706, 2149, 1376, 2905, 1602, 434, 2891, 966, 1948, 2167, 1977, 2991, 2056, 1572, 1771, 815, 1282, 835, 2567, 829, 1708, 1825, 537, 707, 3242, 713, 923, 2442, 1729, 318]
+2024-01-18 12:27:37 | DEBUG   | Cluster ranges: (0, 8.9526e+15), (0.002, 64), (2040, 3.0769e+09), (-0.41, 90.9), (0.001, 26810), (439, 2.0221e+07), (-176.6, 254), (0, 6), (0, 93765), (1.2, 380), (5.59, 3.2538e+05), (0.0001, 18.8), (58, 9e+15), (4, 3024), (0.001, 2000), (1.01, 33.39), (0.0042, 176), (0.0001, 1.1111e+15), (-862, 1264), (-1.9999e+10, 8.7422e+15), (14, 2.207e+10), (1.3, 337), (-6.6667e+08, 54094), (12.2, 116), (-4.02, 26), (-138.28, 14), (204, 2.0101e+05), (0, 6947), (9, 63166), (-9.8039e+07, 94.245)
+2024-01-18 12:27:37 | DEBUG   | Uniform bin widths: 3.3084e+12, 0.0298, 2.2361e+06, 0.0314, 16.735, 46590, 0.1489, 0.0062, 48.134, 0.1748, 164.58, 0.0063, 4.3774e+12, 1.9211, 1.1293, 0.0397, 0.1373, 1.3307e+12, 0.8282, 1.0546e+13, 1.2922e+07, 0.1839, 1.2416e+06, 0.1468, 0.0093, 0.2136, 217.55, 2.8448, 36.528, 3.083e+05
+2024-01-18 12:27:37 | DEBUG   | Predicted (rebinning) index size: 851.14 MB
+2024-01-18 12:27:37 | INFO    | Clustered 68313 histograms into 30 clusters in 2.68s
+2024-01-18 12:27:37 | TRACE   | total_time, 2.6835073716938496
+2024-01-18 12:27:37 | DEBUG   | Saving output
+2024-01-18 12:27:38 | DEBUG   | Saved clustering to data/open_data_usa/clusterings/runtime_benchmark/k30-n50000.zst

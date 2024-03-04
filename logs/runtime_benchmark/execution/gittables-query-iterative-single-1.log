@@ -1,0 +1,10 @@
+2024-01-18 09:37:25 | DEBUG   | {'input': PosixPath('data/gittables/histograms.zst'), 'input_type': 'histograms', 'query': ['0.1', 'lt', '50'], 'estimation_mode': 'over', 'index_mode': None, 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/gittables-query-iterative-single-1.log')}
+2024-01-18 09:37:25 | DEBUG   | Loading input data from data/gittables/histograms.zst
+2024-01-18 09:37:57 | DEBUG   | Starting execution
+2024-01-18 09:38:44 | TRACE   | query_time, 46.31408680602908
+2024-01-18 09:38:44 | DEBUG   | Raw naive query execution time: 46.314603s
+2024-01-18 09:38:44 | TRACE   | query_collection_time, 46.31460250727832
+2024-01-18 09:38:44 | DEBUG   | Execution finished
+2024-01-18 09:38:44 | INFO    | Ran query in 46.31s
+2024-01-18 09:38:44 | TRACE   | execution_time, 46.3147602789104
+2024-01-18 09:38:44 | TRACE   | total_time, 78.53490716405213

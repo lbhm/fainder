@@ -1,0 +1,10 @@
+2024-02-14 12:08:45 | DEBUG   | {'input': PosixPath('data/open_data_usa/clusterings/microbenchmarks/k100-b100.zst'), 'index_method': 'rebinning', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/open_data_usa/indices/microbenchmarks'), 'index_file': 'rebinning-b100.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/microbenchmarks/indexing/open_data_usa-rebinning-b100.log')}
+2024-02-14 12:08:45 | DEBUG   | Loading histogram clusters from data/open_data_usa/clusterings/microbenchmarks/k100-b100.zst
+2024-02-14 12:08:46 | DEBUG   | Starting rebinning
+2024-02-14 12:08:53 | DEBUG   | Starting index creation
+2024-02-14 12:08:53 | DEBUG   | Veryfying index
+2024-02-14 12:08:53 | DEBUG   | Index size: 0.93 MB
+2024-02-14 12:08:53 | TRACE   | index_size, 0.92955
+2024-02-14 12:08:53 | INFO    | Created rebinning-based index in 7.49s
+2024-02-14 12:08:53 | TRACE   | total_time, 7.492340866476297
+2024-02-14 12:08:53 | DEBUG   | Saved index to data/open_data_usa/indices/microbenchmarks/rebinning-b100.zst

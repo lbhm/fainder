@@ -1,0 +1,10 @@
+2024-01-18 15:42:46 | DEBUG   | {'input': PosixPath('data/sportstables/clusterings/runtime_benchmark/k2-n50000.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/sportstables/indices/runtime_benchmark'), 'index_file': 'conversion-k2.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/indexing/sportstables-conversion-k2-1.log')}
+2024-01-18 15:42:46 | DEBUG   | Loading histogram clusters from data/sportstables/clusterings/runtime_benchmark/k2-n50000.zst
+2024-01-18 15:42:47 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-01-18 15:42:47 | DEBUG   | Starting conversion
+2024-01-18 15:43:18 | DEBUG   | Starting index creation
+2024-01-18 15:45:35 | DEBUG   | Veryfying index
+2024-01-18 15:45:35 | DEBUG   | Index size: 5961.62 MB
+2024-01-18 15:45:35 | INFO    | Created conversion-based index in 168.96s
+2024-01-18 15:45:35 | TRACE   | total_time, 168.9647870734334
+2024-01-18 15:45:38 | DEBUG   | Saved index to data/sportstables/indices/runtime_benchmark/conversion-k2.zst

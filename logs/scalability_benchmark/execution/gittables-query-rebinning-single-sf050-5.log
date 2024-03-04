@@ -1,0 +1,12 @@
+2024-01-22 20:48:44 | DEBUG   | {'input': PosixPath('data/gittables/indices/scalability_benchmark/rebinning-sf050.zst'), 'input_type': 'index', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/scalability_benchmark/gittables-query-rebinning-single-sf050-5.log')}
+2024-01-22 20:48:44 | DEBUG   | Loading input data from data/gittables/indices/scalability_benchmark/rebinning-sf050.zst
+2024-01-22 20:48:50 | TRACE   | bootstrap_time, 6.088287515565753
+2024-01-22 20:48:50 | DEBUG   | Starting execution
+2024-01-22 20:48:50 | TRACE   | query_time, 0.17135282792150974
+2024-01-22 20:48:50 | DEBUG   | Raw index-based query execution time: 0.171586s
+2024-01-22 20:48:50 | TRACE   | query_collection_time, 0.1715859156101942
+2024-01-22 20:48:50 | TRACE   | avg_result_size, 1491435.0
+2024-01-22 20:48:50 | DEBUG   | Execution finished
+2024-01-22 20:48:50 | INFO    | Ran query in 0.1718s
+2024-01-22 20:48:50 | TRACE   | execution_time, 0.1717800386250019
+2024-01-22 20:48:50 | TRACE   | total_time, 6.2610852010548115

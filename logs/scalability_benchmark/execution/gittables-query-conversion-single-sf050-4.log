@@ -1,0 +1,12 @@
+2024-01-22 20:15:40 | DEBUG   | {'input': PosixPath('data/gittables/indices/scalability_benchmark/conversion-sf050.zst'), 'input_type': 'index', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/scalability_benchmark/gittables-query-conversion-single-sf050-4.log')}
+2024-01-22 20:15:40 | DEBUG   | Loading input data from data/gittables/indices/scalability_benchmark/conversion-sf050.zst
+2024-01-22 20:15:51 | TRACE   | bootstrap_time, 10.260411327704787
+2024-01-22 20:15:51 | DEBUG   | Starting execution
+2024-01-22 20:15:51 | TRACE   | query_time, 0.1773507259786129
+2024-01-22 20:15:51 | DEBUG   | Raw index-based query execution time: 0.177589s
+2024-01-22 20:15:51 | TRACE   | query_collection_time, 0.17758851870894432
+2024-01-22 20:15:51 | TRACE   | avg_result_size, 1515275.0
+2024-01-22 20:15:51 | DEBUG   | Execution finished
+2024-01-22 20:15:51 | INFO    | Ran query in 0.1778s
+2024-01-22 20:15:51 | TRACE   | execution_time, 0.17777483351528645
+2024-01-22 20:15:51 | TRACE   | total_time, 10.438958631828427
