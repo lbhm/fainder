@@ -1,7 +1,8 @@
 # Fainder
 
-![Python](https://img.shields.io/badge/python-3.10_--_3.11-informational)
+![Python Version](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Flbhm%2Ffainder%2Fmain%2Fpyproject.toml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![GitHub License](https://img.shields.io/github/license/lbhm/fainder)
 
 This repository contains the source code, experiment logs, and result analyses for our
 paper **"Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"**.
@@ -39,7 +40,11 @@ pip install .
 ```
 
 If you also want to execute the analysis notebooks and generate the plots we show in our paper,
-replace the last line with `pip install -e ".[analysis]"`.
+replace the last line with `pip install -e ".[analysis]"`. Note that in order to recreate the plots
+as they appear in the paper, you also need a working LaTeX installation on your computer (see the
+[Matplotlib docs](https://matplotlib.org/stable/users/explain/text/usetex.html) for details). If
+you just want to recreate the results and do not care about the layout, you can remove the call to
+`set_style()` in each notebook.
 
 #### Development Setup
 
