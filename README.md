@@ -12,7 +12,6 @@ The repository is structured as follows:
 ```bash
 fainder/
 ├── analysis  # Jupyter notebooks with result analyses and plotting code
-├── data  # placeholder for dataset (see below) and
 ├── experiments  # Python and Bash scripts with experiment configurations
 ├── fainder  # main Python package with our index implementation
 └── logs  # results of our experimental evaluation
@@ -49,7 +48,7 @@ you just want to recreate the results and do not care about the layout, you can 
 #### Development Setup
 
 ```bash
-# Follow the steps above until you activated your virtual environment
+# Follow the steps above until you have activated your virtual environment
 pip install -e ".[dev]"
 pre-commit install
 ```
@@ -62,7 +61,7 @@ Our experiment configurations assume the existence of the following folders that
 dataset collections we use formatted as either CSV or Parquet files:
 
 - `data/sportstables/csv`: Follow the instructions at [DHBWMosbachWI/SportsTables](https://github.com/DHBWMosbachWI/SportsTables) or contact the authors of the original paper to acquire a dump of the dataset collection.
-- `data/open_data_usa/csv`: Follow the instructions at [Open Data Portal Watch](https://data.wu.ac.at/portalwatch) or contact us to receive a download link for this collection.
+- `data/open_data_usa/csv`: Follow the instructions at [Open Data Portal Watch](https://data.wu.ac.at/portalwatch/about) or contact us to receive a download link for this collection.
 - `data/gittables/pq`: Follow the instructions at [gittables.github.io](https://gittables.github.io/) or use our download script (see `download-datasets -h`).
 
 ### General Usage
