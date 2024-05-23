@@ -12,6 +12,7 @@ The repository is structured as follows:
 ```bash
 fainder/
 ├── analysis  # Jupyter notebooks with result analyses and plotting code
+├── data  # dataset collections and intermediate data structures from experiments
 ├── experiments  # Python and Bash scripts with experiment configurations
 ├── fainder  # main Python package with our index implementation
 └── logs  # results of our experimental evaluation
@@ -58,7 +59,7 @@ pre-commit install
 ### Datasets
 
 Our experiment configurations assume the existence of the following folders that contain the
-dataset collections we use formatted as either CSV or Parquet files:
+dataset collections we use (formatted either as CSV or Parquet files):
 
 - `data/sportstables/csv`: Follow the instructions at [DHBWMosbachWI/SportsTables](https://github.com/DHBWMosbachWI/SportsTables) or contact the authors of the original paper to acquire a dump of the dataset collection.
 - `data/open_data_usa/csv`: Follow the instructions at [Open Data Portal Watch](https://data.wu.ac.at/portalwatch/about) or contact us to receive a download link for this collection.
@@ -82,11 +83,12 @@ experiments/
 ├── scalability_benchmark.sh  # Runtime scalability analysis on GitTables
 ├── accuracy_benchmark.sh  # Parameter grid search and comparison to baselines
 ├── exact_results.sh  # Runtime breakdown of Fainder Exact
-└── microbenchmarks.sh  # Detailed analysis of index parameters
+├── microbenchmarks.sh  # Detailed analysis of index parameters
+└── binsort_benchmark.sh  # Supplementary experiments for the binsort baseline
 ```
 
-The additional Python in `experiments/` files encapsulate partial experiment logic that we use in
-the abovementioned scripts.
+The additional Python files in `experiments/` encapsulate partial experiment logic that we use in
+the aforementioned scripts.
 
 ## Citation
 
