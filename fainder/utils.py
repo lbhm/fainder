@@ -10,14 +10,66 @@ from loguru import logger
 
 from fainder.typing import (
     ConversionIndex,
+    F32Array,
     F64Array,
+    FArray,
     Histogram,
+    PercentileIndex,
     PercentileIndexPointer,
     PercentileQuery,
     RebinningIndex,
+    UInt32Array,
 )
 
 ROUNDING_PRECISION = 4
+
+
+def filter_hists(
+    hists: list[tuple[np.uint32, Histogram]], filter: set[np.uint32]
+) -> list[tuple[np.uint32, Histogram]]:
+    return [hist for hist in hists if hist[0] in filter]
+
+
+def filter_index(
+    pctl_index: list[PercentileIndex],
+    cluster_bins: list[F64Array],
+    filter: set[np.uint32],
+) -> tuple[list[PercentileIndex], list[F64Array]]:
+    new_index: list[PercentileIndex] = []
+    new_bins: list[F64Array] = []
+    for i, cluster in enumerate(pctl_index):
+        new_cluster: list[tuple[FArray, UInt32Array]] = []
+        for pctls, ids in cluster:
+            mask = np.isin(ids.reshape(-1, order="F"), list(filter))
+            new_pctls = np.require(
+                pctls.reshape(-1, order="F")[mask].reshape((-1, pctls.shape[1]), order="F"),
+                dtype=pctls.dtype,
+                requirements="F",
+            )
+            new_ids = np.require(
+                ids.reshape(-1, order="F")[mask].reshape((-1, ids.shape[1]), order="F"),
+                dtype=ids.dtype,
+                requirements="F",
+            )
+            new_cluster.append((new_pctls, new_ids))
+
+        if mask.sum() > 0:
+            new_index.append(tuple(new_cluster))  # type: ignore
+            new_bins.append(cluster_bins[i])
+
+    return new_index, new_bins
+
+
+def filter_binsort(
+    binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array],
+    filter: set[np.uint32],
+) -> tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array]:
+    mask = np.isin(binsort[2], list(filter))
+    return (
+        binsort[0][mask],
+        (binsort[1][0][mask], binsort[1][1][mask], binsort[1][2][mask]),
+        binsort[2][mask],
+    )
 
 
 def query_accuracy_metrics(

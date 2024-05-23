@@ -7,6 +7,7 @@ start_time=$(date +%s)
 
 ### Setup ###
 dataset="gittables"
+cp data/"$dataset"/queries/accuracy_benchmark/test-all.zst data/"$dataset"/queries/scalability_benchmark.zst
 query=("0.1" "lt" "50")
 # nproc=$(nproc)
 
@@ -26,16 +27,16 @@ for f in 025 050 100 200; do
         run-query -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q "${query[@]}" -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-query-conversion-single_suppressed-sf"$f"-"$i".log
 
         # Query collection
-        run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-single-sf"$f"-"$i".log
-        # run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall -w "$nproc" --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-parallel-sf"$f"-"$i".log
-        run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single-sf"$f"-"$i".log
-        # run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall -w "$nproc" --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-parallel-sf"$f"-"$i".log
+        run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-single-sf"$f"-"$i".log
+        # run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w "$nproc" --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-parallel-sf"$f"-"$i".log
+        run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single-sf"$f"-"$i".log
+        # run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w "$nproc" --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-parallel-sf"$f"-"$i".log
 
         # Query collection (without IPC)
-        run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-single_suppressed-sf"$f"-"$i".log
-        # run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall -w"$nproc" --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-parallel_suppressed-sf"$f"-"$i".log
-        run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single_suppressed-sf"$f"-"$i".log
-        # run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/test-all.zst -m recall -w"$nproc" --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-parallel_suppressed-sf"$f"-"$i".log
+        run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-single_suppressed-sf"$f"-"$i".log
+        # run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-parallel_suppressed-sf"$f"-"$i".log
+        run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single_suppressed-sf"$f"-"$i".log
+        # run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-parallel_suppressed-sf"$f"-"$i".log
     done
 done
 

@@ -7,6 +7,7 @@ from typing import Any, Literal
 import numpy as np
 from loguru import logger
 
+from fainder.execution.baselines import query_binsort, query_dist_collection
 from fainder.execution.percentile_queries import (
     query_conversion_collection,
     query_histogram_collection,
@@ -35,7 +36,15 @@ def parse_args() -> argparse.Namespace:
         "-t",
         "--input-type",
         type=str,
-        choices=["histograms", "rebinned_hists", "conversion_matrices", "index", "index_trace"],
+        choices=[
+            "histograms",
+            "rebinned_hists",
+            "conversion_matrices",
+            "index",
+            "index_trace",
+            "normal_dists",
+            "binsort",
+        ],
         required=True,
         help="content type of the input data",
     )
@@ -113,7 +122,13 @@ def run(
     input_data: Any,
     query: PercentileQuery,
     input_type: Literal[
-        "histograms", "rebinned_hists", "conversion_matrices", "index", "index_trace"
+        "histograms",
+        "rebinned_hists",
+        "conversion_matrices",
+        "index",
+        "index_trace",
+        "normal_dists",
+        "binsort",
     ],
     estimation_mode: Literal["over", "under", "continuous_value", "cubic_spline"] = "over",
     index_mode: Literal["precision", "recall"] = "recall",
@@ -170,7 +185,12 @@ def run(
             )
         else:
             results = [trace_local_index(pctl_index, cluster_bins, index_mode, query)]
-
+    elif input_type == "normal_dists":
+        dists = input_data
+        results = query_dist_collection(dists, "normal", [query], workers)
+    elif input_type == "binsort":
+        binsort = input_data
+        results = query_binsort(binsort, index_mode, [query], workers)
     else:
         raise ValueError(f"Invalid input type {input_type}.")
     end = time.perf_counter()

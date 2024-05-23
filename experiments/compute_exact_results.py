@@ -7,7 +7,7 @@ import numpy as np
 from loguru import logger
 
 from fainder.execution import runner, runner_exact
-from fainder.typing import Histogram, PercentileQuery
+from fainder.typing import F32Array, F64Array, Histogram, PercentileQuery, UInt32Array
 from fainder.utils import configure_run, load_input, save_output
 
 
@@ -17,11 +17,11 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.MetavarTypeHelpFormatter,
     )
     parser.add_argument(
-        "-H",
-        "--histograms",
+        "-d",
+        "--data",
         type=lambda s: Path(os.path.expandvars(s)),
         required=True,
-        help="Path to a histogram collection",
+        help="Path to a histogram collection or binsort index",
         metavar="SRC",
     )
     parser.add_argument(
@@ -39,6 +39,14 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Path to a (conversion-based) index",
         metavar="SRC",
+    )
+    parser.add_argument(
+        "-e",
+        "--exact-method",
+        default="pscan",
+        type=str,
+        choices=["pscan", "binsort"],
+        help="exact method to use (default: %(default)s)",
     )
     parser.add_argument(
         "--no-ground-truth",
@@ -79,7 +87,6 @@ def main() -> None:
     args = parse_args()
     configure_run(args.log_level)
 
-    histograms: list[tuple[np.uint32, Histogram]] = load_input(args.histograms, name="histograms")
     queries: list[PercentileQuery] = load_input(args.queries, name="queries")
     pctl_index, cluster_bins = load_input(args.index, name="index")
 
@@ -97,17 +104,34 @@ def main() -> None:
         index_mode="recall",
         workers=args.workers,
     )
-    exact_results, iterative_time, avg_reduction = runner_exact.run_many(
-        hists=histograms,
-        precision_results=precision_results,
-        recall_results=recall_results,
-        queries=queries,
-        estimation_mode="over",
-        workers=args.workers,
-    )
+
+    if args.exact_method == "pscan":
+        histograms: list[tuple[np.uint32, Histogram]] = load_input(args.data, name="histograms")
+        exact_results, iterative_time, avg_reduction = runner_exact.run_pscan_collection(
+            hists=histograms,
+            precision_results=precision_results,
+            recall_results=recall_results,
+            queries=queries,
+            estimation_mode="over",
+            workers=args.workers,
+        )
+    elif args.exact_method == "binsort":
+        binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array] = load_input(
+            args.data, name="binsort"
+        )
+        exact_results, iterative_time, avg_reduction = runner_exact.run_binsort_collection(
+            binsort=binsort,
+            precision_results=precision_results,
+            recall_results=recall_results,
+            queries=queries,
+            index_mode="recall",
+            workers=args.workers,
+        )
+    else:
+        raise ValueError(f"Invalid exact method: {args.exact_method}")
 
     avg_sym_difference = -1.0
-    if not args.no_ground_truth:
+    if not args.no_ground_truth and args.exact_method == "pscan":
         if args.no_sym_difference:
             del precision_results
             del recall_results
@@ -134,7 +158,7 @@ def main() -> None:
         save_output(
             args.log_file,
             {
-                "histograms": args.histograms,
+                "data": args.data,
                 "precision_time": precision_time,
                 "recall_time": recall_time,
                 "iterative_time": iterative_time,
@@ -145,6 +169,9 @@ def main() -> None:
             name="exact results",
         )
 
+    logger.info(f"Precision time: {precision_time:.4g}s")
+    logger.info(f"Recall time: {recall_time:.4g}s")
+    logger.info(f"Iterative time: {iterative_time:.4g}s")
     logger.info(f"Average reduction: {avg_reduction:.2f}")
     logger.info(f"Average symmetric difference: {avg_sym_difference:.6g}")
     logger.info(f"Executed experiment in {time.perf_counter() - start:.2f}s.")

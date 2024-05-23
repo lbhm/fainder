@@ -1,0 +1,12 @@
+2024-04-23 16:52:59 | DEBUG   | {'input': PosixPath('data/gittables/binsort.zst'), 'input_type': 'binsort', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/gittables-query-binsort-single-2.log')}
+2024-04-23 16:52:59 | DEBUG   | Loading input data from data/gittables/binsort.zst
+2024-04-23 16:53:01 | TRACE   | bootstrap_time, 2.1849749982357025
+2024-04-23 16:53:01 | DEBUG   | Ignoring --index-mode as it is only relevant for non-index methods.
+2024-04-23 16:53:01 | DEBUG   | Starting execution
+2024-04-23 16:53:32 | TRACE   | query_time, 31.574933543801308
+2024-04-23 16:53:32 | DEBUG   | Raw binsort query execution time: 31.575517s
+2024-04-23 16:53:32 | TRACE   | query_collection_time, 31.575517375022173
+2024-04-23 16:53:32 | DEBUG   | Execution finished
+2024-04-23 16:53:32 | INFO    | Ran query in 31.58s
+2024-04-23 16:53:32 | TRACE   | execution_time, 31.57567209750414
+2024-04-23 16:53:32 | TRACE   | total_time, 33.76133044436574

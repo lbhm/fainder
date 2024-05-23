@@ -1,0 +1,11 @@
+2024-05-08 14:22:51 | DEBUG   | {'input': PosixPath('data/gittables/clusterings/microbenchmarks/k700-b50000.zst'), 'index_method': 'conversion', 'bin_estimation': 'continuous_value', 'index_precision': 'float16', 'output_dir': PosixPath('data/gittables/indices/microbenchmarks'), 'index_file': 'conversion-k700.zst', 'intermediate_output': None, 'workers': 112, 'log_level': 'INFO', 'log_file': PosixPath('logs/microbenchmarks/indexing/gittables-conversion-k700.log')}
+2024-05-08 14:22:51 | DEBUG   | Loading histogram clusters from data/gittables/clusterings/microbenchmarks/k700-b50000.zst
+2024-05-08 14:23:24 | DEBUG   | Selected conversion method, ignoring bin estimation choice
+2024-05-08 14:23:24 | DEBUG   | Starting conversion
+2024-05-08 14:26:09 | DEBUG   | Starting index creation
+2024-05-08 14:31:29 | DEBUG   | Veryfying index
+2024-05-08 14:31:30 | DEBUG   | Index size: 8011.33 MB
+2024-05-08 14:31:30 | TRACE   | index_size, 8011.329636
+2024-05-08 14:31:30 | INFO    | Created conversion-based index in 485.79s
+2024-05-08 14:31:30 | TRACE   | total_time, 485.79414224624634
+2024-05-08 14:31:41 | DEBUG   | Saved index to data/gittables/indices/microbenchmarks/conversion-k700.zst

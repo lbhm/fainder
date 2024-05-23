@@ -1,0 +1,7 @@
+2024-04-22 16:05:51 | DEBUG   | {'input': PosixPath('data/sportstables/pq'), 'output': PosixPath('data/sportstables/histograms_m100.zst'), 'scaling_factor': 1, 'bin_range': [100, 100], 'compute_frequencies': False, 'workers': 112, 'seed': 42, 'log_file': PosixPath('logs/runtime_benchmark/binsort/sportstables-construction-m100.log')}
+2024-04-22 16:05:55 | DEBUG   | Saved histograms to data/sportstables/histograms_m100.zst
+2024-04-22 16:05:55 | INFO    | Parsed 1183 files and generated 19862 histograms with a total of 718429 bins in 3.77s with 0 errors.
+2024-04-22 16:05:55 | TRACE   | histogram_count, 19862
+2024-04-22 16:05:55 | TRACE   | bin_count, 718429
+2024-04-22 16:05:55 | TRACE   | error_count, 0
+2024-04-22 16:05:55 | TRACE   | construction_time, 3.772050805389881

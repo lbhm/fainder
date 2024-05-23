@@ -83,12 +83,13 @@ def compute_histogram(
     bin_range: tuple[int, int] | None,
     scaling_factor: float = 1,
     density: bool = True,
-) -> list[Histogram] | str:
+) -> tuple[list[Histogram], int] | str:
     try:
         np.seterr(all="raise")
         hists: list[Histogram] = []
         rng = np.random.default_rng(seed)
         df = pd.read_parquet(input_file, engine="pyarrow").select_dtypes(include="number")
+        bin_counter = 0
         for _, values in df.items():
             values.dropna(inplace=True)
             # We filter out huge values to prevent overflows in the index (and since they
@@ -104,6 +105,7 @@ def compute_histogram(
                             values.nunique() - 1,
                             rng.integers(low=bin_range[0], high=bin_range[1] + 1),
                         )
+                        bin_counter += bins
                     else:
                         bins = "auto"
                     hist = np.histogram(
@@ -125,7 +127,7 @@ def compute_histogram(
                     hists.append(hist)
 
                     probability -= 1
-        return hists
+        return hists, bin_counter
     except AssertionError as e:
         raise AssertionError(input_file) from e
     except Exception as e:
@@ -159,21 +161,27 @@ def main() -> None:
     errors: list[str] = []
     hists: list[tuple[np.uint32, Histogram]] = []
     i = 0
+    bin_counter = 0
     for result in results:
         if isinstance(result, str):
             errors.append(result)
         else:
-            for hist in result:
+            for hist in result[0]:
                 hists.append((np.uint32(i), hist))
                 i += 1
+            bin_counter += result[1]
 
     save_output(args.output, hists, name="histograms")
 
     end = time.perf_counter()
     logger.info(
-        f"Parsed {n_files} files and generated {i} histograms in {end - start:.2f}s"
-        f" with {len(errors)} errors."
+        f"Parsed {n_files} files and generated {i} histograms with a total of {bin_counter} bins "
+        f"in {end - start:.2f}s with {len(errors)} errors."
     )
+    logger.trace(f"histogram_count, {i}")
+    logger.trace(f"bin_count, {bin_counter}")
+    logger.trace(f"error_count, {len(errors)}")
+    logger.trace(f"construction_time, {end - start}")
     for error in errors:
         logger.debug(error)
 

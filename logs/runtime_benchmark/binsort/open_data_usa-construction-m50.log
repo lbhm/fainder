@@ -1,0 +1,7 @@
+2024-04-22 19:16:22 | DEBUG   | {'input': PosixPath('data/open_data_usa/pq'), 'output': PosixPath('data/open_data_usa/histograms_m50.zst'), 'scaling_factor': 1, 'bin_range': [50, 50], 'compute_frequencies': False, 'workers': 112, 'seed': 42, 'log_file': PosixPath('logs/runtime_benchmark/binsort/open_data_usa-construction-m50.log')}
+2024-04-22 19:16:42 | DEBUG   | Saved histograms to data/open_data_usa/histograms_m50.zst
+2024-04-22 19:16:42 | INFO    | Parsed 5422 files and generated 68313 histograms with a total of 2393908 bins in 20.69s with 0 errors.
+2024-04-22 19:16:42 | TRACE   | histogram_count, 68313
+2024-04-22 19:16:42 | TRACE   | bin_count, 2393908
+2024-04-22 19:16:42 | TRACE   | error_count, 0
+2024-04-22 19:16:42 | TRACE   | construction_time, 20.693699717521667

@@ -1,0 +1,12 @@
+2024-04-23 14:26:00 | DEBUG   | {'input': PosixPath('data/sportstables/binsort.zst'), 'input_type': 'binsort', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/sportstables-query-binsort-single-2.log')}
+2024-04-23 14:26:00 | DEBUG   | Loading input data from data/sportstables/binsort.zst
+2024-04-23 14:26:00 | TRACE   | bootstrap_time, 0.03618964925408363
+2024-04-23 14:26:00 | DEBUG   | Ignoring --index-mode as it is only relevant for non-index methods.
+2024-04-23 14:26:00 | DEBUG   | Starting execution
+2024-04-23 14:26:01 | TRACE   | query_time, 0.411756306886673
+2024-04-23 14:26:01 | DEBUG   | Raw binsort query execution time: 0.411942s
+2024-04-23 14:26:01 | TRACE   | query_collection_time, 0.4119424596428871
+2024-04-23 14:26:01 | DEBUG   | Execution finished
+2024-04-23 14:26:01 | INFO    | Ran query in 0.4121s
+2024-04-23 14:26:01 | TRACE   | execution_time, 0.41212114319205284
+2024-04-23 14:26:01 | TRACE   | total_time, 0.449020866304636

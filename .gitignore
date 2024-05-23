@@ -41,6 +41,9 @@ venv/
 .pytest_cache/
 
 # Local project folders
-/data/
+/data/*
 diagrams/
 plots/
+
+# Include the LLM predicate workload in Git
+!/data/llm_workload/

@@ -132,8 +132,8 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
                 file=${path##*/}
                 python experiments/compute_fainder_results.py \
                     -i "$path" \
-                    -q data/"$dataset"/queries/val-"$queries".zst \
-                    -t data/"$dataset"/results/ground_truth-val-"$queries".zst \
+                    -q data/"$dataset"/queries/accuracy_benchmark/val-"$queries".zst \
+                    -t data/"$dataset"/results/accuracy_benchmark/ground_truth-val-"$queries".zst \
                     --log-file logs/accuracy_benchmark/"$experiment"/"$dataset"-"${file%%.*}"-"$queries".zst
             done
         done
@@ -153,33 +153,68 @@ for dataset in "${!datasets[@]}"; do
     for queries in "low_selectivity" "mid_selectivity" "high_selectivity"; do
         python experiments/compute_pscan_results.py \
             -H data/"$dataset"/histograms.zst \
-            -q data/"$dataset"/queries/test-"$queries".zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-pscan-"$queries".zst
+        python experiments/compute_binsort_results.py \
+            -i data/"$dataset"/binsort.zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
+            -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
+            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-binsort-"$queries".zst
         python experiments/compute_ndist_results.py \
             -d data/"$dataset"/normal_dists.zst \
-            -q data/"$dataset"/queries/test-"$queries".zst \
-            -t data/"$dataset"/results/ground_truth-test-"$queries".zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
+            -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             -w "$(nproc)" \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-ndist-"$queries".zst
         python experiments/compute_fainder_results.py \
             -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/rebinning-"${datasets[$dataset]}".zst \
-            -q data/"$dataset"/queries/test-"$queries".zst \
-            -t data/"$dataset"/results/ground_truth-test-"$queries".zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
+            -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-rebinning-"$queries".zst \
             --log-runtime
         python experiments/compute_fainder_results.py \
             -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/conversion-"${datasets[$dataset]}".zst \
-            -q data/"$dataset"/queries/test-"$queries".zst \
-            -t data/"$dataset"/results/ground_truth-test-"$queries".zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
+            -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-conversion-"$queries".zst \
             --log-runtime
         python experiments/compute_exact_results.py \
-            -H data/"$dataset"/histograms.zst \
-            -q data/"$dataset"/queries/test-"$queries".zst \
+            -d data/"$dataset"/binsort.zst \
             -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/conversion-"${datasets[$dataset]}".zst \
+            -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
+            -e binsort \
             --no-ground-truth \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-exact-"$queries".zst
     done
+done
+
+### LLM Query Workload ###
+for dataset in "${!datasets[@]}"; do
+    cp data/llm_workload/llm_queries.zst data/"$dataset"/queries/llm/all.zst
+    python experiments/collate_benchmark_queries.py \
+        -d "$dataset" \
+        -q data/"$dataset"/queries/llm/all.zst \
+        -W llm \
+        -c "data/$dataset/clusterings/accuracy_benchmark/k_cluster/${datasets[$dataset]}.zst"
+
+    python experiments/compute_ndist_results.py \
+        -d data/"$dataset"/normal_dists.zst \
+        -q data/"$dataset"/queries/llm/all.zst \
+        -t data/"$dataset"/results/llm/ground_truth-all.zst \
+        -w "$(nproc)" \
+        --log-file logs/accuracy_benchmark/llm/"$dataset"-ndist.zst
+    python experiments/compute_fainder_results.py \
+        -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/rebinning-"${datasets[$dataset]}".zst \
+        -q data/"$dataset"/queries/llm/all.zst \
+        -t data/"$dataset"/results/llm/ground_truth-all.zst \
+        --log-file logs/accuracy_benchmark/llm/"$dataset"-rebinning.zst \
+        --log-runtime
+    python experiments/compute_fainder_results.py \
+        -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/conversion-"${datasets[$dataset]}".zst \
+        -q data/"$dataset"/queries/llm/all.zst \
+        -t data/"$dataset"/results/llm/ground_truth-all.zst \
+        --log-file logs/accuracy_benchmark/llm/"$dataset"-conversion.zst \
+        --log-runtime
 done
 
 end_time=$(date +%s)

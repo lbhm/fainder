@@ -36,20 +36,19 @@ def parse_args() -> argparse.Namespace:
         metavar="SRC",
     )
     parser.add_argument(
+        "-W",
+        "--workload",
+        default="accuracy_benchmark",
+        choices=["accuracy_benchmark", "llm"],
+        help="The type of query workload to compute results for",
+    )
+    parser.add_argument(
         "-c",
         "--clustering",
         default=None,
         type=lambda s: Path(os.path.expandvars(s)),
         help="Path to a clustering",
         metavar="SRC",
-    )
-    parser.add_argument(
-        "-m",
-        "--metrics",
-        type=lambda s: Path(os.path.expandvars(s)),
-        required=True,
-        help="Path to an output file for query metrics",
-        metavar="DST",
     )
     parser.add_argument(
         "-v",
@@ -103,9 +102,8 @@ def main() -> None:
     random.seed(args.seed)
 
     histograms_path = Path(f"data/{args.dataset}/histograms.zst")
-    clustering_path = Path(f"data/{args.dataset}/clusterings/accuracy_benchmark.zst")
-    result_path = Path(f"data/{args.dataset}/results")
-    query_path = Path(f"data/{args.dataset}/queries")
+    result_path = Path(f"data/{args.dataset}/results/{args.workload}")
+    query_path = Path(f"data/{args.dataset}/queries/{args.workload}")
 
     histograms: list[tuple[np.uint32, Histogram]] = load_input(histograms_path, "histograms")
     queries: list[PercentileQuery] = load_input(args.queries, "queries")
@@ -126,7 +124,7 @@ def main() -> None:
     logger.info("Computed selectivity metrics")
 
     if args.clustering:
-        _, cluster_bins = load_input(clustering_path, "clustering")
+        _, cluster_bins = load_input(args.clustering, "clustering")
         cluster_hits = query_metrics.cluster_hits(
             queries=queries,
             cluster_bins=cluster_bins,
@@ -143,54 +141,60 @@ def main() -> None:
     )
     logger.info("Computed bin edge matches metrics")
 
-    val_queries: list[PercentileQuery] = []
-    test_queries: list[PercentileQuery] = []
-    for category, filter in [
-        ("low_selectivity", selectivity < 0.1),
-        ("mid_selectivity", (selectivity > 0.1) & (selectivity < 0.9)),
-        ("high_selectivity", selectivity > 0.9),
-    ]:
-        query_subset = list(compress(queries, filter))
-        result_subset = list(compress(ground_truth, filter))
-        n_queries: int = args.n_val_queries + args.n_test_queries
-        if len(query_subset) > n_queries:
-            ids = random.sample(range(len(query_subset)), n_queries)
-            query_subset = [query for i, query in enumerate(query_subset) if i in ids]
-            result_subset = [result for i, result in enumerate(result_subset) if i in ids]
-
-            val_queries += query_subset[: args.n_val_queries]
-            test_queries += query_subset[args.n_val_queries :]
-
-            save_output(
-                query_path / f"val-{category}.zst",
-                query_subset[: args.n_val_queries],
-                f"{category} val queries",
-            )
-            save_output(
-                query_path / f"test-{category}.zst",
-                query_subset[args.n_val_queries :],
-                f"{category} test queries",
-            )
-            save_output(
-                result_path / f"ground_truth-val-{category}.zst",
-                result_subset[: args.n_val_queries],
-                f"{category} val truth",
-            )
-            save_output(
-                result_path / f"ground_truth-test-{category}.zst",
-                result_subset[args.n_val_queries :],
-                f"{category} test truth",
-            )
-        else:
-            logger.error(
-                f"Only {len(query_subset)} queries with {category} available, "
-                f"but {n_queries} requested."
-            )
-
-    save_output(query_path / "val-all.zst", val_queries, "val queries")
-    save_output(query_path / "test-all.zst", test_queries, "test queries")
+    save_output(
+        args.queries.with_stem(args.queries.stem + "-metrics"),
+        (selectivity, cluster_hits, bin_edge_matches),
+        "query metrics",
+    )
     save_output(result_path / "ground_truth-all.zst", ground_truth, "ground truth")
-    save_output(args.metrics, (selectivity, cluster_hits, bin_edge_matches), "query metrics")
+
+    if args.workload == "accuracy_benchmark":
+        val_queries: list[PercentileQuery] = []
+        test_queries: list[PercentileQuery] = []
+        for category, filter in [
+            ("low_selectivity", selectivity < 0.1),
+            ("mid_selectivity", (selectivity > 0.1) & (selectivity < 0.9)),
+            ("high_selectivity", selectivity > 0.9),
+        ]:
+            query_subset = list(compress(queries, filter))
+            result_subset = list(compress(ground_truth, filter))
+            n_queries: int = args.n_val_queries + args.n_test_queries
+            if len(query_subset) > n_queries:
+                ids = random.sample(range(len(query_subset)), n_queries)
+                query_subset = [query for i, query in enumerate(query_subset) if i in ids]
+                result_subset = [result for i, result in enumerate(result_subset) if i in ids]
+
+                val_queries += query_subset[: args.n_val_queries]
+                test_queries += query_subset[args.n_val_queries :]
+
+                save_output(
+                    query_path / f"val-{category}.zst",
+                    query_subset[: args.n_val_queries],
+                    f"{category} val queries",
+                )
+                save_output(
+                    query_path / f"test-{category}.zst",
+                    query_subset[args.n_val_queries :],
+                    f"{category} test queries",
+                )
+                save_output(
+                    result_path / f"ground_truth-val-{category}.zst",
+                    result_subset[: args.n_val_queries],
+                    f"{category} val truth",
+                )
+                save_output(
+                    result_path / f"ground_truth-test-{category}.zst",
+                    result_subset[args.n_val_queries :],
+                    f"{category} test truth",
+                )
+            else:
+                logger.error(
+                    f"Only {len(query_subset)} queries with {category} available, "
+                    f"but {n_queries} requested."
+                )
+
+        save_output(query_path / "val-all.zst", val_queries, "val queries")
+        save_output(query_path / "test-all.zst", test_queries, "test queries")
 
     logger.info(f"Executed experiment in {time.perf_counter() - start:.2f}s.")
 

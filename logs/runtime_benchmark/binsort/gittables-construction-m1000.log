@@ -1,0 +1,498 @@
+2024-04-22 18:23:45 | DEBUG   | {'input': PosixPath('data/gittables/pq'), 'output': PosixPath('data/gittables/histograms_m1000.zst'), 'scaling_factor': 1, 'bin_range': [1000, 1000], 'compute_frequencies': False, 'workers': 112, 'seed': 42, 'log_file': PosixPath('logs/runtime_benchmark/binsort/gittables-construction-m1000.log')}
+2024-04-22 18:28:36 | DEBUG   | Saved histograms to data/gittables/histograms_m1000.zst
+2024-04-22 18:28:36 | INFO    | Parsed 1018649 files and generated 5017619 histograms with a total of 173037340 bins in 291.58s with 17 errors.
+2024-04-22 18:28:36 | TRACE   | histogram_count, 5017619
+2024-04-22 18:28:36 | TRACE   | bin_count, 173037340
+2024-04-22 18:28:36 | TRACE   | error_count, 17
+2024-04-22 18:28:36 | TRACE   | construction_time, 291.5768420808017
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/parent_tables_licensed_3021.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(webdesign) in identifier: string
+tag_createUserEmail: string
+tag_modUserEmail: string
+tag_parent: string
+tag_pages: string
+tag_title: string
+tag_createDate: string
+tag_modDate: string
+tag_name: string
+120010: int64
+system@vosao.org: string
+: double
+90007: double
+[/blog/aliquam-risus-justo: string
+ /blog/lorem-ipsum-dolor-sit-amet]: string
+webdesign: string
+Thu Mar 13 09:32:51 CET 2014: string
+Thu Mar 13 09:32:51 CET 2014: string
+webdesign: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/stopping_point_tables_licensed_1504.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/then_tables_licensed_33109.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(cough) in I: string
+kinda: string
+wanted: string
+to: string
+see: string
+where: string
+Virgo: string
+was: string
+going: string
+with: string
+the: string
+rings: string
+and: string
+vaulting: string
+horse...: string
+from: string
+her: string
+bikini: string
+obviously: string
+(cough: string
+cough: string
+vag: string
+cough: string
+cough): string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/thing_tables_licensed_33197.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/processing_time_tables_licensed_5415.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/show_time_tables_licensed_14061.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/whole_tables_licensed_30621.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/parent_tables_licensed_23977.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(webdesign) in identifier: string
+tag_createUserEmail: string
+tag_modUserEmail: string
+tag_parent: string
+tag_pages: string
+tag_title: string
+tag_createDate: string
+tag_modDate: string
+tag_name: string
+120010: int64
+system@vosao.org: string
+: double
+90007: double
+[/blog/aliquam-risus-justo: string
+ /blog/lorem-ipsum-dolor-sit-amet]: string
+webdesign: string
+Thu Mar 13 09:32:51 CET 2014: string
+Thu Mar 13 09:32:51 CET 2014: string
+webdesign: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/whole_tables_licensed_23334.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(cough) in I: string
+kinda: string
+wanted: string
+to: string
+see: string
+where: string
+Virgo: string
+was: string
+going: string
+with: string
+the: string
+rings: string
+and: string
+vaulting: string
+horse...: string
+from: string
+her: string
+bikini: string
+obviously: string
+(cough: string
+cough: string
+vag: string
+cough: string
+cough): string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/living_thing_tables_licensed_3356.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/safe_period_tables_licensed_2708.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/thing_tables_licensed_62815.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(and) in If: string
+I: string
+die: string
+of.1: string
+old: string
+age: string
+before: string
+we: string
+get: string
+out: string
+of.1.1: string
+this.1: string
+filler.1: string
+will: string
+somene: string
+visit: string
+my: string
+grave: string
+and.2: string
+tell: string
+me: string
+what: string
+happens?: string
+We: string
+need: string
+a: string
+filler: string
+with: string
+Konohamaru..: string
+and: string
+he: string
+should: string
+of: string
+been: string
+in: string
+this: string
+second: string
+chunin: string
+exam.: string
+SHowing: string
+how: string
+he: string
+learned: string
+the: string
+resgenan: string
+and: string
+using: string
+it: string
+to: string
+surprise: string
+everyone: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/lead_time_tables_licensed_8527.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(none) in text: string
+observed: string
+expected: string
+'5 juegos que me marcaron: - Call of duty: Black Ops 2 - Rocket League - Battlefield 3 - Bioshock Infinite - Kingdom Hearts 2 ': string
+none: string
+none: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/quick_time_tables_licensed_10806.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(none) in text: string
+observed: string
+expected: string
+'5 juegos que me marcaron: - Call of duty: Black Ops 2 - Rocket League - Battlefield 3 - Bioshock Infinite - Kingdom Hearts 2 ': string
+none: string
+none: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/whole_tables_licensed_44419.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(none) in text: string
+observed: string
+expected: string
+'5 juegos que me marcaron: - Call of duty: Black Ops 2 - Rocket League - Battlefield 3 - Bioshock Infinite - Kingdom Hearts 2 ': string
+none: string
+none: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/object_tables_licensed_19105.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name( docum) in S: string
+nt1~S: string
+nt2~Scor: string
+Unnamed: 3: string
+V: string
+ctor spac: string
+ r: string
+pr: string
+s: string
+ntation r: string
+sults in th: string
+ loss of th: string
+ ord: string
+r which th: string
+ t: string
+rms ar: string
+ in th: string
+ docum: string
+nt.~If a t: string
+rm occurs in th: string
+ docum: string
+nt, th: string
+ valu: string
+ will b: string
+ non-z: string
+ro in th: string
+ v: string
+ctor.~1.0: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string
+2024-04-22 18:28:36 | DEBUG   | data/gittables/pq/real_time_tables_licensed_36351.pq: <class 'pyarrow.lib.ArrowInvalid'> Multiple matches for FieldRef.Name(its) in An: string
+absolute: string
+joy...: string
+One: string
+of: string
+the: string
+best: string
+films: string
+to.1: string
+ever: string
+come: string
+out: string
+of.1: string
+Pixar's: string
+library.|Fresh: string
+[W]hat: string
+sets: string
+this: string
+movie: string
+apart: string
+is: string
+its: string
+ability: string
+to: string
+thoroughly: string
+educate: string
+its: string
+audience: string
+via: string
+entertainment.|Fresh: string
+__fragment_index: int32
+__batch_index: int32
+__last_in_fragment: bool
+__filename: string

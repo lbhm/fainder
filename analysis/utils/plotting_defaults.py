@@ -18,7 +18,7 @@ def parse_logs_wide(logfile: Path | str) -> dict[str, Any]:
 
     for line in lines:
         log = line.split("|")
-        if log[1].strip() != "TRACE":
+        if len(log) <= 1 or log[1].strip() != "TRACE":
             continue
         log = log[2].split(",")
         log = [x.strip() for x in log]
@@ -40,7 +40,7 @@ def parse_logs_long(logfile: Path | str) -> list[dict[str, Any]]:
 
     for line in lines:
         log = line.split("|")
-        if log[1].strip() != "TRACE":
+        if len(log) <= 1 or log[1].strip() != "TRACE":
             continue
         log = log[2].split(",")
         log = [x.strip() for x in log]
@@ -199,6 +199,7 @@ def set_style(font_scale: float = 6.0) -> None:
                 r"\newcommand{\exact}[0]{\textsc{Fainder Exact}}"
                 r"\newcommand{\approximate}[0]{\textsc{Fainder Approx}}"
                 r"\newcommand{\pscan}[0]{\texttt{profile-scan}}"
+                r"\newcommand{\binsort}[0]{\texttt{binsort}}"
                 r"\newcommand{\ndist}[0]{\texttt{normal-dist}}"
             ),
         },

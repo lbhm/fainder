@@ -10,13 +10,22 @@ cp data/open_data_usa/indices/accuracy_benchmark/k_cluster/conversion-kmeans-k25
 cp data/gittables/indices/accuracy_benchmark/k_cluster/conversion-kmeans-k750-b100000-quantile-a1.zst data/gittables/indices/exact_results.zst
 
 for dataset in "sportstables" "open_data_usa" "gittables"; do
+    cp data/"$dataset"/queries/accuracy_benchmark/test-all.zst data/"$dataset"/queries/exact_results.zst
+
     for i in {1..5}; do
         python experiments/compute_exact_results.py \
-            -H data/"$dataset"/histograms.zst \
+            -d data/"$dataset"/histograms.zst \
             -i data/"$dataset"/indices/exact_results.zst \
-            -q data/"$dataset"/queries/test-all.zst \
+            -q data/"$dataset"/queries/exact_results.zst \
             --no-sym-difference \
-            --log-file logs/exact_results/"$dataset"-"$i".zst
+            --log-file logs/exact_results/"$dataset"-pscan-"$i".zst
+        python experiments/compute_exact_results.py \
+            -d data/"$dataset"/binsort.zst \
+            -i data/"$dataset"/indices/exact_results.zst \
+            -q data/"$dataset"/queries/exact_results.zst \
+            -e binsort \
+            --no-ground-truth \
+            --log-file logs/exact_results/"$dataset"-binsort-"$i".zst
     done
 done
 

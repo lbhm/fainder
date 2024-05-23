@@ -1,0 +1,12 @@
+2024-04-23 14:32:28 | DEBUG   | {'input': PosixPath('data/open_data_usa/binsort.zst'), 'input_type': 'binsort', 'query': ['0.1', 'lt', '50'], 'estimation_mode': None, 'index_mode': 'recall', 'output': None, 'workers': None, 'frequency_hists': False, 'suppress_results': False, 'log_level': 'INFO', 'log_file': PosixPath('logs/runtime_benchmark/execution/open_data_usa-query-binsort-single-3.log')}
+2024-04-23 14:32:28 | DEBUG   | Loading input data from data/open_data_usa/binsort.zst
+2024-04-23 14:32:28 | TRACE   | bootstrap_time, 0.08428525924682617
+2024-04-23 14:32:28 | DEBUG   | Ignoring --index-mode as it is only relevant for non-index methods.
+2024-04-23 14:32:28 | DEBUG   | Starting execution
+2024-04-23 14:32:29 | TRACE   | query_time, 0.7235829047858715
+2024-04-23 14:32:29 | DEBUG   | Raw binsort query execution time: 0.723966s
+2024-04-23 14:32:29 | TRACE   | query_collection_time, 0.7239663898944855
+2024-04-23 14:32:29 | DEBUG   | Execution finished
+2024-04-23 14:32:29 | INFO    | Ran query in 0.7242s
+2024-04-23 14:32:29 | TRACE   | execution_time, 0.7241608463227749
+2024-04-23 14:32:29 | TRACE   | total_time, 0.8091833330690861

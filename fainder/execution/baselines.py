@@ -7,7 +7,7 @@ import numpy as np
 from loguru import logger
 from scipy.stats import norm
 
-from fainder.typing import PercentileQuery
+from fainder.typing import F32Array, F64Array, PercentileQuery, UInt32Array
 from fainder.utils import ROUNDING_PRECISION
 
 
@@ -73,5 +73,60 @@ def query_dist_collection(
 
     end = time.perf_counter()
     logger.debug(f"Raw naive query execution time: {end - start:.6f}s")
+    logger.trace(f"query_collection_time, {end - start}")
+    return matches
+
+
+def query_binsort(
+    binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array],
+    index_mode: Literal["precision", "recall"],
+    queries: list[PercentileQuery],
+    n_workers: int | None,
+) -> list[set[np.uint32]]:
+    if n_workers is not None:
+        raise NotImplementedError(
+            "Multiple workers are not implemented yet as we compare all solutions without "
+            "parallelization."
+        )
+
+    start = time.perf_counter()
+    matches: list[set[np.uint32]] = []
+
+    edges, pctls, ids = binsort
+    for query in queries:
+        query_start = time.perf_counter()
+        query_matches: set[np.uint32] = set()
+        percentile, comparison, reference = query
+
+        assert 0 < percentile <= 1
+        if "g" in comparison:
+            percentile = 1.0 - percentile
+
+        if "g" in comparison and index_mode == "recall":
+            pctl_mode = 0
+        elif index_mode == "precision":
+            pctl_mode = 1
+        else:
+            # "l" in comparison and index_mode == "recall"
+            pctl_mode = 2
+
+        if "l" in comparison:
+            bin_index = np.searchsorted(edges, reference, side="right")
+            for i in range(bin_index):
+                if pctls[pctl_mode][i] >= percentile:
+                    query_matches.add(ids[i])
+        elif "g" in comparison:
+            bin_index = np.searchsorted(edges, reference, side="left")
+            for i in range(bin_index, len(edges)):
+                if pctls[pctl_mode][i] <= percentile:
+                    query_matches.add(ids[i])
+        else:
+            raise ValueError("Invalid comparison.")
+
+        matches.append(query_matches)
+        logger.trace(f"query_time, {time.perf_counter() - query_start}")
+
+    end = time.perf_counter()
+    logger.debug(f"Raw binsort query execution time: {end - start:.6f}s")
     logger.trace(f"query_collection_time, {end - start}")
     return matches

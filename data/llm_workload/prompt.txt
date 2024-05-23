@@ -1,0 +1,14 @@
+You are a data scientist tasked with training a machine learning model. To accomplish this task, you need to find suitable datasets using a dataset search engine. Currently, such dataset search engines only support keyword-based search. Imagine, however, that you are also able to specify distributional search predicates in your query. More specifically, imagine that you could specify a new kind of search predicate called percentile predicate. A percentile predicate allows you to search for datasets that have a column with specific value distribution characteristics. For example:
+- Columns where at least 20% of the values are smaller than 40.
+- Columns where at most 50% of the values are smaller than 100.
+- Columns where less than 5.5% of the values are smaller than -7.
+- Columns where more than 80% of the values are smaller than 87.3.
+
+In technical terms, a percentile predicate is represented by a 3-tuple as follows:
+- A comparison operator from the choices: <, <=, >, and >=.
+- A percentage value between 0 and 1. Examples for such values are 0.4, 0.53, or 0.07.
+- A reference number from the domain of rational numbers. Examples for such numbers are 1, 203, 4.67, -10, or -256.4.
+
+As an example, the predicate "at least 20% of the values are smaller than 40" is represented as (>=, 0.2, 40).
+
+Your task is to generate examples of such percentile predicates. Write every example into a new line and generate at least 60 examples.

@@ -18,7 +18,9 @@ from fainder.utils import (
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Compute the accuracy of an index given a query set and a ground truth.",
+        description=(
+            "Compute the accuracy of a Fainder index given a query set and a ground truth."
+        ),
         formatter_class=argparse.MetavarTypeHelpFormatter,
     )
     parser.add_argument(
@@ -26,7 +28,7 @@ def parse_args() -> argparse.Namespace:
         "--index",
         type=lambda s: Path(os.path.expandvars(s)),
         required=True,
-        help="Path to the index file",
+        help="Path to the Fainder index file",
         metavar="SRC",
     )
     parser.add_argument(

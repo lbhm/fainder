@@ -7,7 +7,7 @@ from typing import Any, Literal
 import numpy as np
 from loguru import logger
 
-from fainder.execution.baselines import query_dist_collection
+from fainder.execution.baselines import query_binsort, query_dist_collection
 from fainder.execution.percentile_queries import (
     query_conversion_collection,
     query_histogram_collection,
@@ -15,7 +15,14 @@ from fainder.execution.percentile_queries import (
     query_rebinned_collection,
 )
 from fainder.typing import PercentileQuery
-from fainder.utils import configure_run, load_input, save_output
+from fainder.utils import (
+    configure_run,
+    filter_binsort,
+    filter_hists,
+    filter_index,
+    load_input,
+    save_output,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -36,7 +43,14 @@ def parse_args() -> argparse.Namespace:
         "-t",
         "--input-type",
         type=str,
-        choices=["histograms", "rebinned_hists", "conversion_matrices", "index", "normal_dists"],
+        choices=[
+            "histograms",
+            "rebinned_hists",
+            "conversion_matrices",
+            "index",
+            "normal_dists",
+            "binsort",
+        ],
         required=True,
         help="content type of the input data",
     )
@@ -63,6 +77,13 @@ def parse_args() -> argparse.Namespace:
         type=str,
         choices=["precision", "recall"],
         help="whether to optimize the index for precision or recall (default: %(default)s)",
+    )
+    parser.add_argument(
+        "-f",
+        "--hist-filter",
+        default=None,
+        type=lambda s: Path(os.path.expandvars(s)),
+        help="path to a list of histogram IDs for pre-filtering (default: %(default)s)",
     )
     parser.add_argument(
         "-o",
@@ -113,10 +134,11 @@ def run(
     input_data: Any,
     queries: list[PercentileQuery],
     input_type: Literal[
-        "histograms", "rebinned_hists", "conversion_matrices", "index", "normal_dists"
+        "histograms", "rebinned_hists", "conversion_matrices", "index", "normal_dists", "binsort"
     ],
     estimation_mode: Literal["over", "under", "continuous_value", "cubic_spline"] = "over",
     index_mode: Literal["precision", "recall"] = "recall",
+    hist_filter: set[np.uint32] | None = None,
     frequency_hists: bool = False,
     suppress_results: bool = False,
     workers: int | None = None,
@@ -135,7 +157,7 @@ def run(
     logger.debug("Starting execution")
     start = time.perf_counter()
     if input_type == "histograms":
-        hists = input_data
+        hists = filter_hists(input_data, hist_filter) if hist_filter else input_data
         results = query_histogram_collection(
             hists, estimation_mode, queries, workers, not frequency_hists
         )
@@ -161,13 +183,18 @@ def run(
             not frequency_hists,
         )
     elif input_type == "index":
-        pctl_index, cluster_bins = input_data
+        pctl_index, cluster_bins = (
+            filter_index(input_data[0], input_data[1], hist_filter) if hist_filter else input_data
+        )
         results = query_index(
             pctl_index, cluster_bins, index_mode, queries, workers, suppress_results
         )
     elif input_type == "normal_dists":
         dists = input_data
         results = query_dist_collection(dists, "normal", queries, workers)
+    elif input_type == "binsort":
+        binsort = filter_binsort(input_data, hist_filter) if hist_filter else input_data
+        results = query_binsort(binsort, index_mode, queries, workers)
     else:
         raise ValueError(f"Invalid input type {input_type}.")
     end = time.perf_counter()
@@ -187,16 +214,21 @@ def main() -> None:
 
     input_data = load_input(args.input, name="input data")
     queries = load_input(args.queries, name="queries")
+    if args.hist_filter:
+        hist_filter = load_input(args.hist_filter, name="histogram filter")
+    else:
+        hist_filter = None
     logger.trace(f"bootstrap_time, {time.perf_counter() - start}")
     results, _ = run(
-        input_data,
-        queries,
-        args.input_type,
-        args.estimation_mode,
-        args.index_mode,
-        args.frequency_hists,
-        args.suppress_results,
-        args.workers,
+        input_data=input_data,
+        queries=queries,
+        input_type=args.input_type,
+        estimation_mode=args.estimation_mode,
+        index_mode=args.index_mode,
+        hist_filter=hist_filter,
+        frequency_hists=args.frequency_hists,
+        suppress_results=args.suppress_results,
+        workers=args.workers,
     )
 
     if args.output:
