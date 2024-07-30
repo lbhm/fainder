@@ -103,7 +103,7 @@ def run_pscan(
     filtered_hists = [h for h in hists if h[0] in potential_results]
     logger.debug(
         f"Executing query on {len(filtered_hists)} instead of {len(hists)} histograms"
-        f" ({(1 - len(filtered_hists)/len(hists)) * 100:.2f}% reduction)"
+        f" ({(1 - len(filtered_hists) / len(hists)) * 100:.2f}% reduction)"
     )
 
     logger.debug("Starting execution")

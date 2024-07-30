@@ -637,9 +637,11 @@ def query_index(
         if n_workers <= 0:
             raise ValueError("Number of workers must greater than 0 (or None).")
 
+        method: Literal["rebinning", "conversion"] = (
+            "rebinning" if len(pctl_index[0]) == 1 else "conversion"
+        )
         n_hists = [len(t[0][0]) for t in pctl_index]
         index_dtype = pctl_index[0][0][0].dtype
-        method = "rebinning" if len(pctl_index[0]) == 1 else "conversion"
         shm_pointers = load_shm_index(pctl_index)
         try:
             logger.debug("Initalizing index worker pool")
