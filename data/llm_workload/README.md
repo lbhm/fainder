@@ -1,6 +1,15 @@
-# Explanation of the LLM predicate workload
+# LLM-generated predicate workload
 
-As of April 25, 2024, the following LLMs lead the Chatbot Arena ranking:
+Next to our workload generator available via `generate-queries`, we also experimented with large
+language models (LLMs) to generate benchmark workloads for our experiments. Below, we describe
+how we generated an LLM-based workload using a variety of different models.
+
+The script `experiments/accuracy_benchmark.sh` outlines how we used the workload in our
+experiments.
+
+## Methodology
+
+As of April 25, 2024, the following LLMs lead the [LMSYS Chatbot Arena](https://chat.lmsys.org/?arena) ranking:
 
 | Rank Model | Arena                           | Elo  |
 |------------|---------------------------------|------|
@@ -15,7 +24,8 @@ As of April 25, 2024, the following LLMs lead the Chatbot Arena ranking:
 | 9          | Command R+                      | 1192 |
 | 10         | GPT-4-0314                      | 1188 |
 
-Out of this leaderboard, the following models are not available on Chatbot Arena via the direct chat functionality:
+Out of this leaderboard, the following models were not available on Chatbot Arena via the direct
+chat functionality:
 
 - GPT-4-0125-preview
 - Bard (Gemini Pro)

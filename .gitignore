@@ -44,6 +44,8 @@ venv/
 /data/*
 diagrams/
 plots/
+poster/
+talk/
 
 # Include the LLM predicate workload in Git
 !/data/llm_workload/
