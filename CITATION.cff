@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: If you use this software, please cite our research paper as specified below or in the Readme.
+authors:
+  - family-names: Behme
+    given-names: Lennart
+  - family-names: Galhotra
+    given-names: Sainyam
+  - family-names: Beedkar
+    given-names: Kaustubh
+  - family-names: Markl
+    given-names: Volker
+title: "Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"
+version: 1.0.0
+url: https://doi.org/10.14778/3681954.3681999
+doi: 10.14778/3681954.3681999
+date-released: "2024-08-15"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Behme
+      given-names: Lennart
+    - family-names: Galhotra
+      given-names: Sainyam
+    - family-names: Beedkar
+      given-names: Kaustubh
+    - family-names: Markl
+      given-names: Volker
+  title: "Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"
+  year: 2024
+  journal: "Proc. VLDB Endow."
+  volume: 17
+  issue: 11
+  doi: 10.14778/3681954.3681999
+  url: https://doi.org/10.14778/3681954.3681999
+  start: 3269
+  end: 3282
+  publisher:
+    name: VLDB Endowment
+  place: Guangzhou, China
