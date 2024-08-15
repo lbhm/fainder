@@ -28,6 +28,7 @@ preferred-citation:
   title: "Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"
   year: 2024
   journal: "Proc. VLDB Endow."
+  issn: 2150-8097
   volume: 17
   issue: 11
   doi: 10.14778/3681954.3681999
@@ -36,4 +37,4 @@ preferred-citation:
   end: 3282
   publisher:
     name: VLDB Endowment
-  place: Guangzhou, China
+  issue-date: "August 2024"
