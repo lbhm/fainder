@@ -1,3 +1,9 @@
+<p align="center">
+  <picture>
+    <img alt="Fainder logo" src="https://github.com/user-attachments/assets/41686649-f1c1-4b60-824e-80c322c5da85" width="400">
+  </picture>
+</p>
+
 # Fainder
 
 ![Python Version](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Flbhm%2Ffainder%2Fmain%2Fpyproject.toml)
@@ -44,7 +50,7 @@ pip install .
 ```
 
 If you also want to execute the analysis notebooks and generate the plots we show in our paper,
-replace the last line with `pip install -e ".[analysis]"`. Note that in order to recreate the plots
+replace the last line with `pip install -e ".[analysis]"`. Note that to recreate the plots
 as they appear in the paper, you also need a working LaTeX installation on your computer (see the
 [Matplotlib docs](https://matplotlib.org/stable/users/explain/text/usetex.html) for details). If
 you just want to recreate the results and do not care about the layout, you can remove the call to
@@ -76,7 +82,7 @@ To run your own experiments, review the CLI documentation of the `fainder` execu
 
 ### Reproducing Experiments
 
-All of our experiments can be reproduced by running the respective scripts in `experiments/` and
+Our experiments can be reproduced by running the respective scripts in `experiments/` and
 subsequently analyzing them with the notebooks in `analysis/`. The experiment scripts do not
 exactly follow the section structure of our paper but are roughly structured as follows:
 
@@ -92,8 +98,23 @@ experiments/
 ```
 
 The additional Python files in `experiments/` encapsulate partial experiment logic that we use in
-the aforementioned scripts.
+the scripts mentioned above.
 
 ## Citation
 
-TBD
+```bibtex
+@article{behme_fainder_2024,
+    title        = {Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search},
+    author       = {Behme, Lennart and Galhotra, Sainyam and Beedkar, Kaustubh and Markl, Volker},
+    year         = 2024,
+    journal      = {Proc. VLDB Endow.},
+    publisher    = {VLDB Endowment},
+    volume       = 17,
+    number       = 11,
+    pages        = {3269--3282},
+    doi          = {10.14778/3681954.3681999},
+    issn         = {2150-8097},
+    url          = {https://doi.org/10.14778/3681954.3681999},
+    issue_date   = {August 2024}
+}
+```
