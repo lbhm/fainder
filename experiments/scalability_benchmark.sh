@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Executing scalability benchmark"
+
 set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
@@ -41,4 +43,4 @@ for f in 025 050 100 200; do
 done
 
 end_time=$(date +%s)
-echo Executed script in $((end_time - start_time))s.
+echo Executed scalability benchmark in $((end_time - start_time))s.

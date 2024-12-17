@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Executing binsort benchmark"
+
 set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
@@ -18,4 +20,4 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
 done
 
 end_time=$(date +%s)
-echo Executed script in $((end_time - start_time))s.
+echo Executed binsort benchmark in $((end_time - start_time))s.

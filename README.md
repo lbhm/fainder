@@ -75,16 +75,28 @@ dataset collections we use (formatted either as CSV or Parquet files):
 - `data/open_data_usa/csv`: Follow the instructions at [Open Data Portal Watch](https://data.wu.ac.at/portalwatch/about) or contact us to receive a download link for this collection.
 - `data/gittables/pq`: Follow the instructions at [gittables.github.io](https://gittables.github.io/) or use our download script (see `download-datasets -h`).
 
-### General Usage
-
-To run your own experiments, review the CLI documentation of the `fainder` executables (see
-`pyproject.toml`) and take a look at our scripts in `experiments/`.
-
 ### Reproducing Experiments
 
-Our experiments can be reproduced by running the respective scripts in `experiments/` and
-subsequently analyzing them with the notebooks in `analysis/`. The experiment scripts do not
-exactly follow the section structure of our paper but are roughly structured as follows:
+To reproduce our experiments, you can perform a regular installation or use our Docker container
+for convenience. The following commands first build the Docker container and then execute a script
+that reproduces all figures in our paper.
+
+```bash
+docker build -t fainder:latest .
+docker run -it --rm --name fainder -u "$(id -u)":"$(id -g)" --mount type=bind,src=.,dst=/fainder fainder:latest
+```
+
+Please note:
+
+- You still need to download the dataset collections first and place them in the abovementioned folders.
+- Reproducing all experiments takes a significant amount of time. If you wish to only reproduce some experiments, you can comment out lines in `experiments/run_all.sh`.
+- If you do not rerun all experiments, the existing data in `logs/` will ensure that all figures are created properly. Every experiment you rerun will overwrite parts of the existing logs.
+- You can prepend `bash` to the `docker run` command to start an interactive shell instead of executing the pre-configured experiments.
+- You can interactively analyze experiment results with the notebooks in `analysis/` or rely on the plotting script in `experiments/` that reproduces the figures from the paper.
+
+The scripts in `experiments/` contain more experiments than we could cover in the paper. Please see
+the commented out lines and additional files if you are interested in them. The individual scripts
+do not exactly follow the section structure of our paper but are roughly structured as follows:
 
 ```bash
 experiments/
@@ -99,6 +111,11 @@ experiments/
 
 The additional Python files in `experiments/` encapsulate partial experiment logic that we use in
 the scripts mentioned above.
+
+### General Usage
+
+To run your own experiments, review the CLI documentation of the `fainder` executables (see
+`pyproject.toml`) and take a look at our scripts in `experiments/`.
 
 ## Citation
 

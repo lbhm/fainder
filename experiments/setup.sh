@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Executing setup"
+
 set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
@@ -83,4 +85,4 @@ python experiments/collate_benchmark_queries.py \
     -m logs/query_metrics/gittables-metrics.zst
 
 end_time=$(date +%s)
-echo Executed script in $((end_time - start_time))s.
+echo Executed setup in $((end_time - start_time))s.
