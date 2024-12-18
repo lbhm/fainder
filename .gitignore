@@ -40,6 +40,9 @@ venv/
 # pytest
 .pytest_cache/
 
+# numba
+.numba_cache/
+
 # Local project folders
 /data/*
 diagrams/

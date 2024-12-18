@@ -5,6 +5,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /fainder
-RUN --mount=type=bind,src=.,dst=/fainder,readwrite pip install --no-cache-dir -r pip.lock
+
+COPY pip.lock pyproject.toml ./
+RUN --mount=type=bind,src=fainder,dst=fainder/,readwrite pip install --no-cache-dir -r pip.lock
+RUN rm pip.lock pyproject.toml
+
+ENV NUMBA_CACHE_DIR=/fainder/.numba_cache
 
 CMD [ "/bin/bash", "experiments/run_all.sh" ]

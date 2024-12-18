@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2043
 
 echo "Executing microbenchmarks"
 
@@ -7,16 +8,16 @@ ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
 start_time=$(date +%s)
 
-for dataset in "open_data_usa" "gittables"; do
+for dataset in "open_data_usa"; do # "sportstables" "gittables"
     cp data/"$dataset"/queries/accuracy_benchmark/test-all.zst data/"$dataset"/queries/microbenchmarks.zst
     cp data/"$dataset"/results/accuracy_benchmark/ground_truth-test-all.zst data/"$dataset"/results/microbenchmarks.zst
 
-    if [ "$dataset" == "open_data_usa" ]; then
-        k_values=(1 {10..50..10} {100..1000..50})
-    else
+    if [ "$dataset" == "gittables" ]; then
+        # GitTables crashes for bad clustering parameters due to excessive memory usage
         k_values=({100..1000..50})
+    else
+        k_values=(1 {10..50..10} {100..1000..50})
     fi
-
 
     for k in "${k_values[@]}"; do
         # Create index and measure its size
@@ -43,10 +44,6 @@ for dataset in "open_data_usa" "gittables"; do
             -t data/"$dataset"/results/microbenchmarks.zst \
             --log-file logs/microbenchmarks/accuracy/"$dataset"-conversion-k"$k".zst
     done
-
-    if [ "$dataset" == "gittables" ]; then
-        continue
-    fi
 
     for b in 100 500 1000 5000 10000 50000 100000 500000 1000000; do
         # Create index and measure its size

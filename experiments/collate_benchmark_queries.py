@@ -39,8 +39,9 @@ def parse_args() -> argparse.Namespace:
         "-W",
         "--workload",
         default="accuracy_benchmark",
+        type=str,
         choices=["accuracy_benchmark", "llm"],
-        help="The type of query workload to compute results for",
+        help="type of query workload to compute results for",
     )
     parser.add_argument(
         "-c",

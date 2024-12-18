@@ -1,5 +1,11 @@
 #!/bin/bash
 
-./setup.sh
+experiments/setup.sh
+experiments/benchmark_runtime.sh
+experiments/benchmark_scalability.sh
+experiments/benchmark_construction.sh
+experiments/benchmark_exact.sh
+experiments/benchmark_accuracy.sh
+experiments/benchmark_parameters.sh
 
-echo TODO
+echo "All benchmarks executed successfully."

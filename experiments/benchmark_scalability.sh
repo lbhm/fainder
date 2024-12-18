@@ -8,8 +8,8 @@ cd "$(git rev-parse --show-toplevel)"
 start_time=$(date +%s)
 
 ### Setup ###
-dataset="gittables"
 cp data/"$dataset"/queries/accuracy_benchmark/test-all.zst data/"$dataset"/queries/scalability_benchmark.zst
+dataset="gittables"
 query=("0.1" "lt" "50")
 # nproc=$(nproc)
 
@@ -24,7 +24,7 @@ for f in 025 050 100 200; do
         run-query -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q "${query[@]}" -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-query-rebinning-single-sf"$f"-"$i".log
         run-query -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q "${query[@]}" -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-query-conversion-single-sf"$f"-"$i".log
 
-        # Single query (without IPC)
+        # Single query (without processing results)
         run-query -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q "${query[@]}" -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-query-rebinning-single_suppressed-sf"$f"-"$i".log
         run-query -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q "${query[@]}" -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-query-conversion-single_suppressed-sf"$f"-"$i".log
 
@@ -34,7 +34,7 @@ for f in 025 050 100 200; do
         run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single-sf"$f"-"$i".log
         # run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w "$nproc" --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-parallel-sf"$f"-"$i".log
 
-        # Query collection (without IPC)
+        # Query collection (without processing results)
         run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-single_suppressed-sf"$f"-"$i".log
         # run-queries -i data/"$dataset"/indices/scalability_benchmark/rebinning-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-rebinning-parallel_suppressed-sf"$f"-"$i".log
         run-queries -i data/"$dataset"/indices/scalability_benchmark/conversion-sf"$f".zst -t index -q data/"$dataset"/queries/scalability_benchmark.zst -m recall --suppress-results --log-file logs/scalability_benchmark/execution/"$dataset"-collection-conversion-single_suppressed-sf"$f"-"$i".log

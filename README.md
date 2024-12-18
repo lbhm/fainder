@@ -83,14 +83,14 @@ that reproduces all figures in our paper.
 
 ```bash
 docker build -t fainder:latest .
-docker run -it --rm --name fainder -u "$(id -u)":"$(id -g)" --mount type=bind,src=.,dst=/fainder fainder:latest
+docker run -it --rm --name fainder -u "$(id -u)":"$(id -g)" --mount type=bind,src=.,dst=/fainder fainder
 ```
 
 Please note:
 
 - You still need to download the dataset collections first and place them in the abovementioned folders.
 - Reproducing all experiments takes a significant amount of time. If you wish to only reproduce some experiments, you can comment out lines in `experiments/run_all.sh`.
-- If you do not rerun all experiments, the existing data in `logs/` will ensure that all figures are created properly. Every experiment you rerun will overwrite parts of the existing logs.
+- If you do not rerun all experiments, the existing data in `logs/` will ensure that all figures are created properly. Every experiment you rerun will overwrite parts of the existing logs. If you want to make sure that no existing logs are used for creating figures, delete the contents of `logs/` before starting experiments.
 - You can prepend `bash` to the `docker run` command to start an interactive shell instead of executing the pre-configured experiments.
 - You can interactively analyze experiment results with the notebooks in `analysis/` or rely on the plotting script in `experiments/` that reproduces the figures from the paper.
 
@@ -101,12 +101,13 @@ do not exactly follow the section structure of our paper but are roughly structu
 ```bash
 experiments/
 ├── setup.sh  # Create randomized histograms of the raw data and generate benchmark queries
-├── runtime_benchmark.sh  # Runtime comparison to baselines
-├── scalability_benchmark.sh  # Runtime scalability analysis on GitTables
-├── accuracy_benchmark.sh  # Parameter grid search and comparison to baselines
-├── exact_results.sh  # Runtime breakdown of Fainder Exact
-├── microbenchmarks.sh  # Detailed analysis of index parameters
-└── binsort_benchmark.sh  # Supplementary experiments for the binsort baseline
+├── benchmark_runtime.sh  # Runtime analysis of Fainder and baselines
+├── benchmark_scalability.sh  # Runtime scalability analysis on GitTables
+├── benchmark_construction.sh  # Index construction time analysis
+├── benchmark_exact.sh  # Runtime breakdown of Fainder Exact
+├── benchmark_accuracy.sh  # Parameter grid search and accuracy comparison to baselines
+├── benchmark_parameters.sh  # Detailed analysis of index parameters
+└── run_all.sh  # Run all of the experiments above
 ```
 
 The additional Python files in `experiments/` encapsulate partial experiment logic that we use in
