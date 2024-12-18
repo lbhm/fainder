@@ -6,6 +6,8 @@ set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
 start_time=$(date +%s)
+log_level=INFO
+nproc=$(nproc)
 
 # Create parquet files (if necessary) and histograms
 convert-to-parquet -i data/sportstables/csv -o data/sportstables/pq
@@ -34,7 +36,8 @@ cluster-histograms -i data/sportstables/histograms.zst \
     -b 50000 \
     -t quantile \
     --alpha 1 \
-    --seed 42
+    --seed 42 \
+    --log-level "$log_level"
 generate-queries -o data/sportstables/queries/accuracy_benchmark/all.zst \
     --n-percentiles 20 \
     --n-reference-values 100 \
@@ -44,6 +47,8 @@ python experiments/collate_benchmark_queries.py \
     -d sportstables \
     -q data/sportstables/queries/accuracy_benchmark/all.zst \
     -c data/sportstables/clusterings/benchmark_queries.zst \
+    -w "$nproc" \
+    --log-level "$log_level"
 
 cluster-histograms -i data/open_data_usa/histograms.zst \
     -o data/open_data_usa/clusterings/benchmark_queries.zst \
@@ -52,16 +57,19 @@ cluster-histograms -i data/open_data_usa/histograms.zst \
     -b 50000 \
     -t quantile \
     --alpha 1 \
-    --seed 42
-generate-queries -o data/open_data_usa/accuracy_benchmark/all.zst \
+    --seed 42 \
+    --log-level "$log_level"
+generate-queries -o data/open_data_usa/queries/accuracy_benchmark/all.zst \
     --n-percentiles 20 \
     --n-reference-values 100 \
     --seed 42 \
     --reference-value-range "-1000" "1000"
 python experiments/collate_benchmark_queries.py \
     -d open_data_usa \
-    -q data/open_data_usa/accuracy_benchmark/all.zst \
-    -c data/open_data_usa/clusterings/benchmark_queries.zst
+    -q data/open_data_usa/queries/accuracy_benchmark/all.zst \
+    -c data/open_data_usa/clusterings/benchmark_queries.zst \
+    -w "$nproc" \
+    --log-level "$log_level"
 
 cluster-histograms -i data/gittables/histograms.zst \
     -o data/gittables/clusterings/benchmark_queries.zst \
@@ -70,16 +78,19 @@ cluster-histograms -i data/gittables/histograms.zst \
     -b 100000 \
     -t quantile \
     --alpha 1 \
-    --seed 42
-generate-queries -o data/gittables/accuracy_benchmark/all.zst \
+    --seed 42 \
+    --log-level "$log_level"
+generate-queries -o data/gittables/queries/accuracy_benchmark/all.zst \
     --n-percentiles 10 \
     --n-reference-values 100 \
     --seed 42 \
     --reference-value-range "-10000" "10000"
 python experiments/collate_benchmark_queries.py \
     -d gittables \
-    -q data/gittables/accuracy_benchmark/all.zst \
-    -c data/gittables/clusterings/benchmark_queries.zst
+    -q data/gittables/queries/accuracy_benchmark/all.zst \
+    -c data/gittables/clusterings/benchmark_queries.zst \
+    -w "$nproc" \
+    --log-level "$log_level"
 
 ### Index creation ###
 # Based on the results of our grid search (see the accuracy benchmark), we selected the best index
@@ -97,7 +108,8 @@ cluster-histograms \
     -b 5000 \
     -t standard \
     --alpha 1 \
-    --seed 42
+    --seed 42 \
+    --log-level "$log_level"
 
 # Open Data
 cluster-histograms \
@@ -108,7 +120,8 @@ cluster-histograms \
     -b 50000 \
     -t quantile \
     --alpha 1 \
-    --seed 42
+    --seed 42 \
+    --log-level "$log_level"
 
 # GitTables
 cluster-histograms \
@@ -119,7 +132,8 @@ cluster-histograms \
     -b 100000 \
     -t quantile \
     --alpha 1 \
-    --seed 42
+    --seed 42 \
+    --log-level "$log_level"
 
 for dataset in "sportstables" "open_data_usa" "gittables"; do
     create-index \
@@ -127,13 +141,15 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
         -m rebinning \
         -p float32 \
         -o data/"$dataset"/indices \
-        --index-file best_config_rebinning.zst
+        --index-file best_config_rebinning.zst \
+        --log-level "$log_level"
     create-index \
         -i data/"$dataset"/clusterings/best_config.zst \
         -m conversion \
         -p float32 \
         -o data/"$dataset"/indices \
-        --index-file best_config_conversion.zst
+        --index-file best_config_conversion.zst \
+        --log-level "$log_level"
 done
 
 end_time=$(date +%s)
