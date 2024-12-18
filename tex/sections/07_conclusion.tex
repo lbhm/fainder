@@ -1,0 +1,20 @@
+%!TEX root = ../main.tex
+
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+We introduced the novel problem of distribution-aware dataset search on decentralized data repositories and proposed \system{}, a fast and accurate index for percentile predicates.
+\system{} offers exact and approximate solutions, achieving more than two orders of magnitude speedups over baseline approaches and dominating the start-of-the-art in an accuracy-runtime skyline analysis.
+
+Our work gives rise to several interesting directions for future work, of which we discuss three that we consider most important.
+To effectively integrate \system{} into a system, a search engine should combine it with semantic keyword similarity search and dataset profile alignment techniques to amplify the column identifier in a percentile predicate.
+Once a dataset search engine supports multiple predicate types, query planning and optimization are paramount problems.
+Beyond system integration, we see an opportunity to leverage our query model for designing distribution-aware dataset search predicates based on data synopses other than histograms, such as sketches.
+For example, using synopses to rank each dataset's similarity to an input dataset or a reference distribution is challenging.
+Lastly, while \system{} can approximate percentile predicates with two-sided ranges via a combination of one-sided predicates, developing an index that natively supports range predicates presents novel research challenges.
+
+\begin{acks}
+    We gratefully acknowledge funding from the German Federal Ministry of Education and Research under the grants BIFOLD24B and 01IS17052 (for the Software Campus project FDaaS).
+\end{acks}
+
+\flushcolsend

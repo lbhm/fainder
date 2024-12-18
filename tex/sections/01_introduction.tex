@@ -1,0 +1,113 @@
+%!TEX root = ../main.tex
+
+\section{Introduction}
+\label{sec:intro}
+
+In today's data-driven world, where organizations collect vast amounts of information from various sources, efficient and effective data discovery has become indispensable.
+The increasing importance of data discovery is primarily driven by the growing popularity of machine learning techniques, which require substantial volumes of data.
+Consequently, this trend has led to a surge in data sharing and trading within and across organizations~\cite{azcoitia_survey_2022, kennedy_revisiting_2022}.
+
+However, most data discovery systems (and hence data sharing platforms) have limited utility due to two critical design choices that we summarize in Table~\ref{tab:solution_space}.
+First, these systems typically assume that all datasets are \emph{completely accessible to the search algorithm} for indexing and processing~\cite{castelo_auctus_2021, castro_fernandez_aurum_2018, galhotra_metam_2023, gong_ver_2023}.
+This assumption neglects the distributed nature of data repositories.
+Moving data to a central server is often infeasible due to cost reasons and data owners' reluctance to relinquish control over their proprietary datasets.
+Instead, a widely adopted data-sharing paradigm involves a distributed collection of data repositories, where each data provider only shares the \emph{metadata} with a search engine.
+This is commonly observed in data market platforms, such as Datarade~\cite{datarade_find_2024} and Dawex~\cite{dawex_data_2024}, as well as federated data settings, such as Gaia-X~\cite{braud_road_2021} and Agora~\cite{traub_agora_2021}.
+Second, existing systems generally depend on users conducting keyword search along with filters or providing example data to find relevant datasets~\cite{castelo_auctus_2021, noy_google_2019}.
+Even though this search mode is intuitive, it limits discovery in scenarios where users have specific data distribution requirements.
+For example, users training a machine learning model might seek datasets with a substantial number of samples from each target group to avoid overfitting.
+More broadly, lack of access to a representative sample for data analysis (also known as selection bias) leads to flawed and unreliable outcomes.
+These challenges are particularly evident in industrial settings due to repurposing or reusing data~\cite{bethlehem_selection_2010, culotta_reducing_2014, greenacre_importance_2016, zhu_consistent_2023}.
+Several data science pipelines have failed because of poor representation of training data~\cite{dastin_amazon_2022, mulshine_major_2015, rose_are_2010, townsend_most_2017}.\looseness=-1
+
+\begin{table}[t]
+    \caption{Overview of query-driven dataset search approaches, categorized by search mode and data access model.}
+    \label{tab:solution_space}
+    \centering
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}X c c}
+        \toprule
+        & \multicolumn{2}{c}{Data access model} \\
+        \cmidrule{2-3}
+        Search mode & Full access & Metadata access\\
+        \midrule
+        Keyword & \cite{castelo_auctus_2021, castro_fernandez_aurum_2018} & \cite{noy_google_2019, open_knowledge_foundation_ckan_2022, zhang_ad_2018} \\
+        By example$^\ddagger$ & \cite{bharadwaj_discovering_2021, bogatu_dataset_2020, castelo_auctus_2021, castro_fernandez_aurum_2018, rezig_dice_2021, santos_sketch-based_2022} & - \\
+        Distribution-aware & \cite{asudeh_towards_2022, chai_selective_2022, nargesian_tailoring_2021} & \system{} \\
+        \bottomrule
+    \end{tabularx}
+    \raggedright\footnotesize
+    $^\ddagger$ This includes finding joinable and unionable tables based on an input table.\\
+\end{table}
+
+Together, the full data access assumption and restricted search mode form a critical roadblock in developing practical data discovery systems.
+We demonstrate this with the following example.
+
+\begin{example}
+Consider a data scientist training a cancer prediction model.
+After developing a prototype, they want to test the robustness of their solution with data from similar trials at other hospitals.
+To qualify for their work, a dataset must cover different patient ages, so at least 30\% of patients should be younger than 40 and at least 30\% older than 60.
+Since such studies contain sensitive information, accessing them requires approval.
+Therefore, the datasets are not centrally gathered but hosted by the organizations that own each dataset.
+Consequently, the scientist must search through the publicly available metadata of datasets across several independent data repositories.
+\end{example}
+
+While the status quo for search over decentralized data provides basic functionality, it fails to address the nuanced complexities of searching datasets with distributional requirements.
+In the example above, our medical scientist only has two options when using keyword-based dataset search: (1)~either pose a general keyword query (e.g.,~``cancer'') and manually review a large number of datasets or (2)~add more keywords to the query, hoping that all those keywords are included in the dataset description so that no relevant dataset is filtered out.
+As a consequence of these functional limitations, users often face too many, off-topic, or no results at all.
+
+
+In this work, we study the novel problem of distribution-aware dataset search over decentralized data repositories, which complements existing search paradigms.
+To address the problem, we must tackle three main challenges:
+(C1)~We must develop easily adoptable methods for searching over decentralized datasets;
+(C2)~users must be able to express distributional requirements in search queries; and
+(C3)~search engines must identify datasets that satisfy distributional requirements accurately and efficiently at scale.
+To address all these challenges, we propose \system{}, an index for distribution-aware data discovery without raw data access, and a new query model.
+
+\paragraph{(C1) Dataset profiles for search over decentralized data.}
+Similar to existing data discovery systems, \system{} assumes that data providers share a profile for each of their datasets with a search engine.
+To lower the barrier to enriching existing dataset profiles with distribution-aware data synopses, a solution must require as little additional information and effort beyond the status quo as possible.
+One of the most widespread and simple yet flexible synopses are histograms~\cite{cormode_synopses_2011}.
+They are easy for data owners to generate and seamlessly integrate into dataset profiles.
+Some dataset search engines, such as Auctus~\cite{castelo_auctus_2021} or Kaggle~\cite{kaggle_inc_kaggle_2024}, already present histograms as a visual synopsis to the user (but do not use them for distribution-aware search).
+\system{} allows each data owner to create histograms of their data independently, as it is robust to heterogeneous histograms.
+Thus, they may individually choose the histogram granularity according to their data privacy sensitivity.
+If a data owner refuses to provide histograms for a dataset, the search engine can always fall back to only using existing search techniques.\looseness=-1
+
+\paragraph{(C2) Percentile predicates for specifying user requirements.}
+We introduce a new type of search predicate that we call \emph{percentile predicate} to offer a simple and intuitive way of specifying distributional requirements.
+Abstractly, a percentile predicate requires that the dataset values from a given range must or must not represent more than a certain percentage of all values.
+When composing multiple predicates, this allows users to approximate entire statistical distributions, such as a normal distribution.
+To integrate with prior work, we propose a simple query model based on Boolean algebra that enables searching for datasets by seamlessly combining existing keyword-based techniques with distributional requirements.
+
+\paragraph{(C3) Indexing for accurate and efficient dataset search.}
+Designing an index for dataset search over decentralized data repositories requires taking multiple stakeholders into account: data owners provide heterogeneous histograms, users expect accurate query results at interactive response times, and search engines aim to scale to extensive dataset collections with minimal resource footprint.
+We present two variants of \system{} to overcome this challenge.
+\approximate{} optimizes the execution time and allows users to search with full precision or recall guarantees.
+\exact{} combines these guarantees in a multi-step solution to prune the search space efficiently.
+Both \system{} variants address histogram heterogeneity by transforming the unique bins of independently generated histograms into a globally aligned bin distribution.
+Leveraging the aligned bins, \system{} uses binary search at query time to navigate the search space efficiently.
+Furthermore, we employ clustering to optimize the trade-off between index accuracy and size.\looseness=-1
+
+\paragraph{Outline of Contributions.}
+After introducing basic concepts and our notation in Section~\ref{sec:preliminaries}, we make four major contributions.
+
+\begin{itemize}[left=0pt]
+    \item
+    We formally define the problem of distribution-aware dataset search on decentralized data repositories and propose a minimalistic yet effective query model that combines existing search techniques (e.g.,~keywords) and percentile predicates (Section~\ref{sec:problem}).
+
+    \item
+    We present \system{} (Section~\ref{sec:index_overview}), an index for percentile predicates that can be constructed on collections of heterogeneous, independently generated histograms (Section~\ref{sec:index_construction}).
+
+    \item
+    We introduce two query modes that trade off runtime and result accuracy (Section~\ref{sec:index_querying}).
+    \approximate{} achieves sublinear scaling in the number of datasets while offering different trade-offs for precision and recall.
+    \exact{} yields exact query results whilst being significantly faster than the state-of-the-art.
+
+    \item
+    We conduct an extensive experimental evaluation on real-world open dataset collections (Section~\ref{sec:evaluation}).
+    Our evaluation shows that \approximate{} is up to more than two orders of magnitude faster than our baselines.
+    In addition, \exact{} also is up to $25\times$ faster than the state-of-the-art.
+\end{itemize}
+
+We close our study with a review of related work in Section~\ref{sec:related_work} and an outlook on future research directions in Section~\ref{sec:conclusion}.
+In short, we are the first to investigate distribution-aware dataset search over decentralized data repositories, which is a critical step towards making dataset search practical.

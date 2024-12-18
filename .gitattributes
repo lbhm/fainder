@@ -92,3 +92,4 @@
 # Exclude notebooks from GitHub language statistics
 analysis/* linguist-documentation
 experiments/* linguist-documentation
+tex/* linguist-documentation

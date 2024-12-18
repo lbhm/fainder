@@ -1,0 +1,39 @@
+%!TEX root = ../main.tex
+
+\section{Related Work}
+\label{sec:related_work}
+
+Prior work on dataset search can be broadly classified into data lake navigation~\cite{nargesian_data_2023, nargesian_organizing_2020, ouellette_ronin_2021}, data discovery by example~\cite{rezig_dice_2021}, task-driven search~\cite{galhotra_metam_2023} for machine learning pipelines~\cite{behme_art_2023}, and query-driven search.
+We focus our discussion on the latter, as the other three concepts require access to a dataset collection's raw data.
+Within query-driven dataset search, we distinguish two central settings: data lakes, where the raw data are fully accessible, and metadata-based search, where search engines must rely on data owner-provided, heterogeneous, and potentially missing metadata.
+Moreover, there are different types of search predicates.
+In the following, we specifically discuss dis\-tri\-bu\-tion-aware and keyword search.
+We close by reviewing related work on data profiling and histograms.\looseness=-1
+
+\paragraph{Full Data Access}
+There is a long line of prior work on data discovery in data lakes~\cite{bharadwaj_discovering_2021, bogatu_dataset_2020, castro_fernandez_aurum_2018, esmailoghli_mate_2022, gong_ver_2023, koutras_valentine_2021, miller_making_2018, zhang_dsdd_2021, zhang_finding_2020, gong_nexus_2024}.
+However, data lake-focused discovery techniques assume full data access and thus are not applicable in our problem setting.
+
+\paragraph{Metadata Access}
+Existing metadata-based dataset search engines, such as Google Dataset Search~\cite{noy_google_2019} and CKAN~\cite{open_knowledge_foundation_ckan_2022}, are limited to keyword search (possibly extended with facets).
+Auctus~\cite{castelo_auctus_2021} is a hybrid between the full and metadata access settings, as it collects existing metadata from multiple federated data repositories but also downloads raw data from openly available datasets to profile them individually.
+Based on this auxiliary information, Auctus allows users to add advanced facets to their queries, such as spatiotemporal or column type filters.
+In general, dataset search on metadata has not yet been explored as thoroughly as data lake search.
+The continuum between the two settings, where more or less metadata and samples from a dataset are available, is an exciting direction for future work.
+In practice, solutions must deal with varying degrees of dataset profile heterogeneity and information granularity.
+
+\paragraph{Distribution-Aware Search}
+Recently, \textcite{asudeh_towards_2022} developed a system vision for the new field of distribution-aware data discovery.
+While their vision targets the data lake setting, it highlights the importance of distributional queries over dataset collections.
+For the same setting, \textcite{nargesian_tailoring_2021} proposed distribution tailoring to meet fairness requirements in data integration and \textcite{chai_selective_2022} presented distribution-aware data augmentation for model training.
+Our work expands distribution-aware dataset search and proposes solutions that do not require raw data access.
+
+\paragraph{Keyword Search}
+The extensive work on keyword search is surveyed in~\cite{le_survey_2016, park_keyword_2011, yang_keyword_2021, yu_keyword_2010}.
+Our contributions complement keyword search, as our query model incorporates keyword predicates and integrates them with distribution-aware (i.e.,~percentile) predicates.
+Recent advances in large language models have led to a new line of work focusing on retrieving relevant datasets given a natural language query~\cite{herzig_open_2021, wang_retrieving_2021, wang_solo_2023}.
+However, these works either focus on textual information about datasets or require full data access, whereas we target distribution-aware queries on heterogeneous synopses.\looseness=-1
+
+\paragraph{Data Profiling}
+Prior work on data profiling~\cite{abedjan_profiling_2015} and cleaning~\cite{abedjan_detecting_2016, halevy_goods_2016, galhotra_dataprism_2022} is orthogonal to our contributions on searching over heterogeneous histograms.
+There are various methods for creating histograms~\cite{cormode_synopses_2011}, such as equi-height or equi-width, but the problem of optimizing histograms to reduce estimation error~\cite{behar_optimal_2020, jagadish_optimal_1998} or improve visibility is complementary to our setting, where data owners generate histograms independently of the search engine.

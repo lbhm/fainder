@@ -1,0 +1,255 @@
+
+\pdfminorversion=7
+\documentclass[
+    sigconf,                        % conference layout
+    nonacm,                         % do not include ACM headers/footers
+    balance=false,                  % for balancing the last page
+    natbib=false,                   % we use BibLaTex & Biber
+    pdfa,                           % PDF/A conformance in hyperref
+    svgnames,                       % load xcolor with more named colors
+]{acmart}
+
+%%%%%%% Packages %%%%%%%
+\usepackage[
+    linesnumbered,
+    norelsize,
+    ruled,
+    vlined
+]{algorithm2e}                      % pseudo code
+\usepackage[
+    datamodel=acmdatamodel,
+    style=acmnumeric,
+    backend=biber,
+]{biblatex}                         % BibLaTex with custom ACM style
+\usepackage{enumitem}               % for customizing bullet points
+\usepackage{etoolbox}               % command patching
+\usepackage{flushend}               % balanced columns on last page
+\usepackage[edges]{forest}          % drawing flow charts
+\usepackage{hyphenat}               % hyphenation for words with hyphens
+\usepackage{mathtools}              % math notation
+\usepackage{subcaption}             % subfigures/subtables
+\usepackage{tabularx}               % variable length table columns
+\usepackage[
+    skins,
+    breakable
+]{tcolorbox}                        % for colored text boxes
+\usepackage{tikz}                   % drawings
+
+% These packages are used but already recursively loaded by other packages
+\usepackage{booktabs}               % professional tables
+\usepackage{graphicx}               % figures
+\usepackage{microtype}              % better typography
+
+%%%%%%% Bibliography %%%%%%%
+\input{bib/settings}
+
+%%%%%%% Custom Commands %%%%%%%
+\newcommand{\system}[0]{\textsc{Fain\-der}}
+\newcommand{\exact}[0]{\textsc{Fain\-der Exact}}
+\newcommand{\approximate}[0]{\textsc{Fain\-der Approx}}
+\newcommand{\pscan}{\texttt{pro\-file\hyp{}scan}\xspace}
+\newcommand{\binsort}{\texttt{binsort}\xspace}
+\newcommand{\ndist}{\texttt{nor\-mal\hyp{}dist}\xspace}
+\newcommand{\edges}[1]{\FuncSty{edges} (#1)}
+\newcommand{\density}[1]{\FuncSty{density} (#1)}
+
+\newcommand\cA{\mathcal{A}}
+\newcommand\cB{\mathcal{B}}
+\newcommand\cD{\mathcal{D}}
+\newcommand\cH{\mathcal{H}}
+\newcommand\cI{\mathcal{I}}
+\newcommand\cK{\mathcal{K}}
+\newcommand\cM{\mathcal{M}}
+\newcommand\cP{\mathcal{P}}
+\newcommand\cS{\mathcal{S}}
+
+\newcommand{\sset}[1]{\left\{\,#1\,\right\}} % { ? }, automatic brackets
+\newcommand\bR{\mathbb{R}} % set of reals
+\newcommand\true{\text{true}} % Booleans in math mode
+\newcommand\false{\text{false}} % Booleans in math mode
+
+%%%%%%% Layout settings %%%%%%%
+% ACM template changes
+\settopmatter{authorsperrow=4}
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{0\p@}%
+{-.1\baselineskip \@plus -2\p@ \@minus -.2\p@}%
+{-3.5\p@}%
+{\ACM@NRadjust{\bfseries\@adddotafter}}}
+\makeatother
+
+% Algorithm2e
+\SetAlFnt{\footnotesize}
+\DontPrintSemicolon
+\let\oldnl\nl% Store \nl in \oldnl
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}% Remove line number for one line
+\newcommand\commentstyle[1]{\scriptsize\ttfamily\textcolor{gray}{#1}}
+\SetCommentSty{commentstyle}
+\makeatletter
+% Remove right hand margin in algorithm
+\patchcmd{\@algocf@start}% <cmd>
+{-1.5em}% <search>
+{0pt}% <replace>
+{}{}% <success><failure>
+\makeatother
+
+% Tikz and math
+\usetikzlibrary{arrows, arrows.meta, backgrounds, calc, fit, matrix, patterns, positioning, shapes, shapes.arrows, shapes.misc, trees}
+
+\pgfdeclarelayer{foreground}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main,foreground}
+
+\newcommand*{\circled}[1]{%
+    \tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=0.5pt, fill=lightgray] (char) {\small #1};}%
+}
+
+\tikzset{bound/.style={draw,dashed,gray,rounded corners}}
+\tikzset{fit margins/.style={/tikz/afit/.cd,#1,
+    /tikz/.cd,
+    inner xsep=\pgfkeysvalueof{/tikz/afit/left}+\pgfkeysvalueof{/tikz/afit/right},
+    inner ysep=\pgfkeysvalueof{/tikz/afit/top}+\pgfkeysvalueof{/tikz/afit/bottom},
+    xshift=-\pgfkeysvalueof{/tikz/afit/left}+\pgfkeysvalueof{/tikz/afit/right},
+    yshift=-\pgfkeysvalueof{/tikz/afit/bottom}+\pgfkeysvalueof{/tikz/afit/top}},
+    afit/.cd,left/.initial=2pt,right/.initial=2pt,bottom/.initial=2pt,top/.initial=2pt}
+
+\thinmuskip=0mu plus 2mu minus 1mu
+\medmuskip=1mu plus 3mu minus 1mu
+\thickmuskip=2mu plus 4mu minus 1mu
+
+\newtheoremstyle{custom}% 〈name〉
+    {0.3\baselineskip plus 2pt minus 2pt}% 〈Space above>
+    {0.3\baselineskip plus 2pt minus 2pt}% 〈Space below>
+    {\itshape}% 〈Body font>
+    {\parindent}% 〈Indent amount>
+    {\scshape}% 〈Theorem head font
+    {.}% 〈Punctuation after theorem head
+    {3.5pt}% 〈Space after theorem head>
+    {}% 〈Theorem head spec (can be left empty, meaning ‘normal’ )
+\theoremstyle{custom}
+\newtheorem*{definition}{Definition}
+\newtheorem*{example}{Example}
+\newtheorem*{problem}{Problem}
+
+% Floats
+\setlength{\floatsep}{6pt plus 1pt minus 2pt}{}
+\setlength{\textfloatsep}{5pt plus 0pt minus 2pt}
+\setlength{\intextsep}{6pt plus 1pt minus 2pt}
+\captionsetup[figure]{belowskip=0.0em, aboveskip=0.25em}
+\captionsetup[subfigure]{belowskip=0.0em, aboveskip=0.25em}
+\captionsetup[table]{belowskip=0.0em, aboveskip=0.25em}
+
+\newlength{\oldcolumnsep}
+\setlength{\oldcolumnsep}{\columnsep}
+
+%%%%%%% VLDB settings %%%%%%%
+%% The following content must be adapted for the final version
+% paper-specific
+\newcommand\vldbdoi{10.14778/3681954.3681999}
+\newcommand\vldbpages{3269 - 3282}
+% issue-specific
+\newcommand\vldbvolume{17}
+\newcommand\vldbissue{11}
+\newcommand\vldbyear{2024}
+% should be fine as it is
+\newcommand\vldbauthors{\authors}
+\newcommand\vldbtitle{\shorttitle}
+% leave empty if no availability url should be set
+\newcommand\vldbavailabilityurl{https://github.com/lbhm/fainder}
+% whether page numbers should be shown or not, use 'plain' for review versions, 'empty' for camera-ready
+\newcommand\vldbpagestyle{empty}
+
+%%%%%%% Authors & Title %%%%%%%
+\author{Lennart Behme}
+\affiliation{%
+    \institution{BIFOLD \& TU Berlin}
+    \city{}
+    \country{}
+}
+\email{l.behme@tu-berlin.de}
+
+\author{Sainyam Galhotra}
+\affiliation{%
+    \institution{Cornell University}
+    \city{}
+    \country{}
+}
+\email{sg@cs.cornell.edu}
+
+\author{Kaustubh Beedkar}
+\affiliation{%
+    \institution{IIT Delhi}
+    \city{}
+    \country{}
+}
+\email{kbeedkar@cse.iitd.ac.in}
+
+\author{Volker Markl}
+\affiliation{%
+    \institution{BIFOLD, TU Berlin \& DFKI}
+    \city{}
+    \country{}
+}
+\email{volker.markl@tu-berlin.de}
+
+\renewcommand{\shortauthors}{L. Behme et al.}
+
+\title[\system{}: A Fast and Accurate Index for Distribution-Aware Dataset Search]{\system{}: A Fast and Accurate Index\texorpdfstring{\\}{ }for Distribution-Aware Dataset Search}
+
+%%%%%%% Metadata %%%%%%%
+\hypersetup{%
+    hidelinks,
+    bookmarksnumbered,
+    unicode,
+    pdflang={en},
+    pdfstartview=Fit,
+    pdfdisplaydoctitle,
+    pdfauthor=\vldbauthors,
+    pdftitle=\vldbtitle,
+    pdfkeywords={data discovery, dataset search},
+    pdfapart=2,
+    pdfaconformance=B,
+}
+
+\begin{document}
+
+%%%%%%% Abstract %%%%%%%
+\input{sections/00_abstract}
+
+\maketitle
+
+%%% do not modify the following VLDB block %%
+%%% VLDB block start %%%
+\pagestyle{\vldbpagestyle}
+\begingroup\small\noindent\raggedright\textbf{PVLDB Reference Format:}\\
+\vldbauthors. \vldbtitle. PVLDB, \vldbvolume(\vldbissue): \vldbpages, \vldbyear.\\
+\href{https://doi.org/\vldbdoi}{doi:\vldbdoi}
+\endgroup
+\begingroup
+\renewcommand\thefootnote{}\footnote{\noindent
+This work is licensed under the Creative Commons BY-NC-ND 4.0 International License. Visit \url{https://creativecommons.org/licenses/by-nc-nd/4.0/} to view a copy of this license. For any use beyond those covered by this license, obtain permission by emailing \href{mailto:info@vldb.org}{info@vldb.org}. Copyright is held by the owner/author(s). Publication rights licensed to the VLDB Endowment. \\
+\raggedright Proceedings of the VLDB Endowment, Vol. \vldbvolume, No. \vldbissue\ %
+ISSN 2150-8097. \\
+\href{https://doi.org/\vldbdoi}{doi:\vldbdoi} \\
+}\addtocounter{footnote}{-1}\endgroup
+
+\ifdefempty{\vldbavailabilityurl}{}{
+\vspace{.3cm}
+\begingroup\small\noindent\raggedright\textbf{PVLDB Artifact Availability:}\\
+The source code, data, and/or other artifacts have been made available at \url{\vldbavailabilityurl}.
+\endgroup
+}
+%%% VLDB block end %%%
+
+\input{sections/01_introduction}
+\input{sections/02_preliminaries}
+\input{sections/03_problem}
+\input{sections/04_index}
+\input{sections/05_evaluation}
+\input{sections/06_related_work}
+\input{sections/07_conclusion}
+
+\printbibliography
+
+\end{document}
+\endinput

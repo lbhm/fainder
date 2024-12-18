@@ -1,7 +1,7 @@
-FROM python:3.10-slim
+FROM python:3.11-slim-bookworm
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends git \
+RUN apt update \
+    && apt install -y --no-install-recommends git biber latexmk texlive texlive-bibtex-extra texlive-fonts-extra texlive-latex-extra texlive-plain-generic texlive-publishers texlive-science \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /fainder

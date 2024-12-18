@@ -8,4 +8,6 @@ experiments/benchmark_exact.sh
 experiments/benchmark_accuracy.sh
 experiments/benchmark_parameters.sh
 
-echo "All benchmarks executed successfully."
+echo "All benchmarks executed successfully. Recompiling paper..."
+
+latexmk -pdf -cd -silent -halt-on-error -shell-escape tex/main.tex

@@ -1,0 +1,11 @@
+%!TEX root = ../main.tex
+
+\begin{abstract}
+Efficient data discovery is crucial in the era of data-driven decision-making.
+However, current practices face significant challenges due to the intricacies of identifying datasets with specific distributional characteristics, such as percentiles, when data repositories are decentralized.
+Traditional keyword-based search methods are insufficient for these complex requirements, often resulting in suboptimal dataset search results.
+To address these challenges, this paper presents \system{}, a fast and accurate index for ``percentile predicates'' on histogram-based data summaries, which streamlines the search process for datasets with specific distributional requirements.
+\system{} can be constructed on heterogeneous histogram collections and employs binary search in conjunction with multi-step pruning techniques to efficiently identify search results for percentile predicates.
+Thereby, it simplifies data provisioning and improves the effectiveness of dataset discovery.
+Empirical evaluation of our solution on three large-scale data repositories shows that \system{} is effective for distribution-aware dataset search and provides order-of-magnitude efficiency gains over baselines.
+\end{abstract}

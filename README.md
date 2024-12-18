@@ -21,7 +21,8 @@ fainder/
 ├── data  # dataset collections and intermediate data structures from experiments
 ├── experiments  # Python and Bash scripts with experiment configurations
 ├── fainder  # main Python package with our index implementation
-└── logs  # results of our experimental evaluation
+├── logs  # results of our experimental evaluation
+└── tex  # LaTeX source code for the paper
 ```
 
 ## Setup
@@ -78,10 +79,13 @@ dataset collections we use (formatted either as CSV or Parquet files):
 ### Reproducing Experiments
 
 To reproduce our experiments, you can perform a regular installation or use our Docker container
-for convenience. The following commands first build the Docker container and then execute a script
-that reproduces all figures in our paper.
+for convenience. The following commands clone this repo, build the Docker container, and then
+execute a script that reruns the experiments for all figures in the paper to then recompile the
+paper. The reproduced paper is located at `tex/main.pdf`.
 
 ```bash
+git clone https://github.com/lbhm/fainder
+cd fainder
 docker build -t fainder:latest .
 docker run -it --rm --name fainder -u "$(id -u)":"$(id -g)" --mount type=bind,src=.,dst=/fainder fainder
 ```

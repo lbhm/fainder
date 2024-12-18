@@ -1,0 +1,80 @@
+% General Options
+\ExecuteBibliographyOptions{
+    block=space,
+    minbibnames=3,
+    maxbibnames=4,
+    maxcitenames=2,
+    % giveninits=true,
+    date=year,
+    doi=false,
+    eprint=false,
+    isbn=false,
+    url=false,
+}
+\ExecuteBibliographyOptions[software]{
+    url=true
+}
+\ExecuteBibliographyOptions[report]{
+    url=true
+}
+\setcounter{biburllcpenalty}{7000}
+
+% Item formatting
+\AtEveryBibitem{
+    \clearfield{day}
+    \clearfield{note}
+    \clearfield{month}
+    % \clearfield{pages}
+    \clearfield{pagetotal}
+    \ifentrytype{inproceedings}{
+        % \clearfield{booktitle}
+        \clearfield{eventtitle}
+        % \clearfield{pages}
+        % \clearfield{series}
+        \clearfield{volume}
+        \clearlist{location}
+        \clearlist{publisher}
+        \clearname{editor}
+    }{}
+    \ifentrytype{article}{
+        % \clearfield{number}
+        % \clearfield{pages}
+        % \clearfield{volume}
+    }{}
+    \ifentrytype{incollection}{
+        \clearfield{volume}
+        \clearlist{location}
+        % \clearlist{publisher}
+        % \clearname{editor}
+        \clearfield{edition}
+    }{}
+    \ifentrytype{book}{
+        \clearlist{location}
+    }{}
+    \ifentrytype{software}{
+        \clearfield{urlyear}
+    }{}
+}
+% \renewbibmacro{in:}{\ifentrytype{inproceedings}{}{\printtext{\bibstring{in} }}}
+\renewbibmacro{in:}{\ifentrytype{inproceedings}{}{\printtext{\bibstring{in}\intitlepunct}}}
+\DeclareFieldFormat[inproceedings]{booktitle}{\mkbibemph{Proceedings of the #1}}
+\DeclareFieldFormat{series}{\mkbibemph{#1}}
+\DeclareFieldFormat{titlecase}{#1}
+
+% \DeclareSourcemap{
+%     \maps[datatype=bibtex]{
+%         \map{
+%             \pertype{inproceedings}
+%             \step[fieldsource=eventtitle, match=\regexp{(.*)....$}, replace=\regexp{$1}]
+%         }
+%     }
+% }
+
+% Hyphenation overwrites
+\hyphenation{Mah-di-ra-ji}
+
+% Reference font size
+\renewcommand*{\bibfont}{\normalfont\small}
+
+% Bib files
+\addbibresource{bib/references.bib}
