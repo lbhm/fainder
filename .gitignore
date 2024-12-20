@@ -70,6 +70,7 @@ venv/
 *-blx.aux
 *-blx.bib
 *.run.xml
+*SAVE-ERROR
 
 # Build tool auxiliary files
 *.fdb_latexmk
@@ -78,6 +79,9 @@ venv/
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+
+# Matplotlib config
+.config/matplotlib/
 
 # Local project folders
 /data/*
