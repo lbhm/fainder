@@ -95,7 +95,7 @@ Please note:
 - You still need to download the dataset collections first and place them in the abovementioned folders.
 - Reproducing all experiments takes a significant amount of time. If you wish to only reproduce some experiments, you can comment out lines in `experiments/run_all.sh`.
 - If you do not rerun all experiments, the existing data in `logs/` will ensure that all figures are created properly. Every experiment you rerun will overwrite parts of the existing logs. If you want to make sure that no existing logs are used for creating figures, delete the contents of `logs/` before starting experiments.
-- You can prepend `bash` to the `docker run` command to start an interactive shell instead of executing the pre-configured experiments.
+- You can append `bash` to the `docker run` command to start an interactive shell instead of executing the pre-configured experiments.
 - You can interactively analyze experiment results with the notebooks in `analysis/` or rely on the plotting script in `experiments/` that reproduces the figures from the paper.
 
 The scripts in `experiments/` contain more experiments than we could cover in the paper. Please see
