@@ -6,6 +6,7 @@ set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
 start_time=$(date +%s)
+log_level=INFO
 
 for dataset in "sportstables" "open_data_usa" "gittables"; do
     cp data/"$dataset"/queries/accuracy_benchmark/test-all.zst data/"$dataset"/queries/exact_results.zst
@@ -17,14 +18,16 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
             -q data/"$dataset"/queries/exact_results.zst \
             -e pscan \
             --no-sym-difference \
-            --log-file logs/exact_results/"$dataset"-pscan-"$i".zst
+            --log-file logs/exact_results/"$dataset"-pscan-"$i".zst \
+            --log-level "$log_level"
         python experiments/compute_exact_results.py \
             -d data/"$dataset"/binsort.zst \
             -i data/"$dataset"/indices/best_config_conversion.zst \
             -q data/"$dataset"/queries/exact_results.zst \
             -e binsort \
             --no-ground-truth \
-            --log-file logs/exact_results/"$dataset"-binsort-"$i".zst
+            --log-file logs/exact_results/"$dataset"-binsort-"$i".zst \
+            --log-level "$log_level"
     done
 done
 

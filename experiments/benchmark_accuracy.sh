@@ -7,6 +7,7 @@ set -euxo pipefail
 ulimit -Sn 10000
 cd "$(git rev-parse --show-toplevel)"
 start_time=$(date +%s)
+log_level=INFO
 
 ### Grid search preprocessing ###
 # Sportstables
@@ -151,37 +152,43 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
         python experiments/compute_pscan_results.py \
             -H data/"$dataset"/histograms.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
-            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-pscan-"$queries".zst
+            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-pscan-"$queries".zst \
+            --log-level "$log_level"
         python experiments/compute_binsort_results.py \
             -i data/"$dataset"/binsort.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
-            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-binsort-"$queries".zst
+            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-binsort-"$queries".zst \
+            --log-level "$log_level"
         python experiments/compute_ndist_results.py \
             -d data/"$dataset"/normal_dists.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             -w "$(nproc)" \
-            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-ndist-"$queries".zst
+            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-ndist-"$queries".zst \
+            --log-level "$log_level"
         python experiments/compute_fainder_results.py \
             -i data/"$dataset"/indices/best_config_rebinning.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-rebinning-"$queries".zst \
-            --log-runtime
+            --log-runtime \
+            --log-level "$log_level"
         python experiments/compute_fainder_results.py \
             -i data/"$dataset"/indices/best_config_conversion.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             -t data/"$dataset"/results/accuracy_benchmark/ground_truth-test-"$queries".zst \
             --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-conversion-"$queries".zst \
-            --log-runtime
+            --log-runtime \
+            --log-level "$log_level"
         python experiments/compute_exact_results.py \
             -d data/"$dataset"/binsort.zst \
             -i data/"$dataset"/indices/best_config_conversion.zst \
             -q data/"$dataset"/queries/accuracy_benchmark/test-"$queries".zst \
             -e binsort \
             --no-ground-truth \
-            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-exact-"$queries".zst
+            --log-file logs/accuracy_benchmark/baseline_comp/"$dataset"-exact-"$queries".zst \
+            --log-level "$log_level"
     done
 done
 
