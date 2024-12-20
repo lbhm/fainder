@@ -17,23 +17,22 @@ GITTABLES_ZENODO_ID = 6517052
 
 
 def download_gittables(output: Path, workers: int, zenodo_id: int = GITTABLES_ZENODO_ID) -> int:
-    response = requests.get(f"https://zenodo.org/api/records/{zenodo_id}")
+    response = requests.get(f"https://zenodo.org/api/records/{zenodo_id}", timeout=10)
     if response.status_code == 200:
         file_infos: list[dict[str, Any]] = response.json()["files"]
         with Pool(processes=workers) as pool:
             fn = partial(download_zenodo_file, output=output)
             results = pool.map(fn, file_infos)
 
-        sum = 0
+        total = 0
         for result in results:
             if isinstance(result, str):
                 logger.debug(result)
             else:
-                sum += result
-        return sum
-    else:
-        logger.error(f"Dataset request failed (response code: {response.status_code})")
-        return 0
+                total += result
+        return total
+    logger.error(f"Dataset request failed (response code: {response.status_code})")
+    return 0
 
 
 def download_zenodo_file(file_info: dict[str, Any], output: Path) -> str | int:
@@ -47,10 +46,8 @@ def download_zenodo_file(file_info: dict[str, Any], output: Path) -> str | int:
                     zip_file.extract(info, output / "pq")
                     logger.trace(f"Extracted {info.filename} to {output / 'pq'}")
             return i + 1
-        else:
-            return f"File {file_info['key']} from {file_info['links']['self']} is not a zip file"
-    else:
-        return f"Failed to download {file_info['key']} from {file_info['links']['self']}"
+        return f"File {file_info['key']} from {file_info['links']['self']} is not a zip file"
+    return f"Failed to download {file_info['key']} from {file_info['links']['self']}"
 
 
 def parse_args() -> argparse.Namespace:

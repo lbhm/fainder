@@ -152,8 +152,7 @@ def query_conversion_matrix(
                     "Underestimation with conversion matrices not implemented yet, use the index."
                 )
                 # mask = np.invert(np.cumsum(conversion_matrix[:, bin_index], dtype=np.bool_))
-            else:
-                mask = np.any(conversion_matrix[:, : bin_index + 1], axis=1)
+            mask = np.any(conversion_matrix[:, : bin_index + 1], axis=1)
             fraction = values[mask].sum()
     elif "g" in comparison:
         if bin_index == -1:
@@ -168,8 +167,7 @@ def query_conversion_matrix(
                 # mask = np.invert(
                 #     np.cumsum(conversion_matrix[:, bin_index][::-1], dtype=np.bool_)[::-1]
                 # )
-            else:
-                mask = np.any(conversion_matrix[:, bin_index:], axis=1)
+            mask = np.any(conversion_matrix[:, bin_index:], axis=1)
             fraction = values[mask].sum()
     else:
         raise ValueError("Invalid comparison.")
@@ -399,12 +397,9 @@ def query_local_index(
 
         bin_mode = 0
         pctl_mode = 0
-        if "g" in comparison and index_mode == "precision":
-            if method == "rebinning":
-                bin_mode = 1
-            if method == "conversion":
-                pctl_mode = 1
-        elif "l" in comparison and index_mode == "recall":
+        if ("g" in comparison and index_mode == "precision") or (
+            "l" in comparison and index_mode == "recall"
+        ):
             if method == "rebinning":
                 bin_mode = 1
             if method == "conversion":
@@ -475,12 +470,9 @@ def trace_local_index(
 
     bin_mode = 0
     pctl_mode = 0
-    if "g" in comparison and index_mode == "precision":
-        if method == "rebinning":
-            bin_mode = 1
-        if method == "conversion":
-            pctl_mode = 1
-    elif "l" in comparison and index_mode == "recall":
+    if ("g" in comparison and index_mode == "precision") or (
+        "l" in comparison and index_mode == "recall"
+    ):
         if method == "rebinning":
             bin_mode = 1
         if method == "conversion":
@@ -580,12 +572,9 @@ def query_index_worker(
 
     bin_mode = 0
     pctl_mode = 0
-    if "g" in comparison and index_mode == "precision":
-        if method == "rebinning":
-            bin_mode = 1
-        if method == "conversion":
-            pctl_mode = 1
-    elif "l" in comparison and index_mode == "recall":
+    if ("g" in comparison and index_mode == "precision") or (
+        "l" in comparison and index_mode == "recall"
+    ):
         if method == "rebinning":
             bin_mode = 1
         if method == "conversion":
@@ -595,7 +584,9 @@ def query_index_worker(
         if bins[0] <= reference <= bins[-1]:
             bin_index = (
                 np.clip(
-                    np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1  # type: ignore
+                    np.searchsorted(bins, reference, "left") - 1,
+                    0,
+                    len(bins) - 1,  # type: ignore
                 )
                 + bin_mode
             )
@@ -633,36 +624,35 @@ def query_index(
 
     if n_workers is None:
         return query_local_index(pctl_index, cluster_bins, index_mode, queries, suppress_results)
-    else:
-        if n_workers <= 0:
-            raise ValueError("Number of workers must greater than 0 (or None).")
+    if n_workers <= 0:
+        raise ValueError("Number of workers must greater than 0 (or None).")
 
-        method: Literal["rebinning", "conversion"] = (
-            "rebinning" if len(pctl_index[0]) == 1 else "conversion"
-        )
-        n_hists = [len(t[0][0]) for t in pctl_index]
-        index_dtype = pctl_index[0][0][0].dtype
-        shm_pointers = load_shm_index(pctl_index)
-        try:
-            logger.debug("Initalizing index worker pool")
-            with Pool(
-                processes=n_workers,
-                initializer=init_index_workers,
-                initargs=(shm_pointers, n_hists, cluster_bins, method, index_dtype),
-            ) as pool:
-                fn = partial(
-                    query_index_worker,
-                    method=method,
-                    index_mode=index_mode,
-                    suppress_results=suppress_results,
-                )
-                logger.debug("Index worker pool initialized")
-                start = time.perf_counter()
-                matches = pool.map(fn, queries)
-                end = time.perf_counter()
-                logger.debug(f"Raw index-based query execution time: {end - start:.6f}s")
-                logger.trace(f"query_collection_time, {end - start}")
-        finally:
-            unlink_pointers(shm_pointers)
+    method: Literal["rebinning", "conversion"] = (
+        "rebinning" if len(pctl_index[0]) == 1 else "conversion"
+    )
+    n_hists = [len(t[0][0]) for t in pctl_index]
+    index_dtype = pctl_index[0][0][0].dtype
+    shm_pointers = load_shm_index(pctl_index)
+    try:
+        logger.debug("Initalizing index worker pool")
+        with Pool(
+            processes=n_workers,
+            initializer=init_index_workers,
+            initargs=(shm_pointers, n_hists, cluster_bins, method, index_dtype),
+        ) as pool:
+            fn = partial(
+                query_index_worker,
+                method=method,
+                index_mode=index_mode,
+                suppress_results=suppress_results,
+            )
+            logger.debug("Index worker pool initialized")
+            start = time.perf_counter()
+            matches = pool.map(fn, queries)
+            end = time.perf_counter()
+            logger.debug(f"Raw index-based query execution time: {end - start:.6f}s")
+            logger.trace(f"query_collection_time, {end - start}")
+    finally:
+        unlink_pointers(shm_pointers)
 
-        return matches
+    return matches

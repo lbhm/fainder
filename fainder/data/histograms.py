@@ -100,6 +100,7 @@ def compute_histogram(
             if values.nunique() > 1 and values.min() != values.max():
                 probability = scaling_factor
                 while probability > rng.random():
+                    bins: int | str
                     if bin_range:
                         bins = min(
                             values.nunique() - 1,

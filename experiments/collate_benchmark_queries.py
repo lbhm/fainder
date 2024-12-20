@@ -152,13 +152,13 @@ def main() -> None:
     if args.workload == "accuracy_benchmark":
         val_queries: list[PercentileQuery] = []
         test_queries: list[PercentileQuery] = []
-        for category, filter in [
+        for category, selector in [
             ("low_selectivity", selectivity < 0.1),
             ("mid_selectivity", (selectivity > 0.1) & (selectivity < 0.9)),
             ("high_selectivity", selectivity > 0.9),
         ]:
-            query_subset = list(compress(queries, filter))
-            result_subset = list(compress(ground_truth, filter))
+            query_subset = list(compress(queries, selector))
+            result_subset = list(compress(ground_truth, selector))
             n_queries: int = args.n_val_queries + args.n_test_queries
             if len(query_subset) > n_queries:
                 ids = random.sample(range(len(query_subset)), n_queries)

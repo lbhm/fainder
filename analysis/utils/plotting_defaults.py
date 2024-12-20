@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -88,11 +89,7 @@ def autolabel_bars(
         decimal_precision = precision
 
     for i, patch in enumerate(ax.patches):
-        if offsets:
-            height = patch.get_height() + offsets[i]  # type: ignore
-        else:
-            height = patch.get_height()  # type: ignore
-
+        height = patch.get_height() + offsets[i] if offsets else patch.get_height()  # type: ignore
         height_str = f"{height:.{precision}g}"
         ha = "center"
         x = patch.get_x() + patch.get_width() / 2  # type: ignore
@@ -204,3 +201,7 @@ def set_style(font_scale: float = 6.0) -> None:
             ),
         },
     )
+
+
+def delete_tex_cache() -> None:
+    shutil.rmtree(Path.home() / ".cache" / "matplotlib" / "tex.cache", ignore_errors=True)

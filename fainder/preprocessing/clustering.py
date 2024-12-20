@@ -125,7 +125,7 @@ def compute_clustering(
 ) -> NDArray[np.int32]:
     if n_clusters == (1, 1):
         return np.zeros(len(features), dtype=np.int32)
-    elif n_clusters[0] == 1:
+    if n_clusters[0] == 1:
         logger.warning(
             "Lower bound for n_cluster is set to 1. To create an index without clustering, you"
             " must pass n_cluster_range=(1,1) since a clustering cannot be compared with no"
@@ -175,11 +175,9 @@ def assign_histograms(
 ) -> list[list[tuple[np.uint32, Histogram]]]:
     clustered_hists: list[list[tuple[np.uint32, Histogram]]] = []
     hash_map: dict[int, int] = {}
-    c = 0
-    for i in np.unique(clustering):
+    for i, id_ in enumerate(np.unique(clustering)):
         clustered_hists.append([])
-        hash_map[i] = c
-        c += 1
+        hash_map[id_] = i
     for i, (id_, hist) in enumerate(hists):
         clustered_hists[hash_map[clustering[i]]].append((id_, hist))
 

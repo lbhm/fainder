@@ -1,11 +1,12 @@
 import argparse
 import os
 import time
+from collections.abc import Sequence
 from functools import partial
 from multiprocessing import Pool, Value
 from multiprocessing.shared_memory import SharedMemory
 from pathlib import Path
-from typing import Any, Literal, Sequence
+from typing import Any, Literal
 
 import numpy as np
 from loguru import logger

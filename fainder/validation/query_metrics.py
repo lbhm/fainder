@@ -21,12 +21,11 @@ def selectivity(
         return np.array(
             [len(result) / collection_size for result in ground_truth], dtype=np.float32
         )
-    else:
-        if workers < 1:
-            raise ValueError("Number of workers must be greater than 0")
-        with Pool(workers) as pool:
-            fn = partial(_selectivity, collection_size=collection_size)
-            return np.array(pool.map(fn, ground_truth), dtype=np.float32)
+    if workers < 1:
+        raise ValueError("Number of workers must be greater than 0")
+    with Pool(workers) as pool:
+        fn = partial(_selectivity, collection_size=collection_size)
+        return np.array(pool.map(fn, ground_truth), dtype=np.float32)
 
 
 def _selectivity(result: set[np.uint32], collection_size: int) -> float:
@@ -42,12 +41,11 @@ def cluster_hits(
         return np.array(
             [_cluster_hits(query, cluster_bins) for query in queries], dtype=np.float32
         )
-    else:
-        if workers < 1:
-            raise ValueError("Number of workers must be greater than 0")
-        with Pool(workers) as pool:
-            fn = partial(_cluster_hits, cluster_bins=cluster_bins)
-            return np.array(pool.map(fn, queries), dtype=np.float32)
+    if workers < 1:
+        raise ValueError("Number of workers must be greater than 0")
+    with Pool(workers) as pool:
+        fn = partial(_cluster_hits, cluster_bins=cluster_bins)
+        return np.array(pool.map(fn, queries), dtype=np.float32)
 
 
 def _cluster_hits(query: PercentileQuery, cluster_bins: list[F64Array]) -> float:
@@ -63,12 +61,11 @@ def bin_edge_matches(
 ) -> F32Array:
     if workers is None:
         return np.array([_bin_edge_matches(query, hists) for query in queries], dtype=np.float32)
-    else:
-        if workers < 1:
-            raise ValueError("Number of workers must be greater than 0")
-        with Pool(workers) as pool:
-            fn = partial(_bin_edge_matches, hists=hists)
-            return np.array(pool.map(fn, queries), dtype=np.float32)
+    if workers < 1:
+        raise ValueError("Number of workers must be greater than 0")
+    with Pool(workers) as pool:
+        fn = partial(_bin_edge_matches, hists=hists)
+        return np.array(pool.map(fn, queries), dtype=np.float32)
 
 
 def _bin_edge_matches(query: PercentileQuery, hists: list[tuple[np.uint32, Histogram]]) -> float:

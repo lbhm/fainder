@@ -29,13 +29,12 @@ def query_normal_dist(dist: tuple[float, ...], query: PercentileQuery) -> bool:
             np.round(norm.cdf(reference, loc=mean, scale=stddev), ROUNDING_PRECISION)
             >= np.float32(percentile)
         )
-    elif "g" in comparison:
+    if "g" in comparison:
         return bool(
             np.round(norm.sf(reference, loc=mean, scale=stddev), ROUNDING_PRECISION)
             >= np.float32(percentile)
         )
-    else:
-        raise ValueError("Invalid comparison.")
+    raise ValueError("Invalid comparison.")
 
 
 def query_dist_collection(

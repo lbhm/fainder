@@ -42,7 +42,11 @@ analysis = [
 ]
 dev = [
     "fainder[analysis]",
+    "mypy~=1.13",
+    "pandas-stubs~=2.1",
     "pre-commit~=3.5",
+    "types-requests~=2.31",
+    "types-seaborn~=0.13",
 ]
 
 [project.scripts]
@@ -73,23 +77,36 @@ fainder = "fainder"
 version = {attr = "fainder.__version__"}
 readme = {file = ["README.md"], content-type = "text/markdown"}
 
-[tool.black]
+[tool.ruff]
 line-length = 99
-preview = true
-target-version = ["py310", "py311", "py312"]
+target-version = "py310"
 
-[tool.flake8]
-max-line-length = 90  # includes 10% buffer so the upper limit actually is 99
-select = ["B", "C", "D", "E", "F", "W", "B9", "C4"]
-ignore = ["D1", "E203", "E501", "F821", "W503"]
-docstring-convention = "google"
-
-[tool.isort]
-float_to_top = true
-line_length = 99
-profile = "black"
-skip_gitignore = true
-src_paths = ["fainder"]
+[tool.ruff.lint]
+select = [
+    "A",  # flake8-builtins
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "ISC",  # flake8-implicit-str-concat
+    "N",  # pep8-naming
+    "Q",  # flake8-quotes
+    "RET",  # flake8-return
+    "RUF",  # ruff-specific rules
+    "SIM",  # flake8-simplify
+    "UP",  # pyupgrade
+    "W",  # pycodestyle warnings
+]
+ignore = [
+    "C90",  # mccabe
+    "D",  # pydocstyle
+    "ISC001",  # single-line-implicit-string-concatenation
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style
+    "S",  # flake8-bandit
+    "UP015",  # redundant-open-modes
+]
 
 [tool.mypy]
 ignore_missing_imports = true

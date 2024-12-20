@@ -25,22 +25,22 @@ ROUNDING_PRECISION = 4
 
 
 def filter_hists(
-    hists: list[tuple[np.uint32, Histogram]], filter: set[np.uint32]
+    hists: list[tuple[np.uint32, Histogram]], filter_ids: set[np.uint32]
 ) -> list[tuple[np.uint32, Histogram]]:
-    return [hist for hist in hists if hist[0] in filter]
+    return [hist for hist in hists if hist[0] in filter_ids]
 
 
 def filter_index(
     pctl_index: list[PercentileIndex],
     cluster_bins: list[F64Array],
-    filter: set[np.uint32],
+    filter_ids: set[np.uint32],
 ) -> tuple[list[PercentileIndex], list[F64Array]]:
     new_index: list[PercentileIndex] = []
     new_bins: list[F64Array] = []
     for i, cluster in enumerate(pctl_index):
         new_cluster: list[tuple[FArray, UInt32Array]] = []
         for pctls, ids in cluster:
-            mask = np.isin(ids.reshape(-1, order="F"), list(filter))
+            mask = np.isin(ids.reshape(-1, order="F"), list(filter_ids))
             new_pctls = np.require(
                 pctls.reshape(-1, order="F")[mask].reshape((-1, pctls.shape[1]), order="F"),
                 dtype=pctls.dtype,
@@ -62,9 +62,9 @@ def filter_index(
 
 def filter_binsort(
     binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array],
-    filter: set[np.uint32],
+    filter_ids: set[np.uint32],
 ) -> tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array]:
-    mask = np.isin(binsort[2], list(filter))
+    mask = np.isin(binsort[2], list(filter_ids))
     return (
         binsort[0][mask],
         (binsort[1][0][mask], binsort[1][1][mask], binsort[1][2][mask]),
@@ -86,16 +86,15 @@ def query_accuracy_metrics(
     """
     if len(truth) == 0 and len(prediction) == 0:
         return 1.0, 1.0, 1.0
-    elif len(truth) == 0:
+    if len(truth) == 0:
         return 0.0, 1.0, 0.0
-    elif len(prediction) == 0:
+    if len(prediction) == 0:
         return 1.0, 0.0, 0.0
-    else:
-        tp = len(truth & prediction)
-        fp = len(prediction - truth)
-        fn = len(truth - prediction)
+    tp = len(truth & prediction)
+    fp = len(prediction - truth)
+    fn = len(truth - prediction)
 
-        return tp / (fp + tp), tp / (fn + tp), 2 * tp / (2 * tp + fp + fn)
+    return tp / (fp + tp), tp / (fn + tp), 2 * tp / (2 * tp + fp + fn)
 
 
 def collection_accuracy_metrics(
