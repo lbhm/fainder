@@ -113,8 +113,8 @@ cluster-histograms \
 
 # Open Data
 cluster-histograms \
-    -i data/sportstables/histograms.zst \
-    -o data/sportstables/clusterings/best_config.zst \
+    -i data/open_data_usa/histograms.zst \
+    -o data/open_data_usa/clusterings/best_config.zst \
     -a kmeans \
     -c 250 250 \
     -b 50000 \
@@ -125,8 +125,8 @@ cluster-histograms \
 
 # GitTables
 cluster-histograms \
-    -i data/sportstables/histograms.zst \
-    -o data/sportstables/clusterings/best_config.zst \
+    -i data/gittables/histograms.zst \
+    -o data/gittables/clusterings/best_config.zst \
     -a kmeans \
     -c 750 750 \
     -b 100000 \
