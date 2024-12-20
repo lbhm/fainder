@@ -89,7 +89,7 @@
 # Jupyter notebook
 *.ipynb  text eol=lf
 
-# Exclude notebooks from GitHub language statistics
-analysis/* linguist-documentation
-experiments/* linguist-documentation
-tex/* linguist-documentation
+# Exclude notebooks, scripts, and Tex code from GitHub language statistics
+analysis/** linguist-documentation
+experiments/** linguist-documentation
+tex/** linguist-documentation
