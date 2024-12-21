@@ -15,7 +15,7 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
     create-index -i data/"$dataset"/clusterings/runtime_benchmark.zst -m conversion -o data/"$dataset"/indices/runtime_benchmark --index-file conversion.zst --log-file logs/runtime_benchmark/indexing/"$dataset"-conversion.log
 
     query=("0.1" "lt" "50")
-    nproc=$(nproc)
+    # nproc=$(nproc)
     for i in {1..5}; do
         ### General runtime experiments ###
         # Single query
@@ -30,19 +30,19 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
 
         # Query collection
         run-queries -i data/"$dataset"/histograms.zst -t histograms -q data/"$dataset"/queries/runtime_benchmark.zst -e over --log-file logs/runtime_benchmark/execution/"$dataset"-collection-iterative-single-"$i".log
-        run-queries -i data/"$dataset"/histograms.zst -t histograms -q data/"$dataset"/queries/runtime_benchmark.zst -e over -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-iterative-parallel-"$i".log
         run-queries -i data/"$dataset"/binsort.zst -t binsort -q data/"$dataset"/queries/runtime_benchmark.zst -m recall --log-file logs/runtime_benchmark/execution/"$dataset"-collection-binsort-single-"$i".log
-        run-queries -i data/"$dataset"/binsort.zst -t binsort -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-binsort-parallel-"$i".log
         run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-single-"$i".log
-        run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-parallel-"$i".log
         run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-single-"$i".log
-        run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-parallel-"$i".log
+        # run-queries -i data/"$dataset"/histograms.zst -t histograms -q data/"$dataset"/queries/runtime_benchmark.zst -e over -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-iterative-parallel-"$i".log
+        # run-queries -i data/"$dataset"/binsort.zst -t binsort -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-binsort-parallel-"$i".log
+        # run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-parallel-"$i".log
+        # run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w "$nproc" --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-parallel-"$i".log
 
         # Query collection (without processing results)
         run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-single_suppressed-"$i".log
-        run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-parallel_suppressed-"$i".log
         run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-single_suppressed-"$i".log
-        run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-parallel_suppressed-"$i".log
+        # run-queries -i data/"$dataset"/indices/runtime_benchmark/rebinning.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-rebinning-parallel_suppressed-"$i".log
+        # run-queries -i data/"$dataset"/indices/runtime_benchmark/conversion.zst -t index -q data/"$dataset"/queries/runtime_benchmark.zst -m recall -w"$nproc" --suppress-results --log-file logs/runtime_benchmark/execution/"$dataset"-collection-conversion-parallel_suppressed-"$i".log
 
         ### Low selectivity runtime experiments ###
         run-queries -i data/"$dataset"/histograms.zst -t histograms -q data/"$dataset"/queries/runtime_benchmark.zst -e over -f data/"$dataset"/filters/01.zst --log-file logs/runtime_benchmark/low_selectivity/"$dataset"-collection-iterative-single-"$i".log
