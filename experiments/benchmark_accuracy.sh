@@ -191,13 +191,13 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
 done
 
 ### LLM Query Workload ###
-# for dataset in "${!datasets[@]}"; do
+# for dataset in "sportstables" "open_data_usa" "gittables"; do
 #     cp data/llm_workload/llm_queries.zst data/"$dataset"/queries/llm/all.zst
 #     python experiments/collate_benchmark_queries.py \
 #         -d "$dataset" \
 #         -q data/"$dataset"/queries/llm/all.zst \
 #         -W llm \
-#         -c "data/$dataset/clusterings/accuracy_benchmark/k_cluster/${datasets[$dataset]}.zst"
+#         -c "data/$dataset/clusterings/best_config.zst"
 #
 #     python experiments/compute_ndist_results.py \
 #         -d data/"$dataset"/normal_dists.zst \
@@ -206,13 +206,13 @@ done
 #         -w "$(nproc)" \
 #         --log-file logs/accuracy_benchmark/llm/"$dataset"-ndist.zst
 #     python experiments/compute_fainder_results.py \
-#         -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/rebinning-"${datasets[$dataset]}".zst \
+#         -i data/"$dataset"/indices/best_config_rebinning.zst \
 #         -q data/"$dataset"/queries/llm/all.zst \
 #         -t data/"$dataset"/results/llm/ground_truth-all.zst \
 #         --log-file logs/accuracy_benchmark/llm/"$dataset"-rebinning.zst \
 #         --log-runtime
 #     python experiments/compute_fainder_results.py \
-#         -i data/"$dataset"/indices/accuracy_benchmark/k_cluster/conversion-"${datasets[$dataset]}".zst \
+#         -i data/"$dataset"/indices/best_config_conversion.zst \
 #         -q data/"$dataset"/queries/llm/all.zst \
 #         -t data/"$dataset"/results/llm/ground_truth-all.zst \
 #         --log-file logs/accuracy_benchmark/llm/"$dataset"-conversion.zst \

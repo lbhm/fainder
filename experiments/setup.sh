@@ -33,7 +33,7 @@ filter-histograms -i data/gittables/histograms.zst -o data/gittables/filters/01.
 
 ### Benchmark queries ###
 cluster-histograms -i data/sportstables/histograms.zst \
-    -o data/sportstables/clusterings/benchmark_queries.zst \
+    -o data/sportstables/clusterings/query_generation.zst \
     -a kmeans \
     -c 140 140 \
     -b 50000 \
@@ -49,12 +49,12 @@ generate-queries -o data/sportstables/queries/accuracy_benchmark/all.zst \
 python experiments/collate_benchmark_queries.py \
     -d sportstables \
     -q data/sportstables/queries/accuracy_benchmark/all.zst \
-    -c data/sportstables/clusterings/benchmark_queries.zst \
+    -c data/sportstables/clusterings/query_generation.zst \
     -w "$nproc" \
     --log-level "$log_level"
 
 cluster-histograms -i data/open_data_usa/histograms.zst \
-    -o data/open_data_usa/clusterings/benchmark_queries.zst \
+    -o data/open_data_usa/clusterings/query_generation.zst \
     -a kmeans \
     -c 140 140 \
     -b 50000 \
@@ -70,12 +70,12 @@ generate-queries -o data/open_data_usa/queries/accuracy_benchmark/all.zst \
 python experiments/collate_benchmark_queries.py \
     -d open_data_usa \
     -q data/open_data_usa/queries/accuracy_benchmark/all.zst \
-    -c data/open_data_usa/clusterings/benchmark_queries.zst \
+    -c data/open_data_usa/clusterings/query_generation.zst \
     -w "$nproc" \
     --log-level "$log_level"
 
 cluster-histograms -i data/gittables/histograms.zst \
-    -o data/gittables/clusterings/benchmark_queries.zst \
+    -o data/gittables/clusterings/query_generation.zst \
     -a kmeans \
     -c 140 140 \
     -b 100000 \
@@ -91,7 +91,7 @@ generate-queries -o data/gittables/queries/accuracy_benchmark/all.zst \
 python experiments/collate_benchmark_queries.py \
     -d gittables \
     -q data/gittables/queries/accuracy_benchmark/all.zst \
-    -c data/gittables/clusterings/benchmark_queries.zst \
+    -c data/gittables/clusterings/query_generation.zst \
     -w "$nproc" \
     --log-level "$log_level"
 
@@ -154,6 +154,14 @@ for dataset in "sportstables" "open_data_usa" "gittables"; do
         --index-file best_config_conversion.zst \
         --log-level "$log_level"
 done
+
+### Setup for additional Binsort scaling experiments ###
+# for dataset in "sportstables" "open_data_usa" "gittables"; do
+#     for m in 10 50 100 500 1000 5000; do
+#         compute-histograms -i data/"$dataset"/pq -o data/"$dataset"/histograms_m"$m".zst --bin-range "$m" "$m" --log-file logs/runtime_benchmark/binsort/"$dataset"-construction-m"$m".log
+#         compute-binsort -i data/"$dataset"/histograms_m"$m".zst -o data/"$dataset"/binsort_m"$m".zst
+#     done
+# done
 
 end_time=$(date +%s)
 echo Executed setup in $((end_time - start_time))s.
