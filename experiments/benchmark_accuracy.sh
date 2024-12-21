@@ -146,8 +146,6 @@ log_level=INFO
 
 ### Baseline comparison ###
 for dataset in "sportstables" "open_data_usa" "gittables"; do
-    compute-distributions -i data/"$dataset"/pq -o data/"$dataset"/normal_dists.zst -k normal
-
     for queries in "low_selectivity" "mid_selectivity" "high_selectivity"; do
         python experiments/compute_pscan_results.py \
             -H data/"$dataset"/histograms.zst \

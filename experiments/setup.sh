@@ -13,11 +13,13 @@ nproc=$(nproc)
 convert-to-parquet -i data/sportstables/csv -o data/sportstables/pq
 compute-histograms -i data/sportstables/pq -o data/sportstables/histograms.zst --bin-range 10 20
 compute-binsort -i data/sportstables/histograms.zst -o data/sportstables/binsort.zst
+compute-distributions -i data/sportstables/pq -o data/sportstables/normal_dists.zst -k normal
 filter-histograms -i data/sportstables/histograms.zst -o data/sportstables/filters/01.zst -s 0.01
 
 convert-to-parquet -i data/open_data_usa/csv -o data/open_data_usa/pq
 compute-histograms -i data/open_data_usa/pq -o data/open_data_usa/histograms.zst --bin-range 10 20
 compute-binsort -i data/open_data_usa/histograms.zst -o data/open_data_usa/binsort.zst
+compute-distributions -i data/open_data_usa/pq -o data/open_data_usa/normal_dists.zst -k normal
 filter-histograms -i data/open_data_usa/histograms.zst -o data/open_data_usa/filters/01.zst -s 0.01
 
 compute-histograms -i data/gittables/pq -o data/gittables/histograms.zst --bin-range 10 20
@@ -26,6 +28,7 @@ compute-histograms -i data/gittables/pq -o data/gittables/histograms_sf050.zst -
 compute-histograms -i data/gittables/pq -o data/gittables/histograms_sf100.zst -f 1 --bin-range 10 20
 compute-histograms -i data/gittables/pq -o data/gittables/histograms_sf200.zst -f 2 --bin-range 10 20
 compute-binsort -i data/gittables/histograms.zst -o data/gittables/binsort.zst
+compute-distributions -i data/gittables/pq -o data/gittables/normal_dists.zst -k normal
 filter-histograms -i data/gittables/histograms.zst -o data/gittables/filters/01.zst -s 0.01
 
 ### Benchmark queries ###
