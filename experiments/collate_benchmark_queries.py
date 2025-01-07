@@ -152,6 +152,7 @@ def main() -> None:
     if args.workload == "accuracy_benchmark":
         val_queries: list[PercentileQuery] = []
         test_queries: list[PercentileQuery] = []
+        test_results: list[set[np.uint32]] = []
         for category, selector in [
             ("low_selectivity", selectivity < 0.1),
             ("mid_selectivity", (selectivity > 0.1) & (selectivity < 0.9)),
@@ -167,6 +168,7 @@ def main() -> None:
 
                 val_queries += query_subset[: args.n_val_queries]
                 test_queries += query_subset[args.n_val_queries :]
+                test_results += result_subset[args.n_val_queries :]
 
                 save_output(
                     query_path / f"val-{category}.zst",
@@ -196,6 +198,7 @@ def main() -> None:
 
         save_output(query_path / "val-all.zst", val_queries, "val queries")
         save_output(query_path / "test-all.zst", test_queries, "test queries")
+        save_output(result_path / "ground_truth-test-all.zst", test_results, "test results")
 
     logger.info(f"Executed experiment in {time.perf_counter() - start:.2f}s.")
 
