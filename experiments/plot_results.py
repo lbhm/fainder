@@ -533,12 +533,11 @@ def plot_runtime(runtime: pd.DataFrame, fig_num: int) -> None:
             runtime[(runtime["dataset"] == dataset) & (runtime["query_set"] == "collection")]
             .groupby(["approach", "execution"])
             .agg({"query_collection_time": ["mean", "std"]})
-            .values
         )
 
         ax.bar(
             x=0,
-            height=data[3][0],
+            height=data.loc[("iterative", "single"), ("query_collection_time", "mean")],  # type: ignore
             width=0.5,
             color=sns.color_palette()[0],
             edgecolor="black",
@@ -546,7 +545,7 @@ def plot_runtime(runtime: pd.DataFrame, fig_num: int) -> None:
         )
         ax.bar(
             x=0.75,
-            height=data[0][0],
+            height=data.loc[("binsort", "single"), ("query_collection_time", "mean")],  # type: ignore
             width=0.5,
             color=sns.color_palette()[1],
             edgecolor="black",
@@ -554,7 +553,7 @@ def plot_runtime(runtime: pd.DataFrame, fig_num: int) -> None:
         )
         ax.bar(
             x=1.5,
-            height=data[4][0],
+            height=data.loc[("rebinning", "single"), ("query_collection_time", "mean")],  # type: ignore
             width=0.5,
             color=sns.color_palette()[2],
             edgecolor="black",
@@ -563,7 +562,7 @@ def plot_runtime(runtime: pd.DataFrame, fig_num: int) -> None:
         )
         ax.bar(
             x=2.05,
-            height=data[5][0],
+            height=data.loc[("rebinning", "single_suppressed"), ("query_collection_time", "mean")],  # type: ignore
             width=0.5,
             color=sns.color_palette()[2],
             edgecolor="black",
@@ -654,18 +653,21 @@ def plot_execution_trace(trace: pd.DataFrame, fig_num: int = 13) -> None:
     _, ax = plt.subplots(1, 1, figsize=(1.79, 1.2))
 
     for i, dataset in enumerate(["sportstables", "open_data_usa", "gittables"]):
-        data = (
-            trace[trace.dataset == dataset]
-            .groupby(["metric"])
-            .agg({"value": ["mean", "std"]})
-            .values
-        )
+        data = trace[trace.dataset == dataset].groupby(["metric"]).agg({"value": ["mean", "std"]})
 
         bottom = 0
-        for j, idx in enumerate([2, 1, 4, 5, 3]):
+        for j, column in enumerate(
+            [
+                "query_boostrap_time",
+                "query_bin_search_time",
+                "query_hist_search_time",
+                "query_result_update_time",
+                "query_cluster_skip_time",
+            ]
+        ):
             ax.bar(
                 x=i * 0.75,
-                height=data[idx][0],
+                height=data.loc[column, ("value", "mean")],  # type: ignore
                 width=0.5,
                 bottom=bottom,
                 color=sns.color_palette()[j],
@@ -682,7 +684,7 @@ def plot_execution_trace(trace: pd.DataFrame, fig_num: int = 13) -> None:
                     else ""
                 ),
             )
-            bottom += data[idx][0]
+            bottom += data.loc[column, ("value", "mean")]  # type: ignore
 
         ax.annotate(
             f"{bottom:.4f}",

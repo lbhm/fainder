@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 -->
 <p align="center">
   <picture>
     <img alt="Fainder logo" src="https://github.com/user-attachments/assets/41686649-f1c1-4b60-824e-80c322c5da85" width="300">
@@ -100,17 +101,18 @@ Please note:
 
 The scripts in `experiments/` contain more experiments than we could cover in the paper. Please see
 the commented out lines and additional files if you are interested in them. The individual scripts
-do not exactly follow the section structure of our paper but are roughly structured as follows:
+do not exactly follow the section structure of our paper but are roughly structured as follows with
+the approximate execution time in parenthesis:
 
 ```bash
 experiments/
-├── setup.sh  # Create randomized histograms of the raw data and generate benchmark queries
-├── benchmark_runtime.sh  # Runtime analysis of Fainder and baselines
-├── benchmark_scalability.sh  # Runtime scalability analysis on GitTables
-├── benchmark_construction.sh  # Index construction time analysis
-├── benchmark_exact.sh  # Runtime breakdown of Fainder Exact
-├── benchmark_accuracy.sh  # Parameter grid search and accuracy comparison to baselines
-├── benchmark_parameters.sh  # Detailed analysis of index parameters
+├── setup.sh  # Create randomized histograms of the raw data and generate benchmark queries (~48 hours)
+├── benchmark_runtime.sh  # Runtime analysis of Fainder and baselines (~97 hours)
+├── benchmark_scalability.sh  # Runtime scalability analysis on GitTables (~11 hours)
+├── benchmark_construction.sh  # Index construction time analysis (~95 hours)
+├── benchmark_exact.sh  # Runtime breakdown of Fainder Exact (~94 hours)
+├── benchmark_accuracy.sh  # Parameter grid search and accuracy comparison to baselines (~42 hours)
+├── benchmark_parameters.sh  # Detailed analysis of index parameters (~2 hours)
 └── run_all.sh  # Run all of the experiments above
 ```
 
