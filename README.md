@@ -113,7 +113,7 @@ experiments/
 ├── benchmark_exact.sh  # Runtime breakdown of Fainder Exact (~94 hours)
 ├── benchmark_accuracy.sh  # Parameter grid search and accuracy comparison to baselines (~42 hours)
 ├── benchmark_parameters.sh  # Detailed analysis of index parameters (~2 hours)
-└── run_all.sh  # Run all of the experiments above
+└── run_all.sh  # Run all of the experiments above (~389 hours/~16 days)
 ```
 
 The additional Python files in `experiments/` encapsulate partial experiment logic that we use in
