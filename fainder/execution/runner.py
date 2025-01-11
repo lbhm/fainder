@@ -157,7 +157,7 @@ def run(
     logger.debug("Starting execution")
     start = time.perf_counter()
     if input_type == "histograms":
-        hists = filter_hists(input_data, hist_filter) if hist_filter else input_data
+        hists = filter_hists(input_data, hist_filter) if hist_filter is not None else input_data
         results = query_histogram_collection(
             hists, estimation_mode, queries, workers, not frequency_hists
         )
@@ -184,7 +184,9 @@ def run(
         )
     elif input_type == "index":
         pctl_index, cluster_bins = (
-            filter_index(input_data[0], input_data[1], hist_filter) if hist_filter else input_data
+            filter_index(input_data[0], input_data[1], hist_filter)
+            if hist_filter is not None
+            else input_data
         )
         results = query_index(
             pctl_index, cluster_bins, index_mode, queries, workers, suppress_results
@@ -193,7 +195,9 @@ def run(
         dists = input_data
         results = query_dist_collection(dists, "normal", queries, workers)
     elif input_type == "binsort":
-        binsort = filter_binsort(input_data, hist_filter) if hist_filter else input_data
+        binsort = (
+            filter_binsort(input_data, hist_filter) if hist_filter is not None else input_data
+        )
         results = query_binsort(binsort, index_mode, queries, workers)
     else:
         raise ValueError(f"Invalid input type {input_type}.")
