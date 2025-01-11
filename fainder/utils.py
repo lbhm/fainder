@@ -25,7 +25,7 @@ ROUNDING_PRECISION = 4
 
 
 def filter_hists(
-    hists: list[tuple[np.uint32, Histogram]], filter_ids: set[np.uint32]
+    hists: list[tuple[np.uint32, Histogram]], filter_ids: UInt32Array | list[int]
 ) -> list[tuple[np.uint32, Histogram]]:
     return [hist for hist in hists if hist[0] in filter_ids]
 
@@ -33,14 +33,14 @@ def filter_hists(
 def filter_index(
     pctl_index: list[PercentileIndex],
     cluster_bins: list[F64Array],
-    filter_ids: set[np.uint32],
+    filter_ids: UInt32Array | list[int],
 ) -> tuple[list[PercentileIndex], list[F64Array]]:
     new_index: list[PercentileIndex] = []
     new_bins: list[F64Array] = []
     for i, cluster in enumerate(pctl_index):
         new_cluster: list[tuple[FArray, UInt32Array]] = []
         for pctls, ids in cluster:
-            mask = np.isin(ids.reshape(-1, order="F"), list(filter_ids))
+            mask = np.isin(ids.reshape(-1, order="F"), filter_ids)
             new_pctls = np.require(
                 pctls.reshape(-1, order="F")[mask].reshape((-1, pctls.shape[1]), order="F"),
                 dtype=pctls.dtype,
@@ -62,9 +62,9 @@ def filter_index(
 
 def filter_binsort(
     binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array],
-    filter_ids: set[np.uint32],
+    filter_ids: UInt32Array | list[int],
 ) -> tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array]:
-    mask = np.isin(binsort[2], list(filter_ids))
+    mask = np.isin(binsort[2], filter_ids)
     return (
         binsort[0][mask],
         (binsort[1][0][mask], binsort[1][1][mask], binsort[1][2][mask]),

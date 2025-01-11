@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 from loguru import logger
+from numpy.typing import NDArray
 
 from fainder.typing import Histogram
 from fainder.utils import configure_run, load_input, save_output
@@ -64,12 +65,14 @@ def filter_histograms(
     hists: list[tuple[np.uint32, Histogram]],
     selectivity: float,
     generator: np.random.Generator,
-) -> set[np.uint32]:
+) -> NDArray[np.uint32]:
     if not 0 < selectivity <= 1:
         raise ValueError(f"Selectivity must be in the range (0, 1], got {selectivity}")
 
     ids, _ = zip(*hists, strict=True)
-    return set(generator.choice(ids, size=int(len(ids) * selectivity), replace=False))
+    return np.array(
+        generator.choice(ids, size=int(len(ids) * selectivity), replace=False), dtype=np.uint32
+    )
 
 
 def main() -> None:

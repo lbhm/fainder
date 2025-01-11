@@ -14,7 +14,7 @@ from fainder.execution.percentile_queries import (
     query_index,
     query_rebinned_collection,
 )
-from fainder.typing import PercentileQuery
+from fainder.typing import PercentileQuery, UInt32Array
 from fainder.utils import (
     configure_run,
     filter_binsort,
@@ -138,7 +138,7 @@ def run(
     ],
     estimation_mode: Literal["over", "under", "continuous_value", "cubic_spline"] = "over",
     index_mode: Literal["precision", "recall"] = "recall",
-    hist_filter: set[np.uint32] | None = None,
+    hist_filter: UInt32Array | list[int] | None = None,
     frequency_hists: bool = False,
     suppress_results: bool = False,
     workers: int | None = None,
