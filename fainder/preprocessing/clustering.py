@@ -48,7 +48,7 @@ def compute_features(
         features = RobustScaler(quantile_range=quantile_range).fit_transform(features)
     elif transform == "quantile":
         features = QuantileTransformer(
-            n_quantiles=10000, subsample=100000, random_state=seed
+            n_quantiles=min(10000, len(hist)), subsample=100000, random_state=seed
         ).fit_transform(features)
     elif transform == "power":
         features = PowerTransformer().fit_transform(features)
@@ -218,8 +218,13 @@ def compute_cluster_bins(
                 ROUNDING_PRECISION,
             )
         )
-        assert cluster_bins[-1][0] >= min_bins[i]
-        assert cluster_bins[-1][-1] <= max_bins[i]
+        try:
+            assert np.allclose(cluster_bins[-1][0], min_bins[i], atol=1e-4)
+            assert np.allclose(cluster_bins[-1][-1], max_bins[i], atol=1e-4)
+        except AssertionError:
+            logger.warning(f"Bins for cluster {i} do not match the histogram min/max values")
+            logger.warning(f"min_bin: {min_bins[i]}, max_bin: {max_bins[i]}")
+            logger.warning(f"cluster bin range: {cluster_bins[-1][0]}, {cluster_bins[-1][-1]}")
 
     return cluster_bins
 

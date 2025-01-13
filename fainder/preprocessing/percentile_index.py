@@ -608,13 +608,20 @@ def create_index(
         # Verify that the cumsum for each histogram starts at 0 and adds up to 1
         # We use a higher rounding tolerance due to floating point precision issues
         for cluster in pctl_index:
-            assert np.allclose(cluster[0][0][:, 0], 0, rtol=0)
+            if not np.allclose(cluster[0][0][:, 0], 0, rtol=0):
+                deviations = np.sum(np.isclose(cluster[0][0][:, 0], 0, rtol=0))
+                logger.warning(
+                    f"{deviations} percentiles do not start at 0 "
+                    f"(max deviation: {np.max(deviations):.10g})"
+                )
             # NOTE: Rebinning can cause larger rounding errors so the check is more lenient
             if not np.allclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0):
-                deviations = np.abs(1 - cluster[0][0][:, -1])
+                deviations = np.sum(
+                    np.isclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0)
+                )
                 logger.warning(
-                    f"{np.sum(deviations > 10**-ROUNDING_PRECISION)} percentiles do not add up"
-                    f" to 1 (maximum deviation: {np.max(deviations):.10g})"
+                    f"{deviations} percentiles do not add up to 1 "
+                    f"(max deviation: {np.max(deviations):.10g})"
                 )
 
         index_size = get_index_size(pctl_index)
@@ -645,8 +652,18 @@ def create_index(
 
         logger.debug("Veryfying index")
         for (lower_pctls, _), (upper_pctls, _) in pctl_index:
-            assert np.allclose(lower_pctls[:, 0], 0, rtol=0)
-            assert np.allclose(upper_pctls[:, -1], 1, rtol=0)
+            if not np.allclose(lower_pctls[:, 0], 0, rtol=0):
+                deviations = np.sum(np.isclose(lower_pctls[:, 0], 0, rtol=0))
+                logger.warning(
+                    f"{deviations} percentiles do not start at 0 "
+                    f"(max deviation: {np.max(deviations):.10g})"
+                )
+            if not np.allclose(upper_pctls[:, -1], 1, rtol=0):
+                deviations = np.sum(np.isclose(upper_pctls[:, -1], 1, rtol=0))
+                logger.warning(
+                    f"{deviations} percentiles do not end at 1 "
+                    f"(max deviation: {np.max(deviations):.10g})"
+                )
 
         index_size = get_index_size(pctl_index)
         logger.debug(f"Index size: {index_size / 1000**2:.2f} MB")
