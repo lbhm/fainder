@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Literal
 
 import numpy as np
-import umap
 from loguru import logger
 from numpy.typing import NDArray
 from sklearn.cluster import HDBSCAN, AgglomerativeClustering, MiniBatchKMeans  # type: ignore
@@ -33,7 +32,6 @@ def compute_features(
     hists: list[tuple[np.uint32, Histogram]],
     transform: Literal["standard", "robust", "quantile", "power"] | None,
     quantile_range: tuple[float, float] | None = (0.25, 0.75),
-    use_umap: bool = False,
     seed: int | None = None,
 ) -> F64Array:
     features = np.zeros((len(hists), 3), dtype=np.float64)
@@ -55,19 +53,11 @@ def compute_features(
     else:
         pass
 
-    if use_umap:
-        features[:] = umap.UMAP(
-            n_neighbors=30,
-            min_dist=0.0,
-            n_components=3,
-            random_state=seed,
-        ).fit_transform(features)
-
     return features
 
 
 def compute_agglomerative_clustering(
-    n_clusters: int, features: NDArray[np.float_]
+    n_clusters: int, features: NDArray[np.float64]
 ) -> tuple[NDArray[np.int32], float]:
     # NOTE: Linkage methods other than single have a prohibitive memory footprint for large
     # datasets
@@ -82,7 +72,7 @@ def compute_agglomerative_clustering(
 
 
 def compute_hdbscan_clustering(
-    n_clusters: int, features: NDArray[np.float_], n_jobs: int
+    n_clusters: int, features: NDArray[np.float64], n_jobs: int
 ) -> tuple[NDArray[np.int32], float]:
     clusterer = HDBSCAN(
         min_cluster_size=5,
@@ -97,7 +87,7 @@ def compute_hdbscan_clustering(
 
 def compute_kmeans_clustering(
     n_clusters: int,
-    features: NDArray[np.float_],
+    features: NDArray[np.float64],
     seed: int | None,
     n_threads: int,
     verbose: bool = False,
@@ -289,7 +279,7 @@ def parse_args() -> argparse.Namespace:
         "--transform",
         default=None,
         type=str,
-        choices=["none", "standard", "robust", "quantile", "power"],
+        choices=["standard", "robust", "quantile", "power"],
         help="feature preprocessing method (default: %(default)s)",
     )
     parser.add_argument(
@@ -302,11 +292,6 @@ def parse_args() -> argparse.Namespace:
             "quantile range for feature scaling, only used if transform=robust (default:"
             " %(default)s)"
         ),
-    )
-    parser.add_argument(
-        "--use-umap",
-        action="store_true",
-        help="use UMAP for preprocessing",
     )
     parser.add_argument(
         "--alpha",
@@ -349,16 +334,15 @@ def parse_args() -> argparse.Namespace:
 
 def cluster_histograms(
     hists: list[tuple[np.uint32, Histogram]],
-    transform: Literal["standard", "robust", "quantile", "power"],
+    transform: Literal["standard", "robust", "quantile", "power"] | None,
     quantile_range: tuple[float, float] | None,
-    use_umap: bool,
     algorithm: Literal["agglomerative", "hdbscan", "kmeans"],
     n_cluster_range: tuple[int, int],
     n_global_bins: int,
     alpha: float,
     seed: int | None,
     workers: int | None,
-    verbose: bool,
+    verbose: bool = False,
 ) -> tuple[list[list[tuple[np.uint32, Histogram]]], list[F64Array], F64Array]:
     start = time.perf_counter()
 
@@ -367,7 +351,6 @@ def cluster_histograms(
         hists,
         transform=transform,
         quantile_range=quantile_range,
-        use_umap=use_umap,
         seed=seed,
     )
 
@@ -420,7 +403,6 @@ def main() -> None:
         load_input(args.input, name="histograms"),
         args.transform,
         tuple(args.quantile_range),  # type: ignore
-        args.use_umap,
         args.algorithm,
         tuple(args.n_cluster_range),  # type: ignore
         args.bin_budget,

@@ -20,13 +20,11 @@ classifiers = [
 ]
 dependencies = [
     "loguru~=0.7.2",
-    "numpy~=1.26",
+    "numpy~=2.0",
     "pandas[parquet,performance]~=2.1",
-    "requests~=2.31",
     "scikit-learn~=1.3",
     "scipy~=1.11",
-    "umap-learn[tbb]~=0.5.5",
-    "zstandard~=0.22.0",
+    "zstandard~=0.23.0",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +42,7 @@ dev = [
     "fainder[analysis]",
     "mypy~=1.13",
     "pandas-stubs~=2.1",
-    "pre-commit~=3.5",
+    "pre-commit~=4.0",
     "types-requests~=2.31",
     "types-seaborn~=0.13",
 ]
@@ -60,7 +58,6 @@ compute-accuracy-metrics = "fainder.validation.result_accuracy:main"
 compute-query-metrics = "fainder.validation.query_metrics:main"
 convert-to-parquet = "fainder.data.parquet_conversion:main"
 create-index = "fainder.preprocessing.percentile_index:main"
-download-datasets = "fainder.data.downloader:main"
 filter-histograms = "fainder.preprocessing.filtering:main"
 generate-queries = "fainder.queries.generator:main"
 run-exact-query = "fainder.execution.runner_exact:main"

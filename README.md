@@ -14,6 +14,9 @@
 This repository contains the source code, experiment logs, and result analyses for our VLDB 2024
 paper **"Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"**.
 
+**This branch contains changes to the original codebase in preparation for a demo of Fainder.**
+See the `main` branch for the original codebase.
+
 The repository is structured as follows:
 
 ```bash
