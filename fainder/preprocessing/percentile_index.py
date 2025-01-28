@@ -58,16 +58,16 @@ def rebin_histogram(
         if new_bins_start == -1:
             if not np.isclose(new_bins[0], old_bin[0], atol=5.0e-8, rtol=1e-5):
                 logger.warning(
-                    f"Old bin edge {old_bin[0]} lies below the cluster bins "
-                    f"(deviation: {np.abs(old_bin[0], new_bins[0]):.10g})"
+                    f"Original bin edge {old_bin[0]:.6f} lies below the cluster bins "
+                    f"(deviation: {np.abs(old_bin[0] - new_bins[0]):.10g})"
                 )
             new_bins_start += 1
             old_bin = (new_bins[0], hist[1][i + 1])
         if new_bins_end == len(new_bins):
             if not np.isclose(new_bins[-1], old_bin[1], atol=5.0e-8, rtol=1e-5):
                 logger.warning(
-                    f"Old bin edge {old_bin[1]} lies above the cluster bins "
-                    f"(deviation: {np.abs(old_bin[1], new_bins[-1]):.10g})"
+                    f"Original bin edge {old_bin[1]:.6f} lies above the cluster bins "
+                    f"(deviation: {np.abs(old_bin[1] - new_bins[-1]):.10g})"
                 )
             new_bins_end -= 1
             old_bin = (hist[1][i], new_bins[-1])
@@ -103,7 +103,7 @@ def rebin_collection(
     n_workers: int,
 ) -> list[tuple[UInt32Array, F32Array]]:
     rebinned_hists: list[tuple[UInt32Array, F32Array]] = []
-    with Pool(processes=n_workers) as pool:
+    with Pool(processes=n_workers, initializer=configure_run, initargs=["INFO"]) as pool:
         for i in range(len(clustered_hists)):
             ids, hists = zip(*clustered_hists[i], strict=True)
             fn = partial(
@@ -130,7 +130,7 @@ def convert_bin_collection(
     n_workers: int,
 ) -> list[list[BoolArray]]:
     conversion_matrices: list[list[BoolArray]] = []
-    with Pool(processes=n_workers) as pool:
+    with Pool(processes=n_workers, initializer=configure_run, initargs=["INFO"]) as pool:
         for i in range(len(clustered_hists)):
             _, hists = zip(*clustered_hists[i], strict=True)
             fn = partial(convert_bins, new_bins=cluster_bins[i])
@@ -620,7 +620,7 @@ def create_index(
                 deviations = np.isclose(cluster[0][0][:, 0], 0, rtol=0)
                 logger.warning(
                     f"{np.sum(deviations)} percentiles do not start at 0 "
-                    f"(max deviation: {np.max(deviations):.10g})"
+                    f"(max deviation: {np.max(np.abs(cluster[0][0][:, 0] - 0)):.10g})"
                 )
             # NOTE: Rebinning can cause larger rounding errors so the check is more lenient
             if not np.allclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0):
@@ -628,8 +628,8 @@ def create_index(
                     cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0
                 )
                 logger.warning(
-                    f"{np.sum(deviations)} percentiles do not add up to 1 "
-                    f"(max deviation: {np.max(deviations):.10g})"
+                    f"{np.sum(deviations)} percentiles do not end at 1 "
+                    f"(max deviation: {np.max(np.abs(cluster[0][0][:, -1] - 1)):.10g})"
                 )
 
         index_size = get_index_size(pctl_index)
@@ -664,13 +664,13 @@ def create_index(
                 deviations = np.isclose(lower_pctls[:, 0], 0, rtol=0)
                 logger.warning(
                     f"{np.sum(deviations)} percentiles do not start at 0 "
-                    f"(max deviation: {np.max(deviations):.10g})"
+                    f"(max deviation: {np.max(np.abs(lower_pctls[:, 0] - 0)):.10g})"
                 )
             if not np.allclose(upper_pctls[:, -1], 1, rtol=0):
                 deviations = np.isclose(upper_pctls[:, -1], 1, rtol=0)
                 logger.warning(
                     f"{np.sum(deviations)} percentiles do not end at 1 "
-                    f"(max deviation: {np.max(deviations):.10g})"
+                    f"(max deviation: {np.max(np.abs(upper_pctls[:, -1] - 1)):.10g})"
                 )
 
         index_size = get_index_size(pctl_index)
