@@ -615,21 +615,19 @@ def create_index(
         logger.debug("Veryfying index")
         # Verify that the cumsum for each histogram starts at 0 and adds up to 1
         # We use a higher rounding tolerance due to floating point precision issues
-        for cluster in pctl_index:
-            if not np.allclose(cluster[0][0][:, 0], 0, rtol=0):
-                deviations = np.isclose(cluster[0][0][:, 0], 0, rtol=0)
+        for i, ((pctls, _),) in enumerate(pctl_index):
+            if not np.allclose(pctls[:, 0], 0, rtol=0):
+                deviations = ~np.isclose(pctls[:, 0], 0, rtol=0)
                 logger.warning(
-                    f"{np.sum(deviations)} percentiles do not start at 0 "
-                    f"(max deviation: {np.max(np.abs(cluster[0][0][:, 0] - 0)):.10g})"
+                    f"Cluster {i}: {np.sum(deviations)} percentiles do not start at 0 "
+                    f"(max deviation: {np.max(np.abs(pctls[:, 0] - 0)):.10g})"
                 )
             # NOTE: Rebinning can cause larger rounding errors so the check is more lenient
-            if not np.allclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0):
-                deviations = np.isclose(
-                    cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0
-                )
+            if not np.allclose(pctls[:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0):
+                deviations = ~np.isclose(pctls[:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0)
                 logger.warning(
-                    f"{np.sum(deviations)} percentiles do not end at 1 "
-                    f"(max deviation: {np.max(np.abs(cluster[0][0][:, -1] - 1)):.10g})"
+                    f"Cluster {i}: {np.sum(deviations)} percentiles do not end at 1 "
+                    f"(max deviation: {np.max(np.abs(pctls[:, -1] - 1)):.10g})"
                 )
 
         index_size = get_index_size(pctl_index)
@@ -659,17 +657,17 @@ def create_index(
             raise ValueError("Invalid index method.")
 
         logger.debug("Veryfying index")
-        for (lower_pctls, _), (upper_pctls, _) in pctl_index:
+        for i, ((lower_pctls, _), (upper_pctls, _)) in enumerate(pctl_index):
             if not np.allclose(lower_pctls[:, 0], 0, rtol=0):
-                deviations = np.isclose(lower_pctls[:, 0], 0, rtol=0)
+                deviations = ~np.isclose(lower_pctls[:, 0], 0, rtol=0)
                 logger.warning(
-                    f"{np.sum(deviations)} percentiles do not start at 0 "
+                    f"Cluster {i}: {np.sum(deviations)} percentiles do not start at 0 "
                     f"(max deviation: {np.max(np.abs(lower_pctls[:, 0] - 0)):.10g})"
                 )
             if not np.allclose(upper_pctls[:, -1], 1, rtol=0):
-                deviations = np.isclose(upper_pctls[:, -1], 1, rtol=0)
+                deviations = ~np.isclose(upper_pctls[:, -1], 1, rtol=0)
                 logger.warning(
-                    f"{np.sum(deviations)} percentiles do not end at 1 "
+                    f"Cluster {i}: {np.sum(deviations)} percentiles do not end at 1 "
                     f"(max deviation: {np.max(np.abs(upper_pctls[:, -1] - 1)):.10g})"
                 )
 

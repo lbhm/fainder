@@ -20,7 +20,6 @@ from sklearn.preprocessing import (
 
 from fainder.typing import F64Array, Histogram
 from fainder.utils import (
-    ROUNDING_PRECISION,
     configure_run,
     load_input,
     predict_index_size,
@@ -197,20 +196,17 @@ def compute_cluster_bins(
             budget_share = (len(cluster) + alpha) / (n_hists + alpha * n_clusters)
 
         cluster_bins.append(
-            np.round(
-                np.linspace(  # type: ignore
-                    start=min_bins[i],
-                    stop=max_bins[i],
-                    num=max(int(budget_share * n_global_bins), 1) + 1,
-                    retstep=False,
-                    dtype=np.float64,
-                ),
-                ROUNDING_PRECISION,
+            np.linspace(
+                start=min_bins[i],
+                stop=max_bins[i],
+                num=max(int(budget_share * n_global_bins), 1) + 1,
+                retstep=False,
+                dtype=np.float64,
             )
         )
         if not (
-            np.allclose(cluster_bins[-1][0], min_bins[i], atol=1e-4)
-            and np.allclose(cluster_bins[-1][-1], max_bins[i], atol=1e-4)
+            np.allclose(cluster_bins[-1][0], min_bins[i], rtol=0)
+            and np.allclose(cluster_bins[-1][-1], max_bins[i], rtol=0)
         ):
             logger.warning(
                 f"Bins for cluster {i} do not match the histogram min/max values: "
