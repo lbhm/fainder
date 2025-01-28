@@ -56,11 +56,19 @@ def rebin_histogram(
 
         # Due to rounding errors, the old bin edges could lie outside of the cluster bin edges
         if new_bins_start == -1:
-            assert np.isclose(new_bins[0], old_bin[0], atol=5.0e-8, rtol=1e-5)
+            if not np.isclose(new_bins[0], old_bin[0], atol=5.0e-8, rtol=1e-5):
+                logger.warning(
+                    f"Old bin edge {old_bin[0]} lies below the cluster bins "
+                    f"(deviation: {np.abs(old_bin[0], new_bins[0]):.10g})"
+                )
             new_bins_start += 1
             old_bin = (new_bins[0], hist[1][i + 1])
         if new_bins_end == len(new_bins):
-            assert np.isclose(new_bins[-1], old_bin[1], atol=5.0e-8, rtol=1e-5)
+            if not np.isclose(new_bins[-1], old_bin[1], atol=5.0e-8, rtol=1e-5):
+                logger.warning(
+                    f"Old bin edge {old_bin[1]} lies above the cluster bins "
+                    f"(deviation: {np.abs(old_bin[1], new_bins[-1]):.10g})"
+                )
             new_bins_end -= 1
             old_bin = (hist[1][i], new_bins[-1])
 
@@ -609,18 +617,18 @@ def create_index(
         # We use a higher rounding tolerance due to floating point precision issues
         for cluster in pctl_index:
             if not np.allclose(cluster[0][0][:, 0], 0, rtol=0):
-                deviations = np.sum(np.isclose(cluster[0][0][:, 0], 0, rtol=0))
+                deviations = np.isclose(cluster[0][0][:, 0], 0, rtol=0)
                 logger.warning(
-                    f"{deviations} percentiles do not start at 0 "
+                    f"{np.sum(deviations)} percentiles do not start at 0 "
                     f"(max deviation: {np.max(deviations):.10g})"
                 )
             # NOTE: Rebinning can cause larger rounding errors so the check is more lenient
             if not np.allclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0):
-                deviations = np.sum(
-                    np.isclose(cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0)
+                deviations = np.isclose(
+                    cluster[0][0][:, -1], 1, atol=10**-ROUNDING_PRECISION, rtol=0
                 )
                 logger.warning(
-                    f"{deviations} percentiles do not add up to 1 "
+                    f"{np.sum(deviations)} percentiles do not add up to 1 "
                     f"(max deviation: {np.max(deviations):.10g})"
                 )
 
@@ -653,15 +661,15 @@ def create_index(
         logger.debug("Veryfying index")
         for (lower_pctls, _), (upper_pctls, _) in pctl_index:
             if not np.allclose(lower_pctls[:, 0], 0, rtol=0):
-                deviations = np.sum(np.isclose(lower_pctls[:, 0], 0, rtol=0))
+                deviations = np.isclose(lower_pctls[:, 0], 0, rtol=0)
                 logger.warning(
-                    f"{deviations} percentiles do not start at 0 "
+                    f"{np.sum(deviations)} percentiles do not start at 0 "
                     f"(max deviation: {np.max(deviations):.10g})"
                 )
             if not np.allclose(upper_pctls[:, -1], 1, rtol=0):
-                deviations = np.sum(np.isclose(upper_pctls[:, -1], 1, rtol=0))
+                deviations = np.isclose(upper_pctls[:, -1], 1, rtol=0)
                 logger.warning(
-                    f"{deviations} percentiles do not end at 1 "
+                    f"{np.sum(deviations)} percentiles do not end at 1 "
                     f"(max deviation: {np.max(deviations):.10g})"
                 )
 

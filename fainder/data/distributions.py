@@ -73,7 +73,7 @@ def compute_distribution(
             # We filter out huge values to prevent overflows in the index (and since they
             # are unrealistic for percentile queries). Since multiple large integer values are
             # represented by the same float value, we cast them before counting unique values.
-            values = values[(values > -(2**53)) & (values < 2**53)].astype(dtype=np.float64)
+            values = values[(values > -(2**53)) & (values < 2**53)].astype(dtype=np.float64)  # noqa
             if values.nunique() > 1 and values.min() != values.max():
                 if kind == "normal":
                     dist = (values.mean(), values.std())

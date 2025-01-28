@@ -2,13 +2,17 @@ import argparse
 import os
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import numpy as np
 from loguru import logger
 
 from fainder.execution import runner, runner_exact
-from fainder.typing import F32Array, F64Array, Histogram, PercentileQuery, UInt32Array
 from fainder.utils import configure_run, load_input, save_output
+
+if TYPE_CHECKING:
+    import numpy as np
+
+    from fainder.typing import F32Array, F64Array, Histogram, PercentileQuery, UInt32Array
 
 
 def parse_args() -> argparse.Namespace:

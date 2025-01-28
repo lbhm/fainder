@@ -61,14 +61,14 @@ def check_correctness(
     assert baseline_results[0] == index_results[0], "Baseline and index queries not equal."
 
     if ground_truth_results:
-        assert (
-            ground_truth_results[0] == baseline_results[0]
-        ), "Ground truth and baseline queries not equal."
+        assert ground_truth_results[0] == baseline_results[0], (
+            "Ground truth and baseline queries not equal."
+        )
 
     for i in range(len(baseline_results[0])):
-        assert (
-            baseline_results[1][i] == index_results[1][i]
-        ), f"Results of query {i} not identical."
+        assert baseline_results[1][i] == index_results[1][i], (
+            f"Results of query {i} not identical."
+        )
         if ground_truth_results and metric:
             precision, recall, _ = query_accuracy_metrics(
                 ground_truth_results[1][i], index_results[1][i]

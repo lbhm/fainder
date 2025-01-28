@@ -97,7 +97,7 @@ def parse_wide_logs(path: Path) -> dict[str, Any]:
     """Parse logs in wide format."""
     data: dict[str, Any] = {}
     data["query_times"] = []
-    with open(path, "r") as file:
+    with path.open("r") as file:
         for line in file.readlines():
             log = line.split("|")
             if len(log) <= 1 or log[1].strip() != "TRACE":
@@ -118,7 +118,7 @@ def parse_wide_logs(path: Path) -> dict[str, Any]:
 def parse_long_logs(path: Path) -> list[dict[str, Any]]:
     """Parse logs in long format."""
     data: list[dict[str, str | float]] = []
-    with open(path, "r") as file:
+    with path.open("r") as file:
         for line in file.readlines():
             log = line.split("|")
             if len(log) <= 1 or log[1].strip() != "TRACE":
@@ -137,7 +137,7 @@ def parse_long_logs(path: Path) -> list[dict[str, Any]]:
 def parse_execution_times(path: Path) -> list[float]:
     """Parse the execution times from the given log file."""
     times: list[float] = []
-    with open(path, "r") as file:
+    with path.open("r") as file:
         for line in file.readlines():
             log = line.split("|")
             if log[1].strip() != "TRACE":

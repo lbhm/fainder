@@ -5,7 +5,7 @@ from fainder.typing import PercentileQuery
 from fainder.utils import save_output
 
 if __name__ == "__main__":
-    with open(Path(__file__).parent / "responses.txt", "r") as f:
+    with (Path(__file__).parent / "responses.txt").open("r") as f:
         lines = f.readlines()
 
     predicates: dict[str, list[PercentileQuery]] = {}

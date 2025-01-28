@@ -5,14 +5,18 @@ import subprocess
 import time
 from itertools import compress
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import numpy as np
 from loguru import logger
 
 from fainder.execution import runner
-from fainder.typing import Histogram, PercentileQuery
 from fainder.utils import configure_run, load_input, save_output
 from fainder.validation import query_metrics
+
+if TYPE_CHECKING:
+    import numpy as np
+
+    from fainder.typing import Histogram, PercentileQuery
 
 
 def parse_args() -> argparse.Namespace:

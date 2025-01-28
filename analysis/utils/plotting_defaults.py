@@ -14,7 +14,7 @@ from matplotlib.transforms import Bbox, BboxBase
 def parse_logs_wide(logfile: Path | str) -> dict[str, Any]:
     data: dict[str, Any] = {}
     data["query_times"] = []
-    with open(logfile, "r") as file:
+    with open(logfile, "r") as file:  # noqa
         lines = file.readlines()
 
     for line in lines:
@@ -36,7 +36,7 @@ def parse_logs_wide(logfile: Path | str) -> dict[str, Any]:
 
 def parse_logs_long(logfile: Path | str) -> list[dict[str, Any]]:
     data: list[dict[str, str | float]] = []
-    with open(logfile, "r") as file:
+    with open(logfile, "r") as file:  # noqa
         lines = file.readlines()
 
     for line in lines:
@@ -55,7 +55,7 @@ def parse_logs_long(logfile: Path | str) -> list[dict[str, Any]]:
 
 
 def parse_logs_special(logfile: Path | str) -> list[float]:
-    with open(logfile, "r") as file:
+    with open(logfile, "r") as file:  # noqa
         lines = file.readlines()
 
     times: list[float] = []

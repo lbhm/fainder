@@ -35,16 +35,16 @@ def check_equality(
     index_1: tuple[list[PercentileIndex], list[F64Array]],
     index_2: tuple[list[PercentileIndex], list[F64Array]],
 ) -> bool:
-    assert len(index_1[0]) == len(
-        index_2[0]
-    ), f"Uneven index length: {len(index_1[0])} and {len(index_1[0])}."
+    assert len(index_1[0]) == len(index_2[0]), (
+        f"Uneven index length: {len(index_1[0])} and {len(index_1[0])}."
+    )
 
     for i in range(len(index_1[0])):
         assert np.allclose(index_1[1][i], index_2[1][i]), "Index cluster bins are not equal."
         for j in range(len(index_1[0][i])):
-            assert np.allclose(
-                index_1[0][i][j][0], index_1[0][i][j][0]
-            ), f"Percentiles {j} in cluster {i} not equal."
+            assert np.allclose(index_1[0][i][j][0], index_1[0][i][j][0]), (
+                f"Percentiles {j} in cluster {i} not equal."
+            )
 
     return True
 

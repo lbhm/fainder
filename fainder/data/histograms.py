@@ -95,8 +95,11 @@ def compute_histogram(
             # We filter out huge values to prevent overflows in the index (and since they
             # are unrealistic for percentile queries). Since multiple large integer values are
             # represented by the same float value, we cast them before counting unique values.
-            values = values[(values > -(2**53)) & (values < 2**53)].astype(dtype=np.float64)
-            values = values.round(ROUNDING_PRECISION)
+            values = (  # noqa
+                values[(values > -(2**53)) & (values < 2**53)]
+                .astype(dtype=np.float64)
+                .round(ROUNDING_PRECISION)
+            )
             if values.nunique() > 1 and values.min() != values.max():
                 probability = scaling_factor
                 while probability > rng.random():

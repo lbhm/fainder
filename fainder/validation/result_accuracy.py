@@ -2,11 +2,11 @@ import argparse
 import os
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 from loguru import logger
 
-from fainder.typing import PercentileQuery
 from fainder.utils import (
     collection_accuracy_metrics,
     configure_run,
@@ -14,6 +14,9 @@ from fainder.utils import (
     query_accuracy_metrics,
     save_output,
 )
+
+if TYPE_CHECKING:
+    from fainder.typing import PercentileQuery
 
 
 def parse_args() -> argparse.Namespace:

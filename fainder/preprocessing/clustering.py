@@ -208,13 +208,15 @@ def compute_cluster_bins(
                 ROUNDING_PRECISION,
             )
         )
-        try:
-            assert np.allclose(cluster_bins[-1][0], min_bins[i], atol=1e-4)
-            assert np.allclose(cluster_bins[-1][-1], max_bins[i], atol=1e-4)
-        except AssertionError:
-            logger.warning(f"Bins for cluster {i} do not match the histogram min/max values")
-            logger.warning(f"min_bin: {min_bins[i]}, max_bin: {max_bins[i]}")
-            logger.warning(f"cluster bin range: {cluster_bins[-1][0]}, {cluster_bins[-1][-1]}")
+        if not (
+            np.allclose(cluster_bins[-1][0], min_bins[i], atol=1e-4)
+            and np.allclose(cluster_bins[-1][-1], max_bins[i], atol=1e-4)
+        ):
+            logger.warning(
+                f"Bins for cluster {i} do not match the histogram min/max values: "
+                f"min_bin: {min_bins[i]}, max_bin: {max_bins[i]}, "
+                f"cluster bin range: {cluster_bins[-1][0]}, {cluster_bins[-1][-1]}"
+            )
 
     return cluster_bins
 
