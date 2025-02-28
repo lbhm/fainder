@@ -1,5 +1,6 @@
 import itertools
 import time
+from collections.abc import Sequence
 from functools import partial
 from multiprocessing import Pool
 from typing import Any, Literal
@@ -710,7 +711,7 @@ def query_index_single(
 
 def query_hist_collection(
     query: PercentileQuery,
-    hists: list[tuple[int | np.integer[Any], Histogram]],
+    hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     density: bool = True,
 ) -> set[np.uint32]:
     return {

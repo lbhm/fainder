@@ -1,4 +1,5 @@
 import time
+from collections.abc import Sequence
 from typing import Any, Literal
 
 import numpy as np
@@ -41,7 +42,7 @@ def run_approx(
 
 def run_exact(
     fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
-    hists: list[tuple[int | np.integer[Any], Histogram]],
+    hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     query: PctlQuery,
     id_filter: ArrayLike | None = None,
 ) -> tuple[set[np.uint32], float]:

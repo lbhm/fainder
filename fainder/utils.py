@@ -1,6 +1,6 @@
 import pickle
 import sys
-from collections.abc import Container
+from collections.abc import Container, Sequence
 from multiprocessing import set_start_method
 from pathlib import Path
 from typing import Any, Literal, TypeVar
@@ -28,7 +28,7 @@ T = TypeVar("T")
 
 
 def filter_hists(
-    hists: list[tuple[T, Histogram]],
+    hists: Sequence[tuple[T, Histogram]],
     filter_ids: Container[T],
 ) -> list[tuple[T, Histogram]]:
     return [hist for hist in hists if hist[0] in filter_ids]
