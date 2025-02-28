@@ -90,7 +90,7 @@ def compute_histogram(
         rng = np.random.default_rng(seed)
         df = pd.read_parquet(input_file, engine="pyarrow").select_dtypes(include="number")
         bin_counter = 0
-        for _, values in df.items():
+        for _, values in df.items():  # noqa: PERF102
             values.dropna(inplace=True)
             # We filter out huge values to prevent overflows in the index (and since they
             # are unrealistic for percentile queries). Since multiple large integer values are

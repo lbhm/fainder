@@ -7,7 +7,7 @@ name = "fainder"
 dynamic = ["version"]
 description = "A fast and accurate index for distribution-aware dataset search."
 readme = "README.md"
-requires-python = ">=3.10, <3.13"
+requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [{ name = "Lennart Behme", email = "lennart.behme@tu-berlin.de" }]
 keywords = [
@@ -18,7 +18,6 @@ keywords = [
 ]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
@@ -44,7 +43,6 @@ dev = [
     "mypy~=1.13",
     "pandas-stubs~=2.1",
     "pre-commit~=4.0",
-    "types-requests~=2.31",
     "types-seaborn~=0.13",
 ]
 
@@ -73,28 +71,32 @@ path = "fainder/__init__.py"
 
 [tool.ruff]
 line-length = 99
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = [
-    "A",   # flake8-builtins
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-    "ISC", # flake8-implicit-str-concat
-    "N",   # pep8-naming
-    "NPY", # Numpy checks
-    "PL",  # pylint
-    "PTH", # flake8-use-pathlib
-    "Q",   # flake8-quotes
-    "RET", # flake8-return
-    "RUF", # ruff-specific rules
-    "SIM", # flake8-simplify
-    "TC",  # flake8-typing-checking
-    "UP",  # pyupgrade
-    "W",   # pycodestyle warnings
+    "A",    # flake8-builtins
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "FURB", # refurb
+    "I",    # isort
+    "ISC",  # flake8-implicit-str-concat
+    "N",    # pep8-naming
+    "NPY",  # Numpy checks
+    "PERF", # perflint
+    "PIE",  # flake8-pie
+    "PL",   # pylint
+    "PTH",  # flake8-use-pathlib
+    "PYI",  # flake8-pyi
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
+    "RUF",  # ruff-specific rules
+    "SIM",  # flake8-simplify
+    "TC",   # flake8-typing-checking
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
 ]
 ignore = [
     "A005",    # stdlib-module-shadowing
