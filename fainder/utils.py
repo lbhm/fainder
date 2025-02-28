@@ -1,5 +1,6 @@
 import pickle
 import sys
+from collections.abc import Container
 from multiprocessing import set_start_method
 from pathlib import Path
 from typing import Any, Literal
@@ -7,6 +8,7 @@ from typing import Any, Literal
 import numpy as np
 import zstandard as zstd
 from loguru import logger
+from numpy.typing import ArrayLike
 
 from fainder.typing import (
     ConversionIndex,
@@ -25,7 +27,7 @@ ROUNDING_PRECISION = 4
 
 
 def filter_hists(
-    hists: list[tuple[np.uint32, Histogram]], filter_ids: UInt32Array | list[int]
+    hists: list[tuple[np.uint32, Histogram]], filter_ids: Container[int | np.integer[Any]]
 ) -> list[tuple[np.uint32, Histogram]]:
     return [hist for hist in hists if hist[0] in filter_ids]
 
@@ -33,7 +35,7 @@ def filter_hists(
 def filter_index(
     pctl_index: list[PercentileIndex],
     cluster_bins: list[F64Array],
-    filter_ids: UInt32Array | list[int],
+    filter_ids: ArrayLike,
 ) -> tuple[list[PercentileIndex], list[F64Array]]:
     new_index: list[PercentileIndex] = []
     new_bins: list[F64Array] = []
@@ -62,7 +64,7 @@ def filter_index(
 
 def filter_binsort(
     binsort: tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array],
-    filter_ids: UInt32Array | list[int],
+    filter_ids: ArrayLike,
 ) -> tuple[F64Array, tuple[F32Array, F32Array, F32Array], UInt32Array]:
     mask = np.isin(binsort[2], filter_ids)
     return (

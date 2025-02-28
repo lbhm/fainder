@@ -408,7 +408,7 @@ def query_local_index(
         for i, bins in enumerate(cluster_bins):
             if bins[0] <= reference <= bins[-1]:
                 bin_index = (
-                    np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1)  # type: ignore
+                    np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1)
                     + bin_mode
                 )
                 if "l" in comparison:
@@ -484,8 +484,7 @@ def trace_local_index(
         if bins[0] <= reference <= bins[-1]:
             pre_bin_search = time.perf_counter()
             bin_index = (
-                np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1)  # type: ignore
-                + bin_mode
+                np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1) + bin_mode
             )
             logger.trace(f"query_bin_search_time, {time.perf_counter() - pre_bin_search}")
             if "l" in comparison:
@@ -583,12 +582,7 @@ def query_index_worker(
     for i, bins in enumerate(cluster_bins):
         if bins[0] <= reference <= bins[-1]:
             bin_index = (
-                np.clip(
-                    np.searchsorted(bins, reference, "left") - 1,
-                    0,
-                    len(bins) - 1,  # type: ignore
-                )
-                + bin_mode
+                np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1) + bin_mode
             )
             if "l" in comparison:
                 hist_index = np.searchsorted(
@@ -656,3 +650,71 @@ def query_index(
         unlink_pointers(shm_pointers)
 
     return matches
+
+
+### The following methods were added for the Fainder demo
+
+
+def query_index_single(
+    query: PercentileQuery,
+    pctl_index: list[PercentileIndex],
+    cluster_bins: list[F64Array],
+    index_mode: Literal["precision", "recall"],
+) -> set[np.uint32]:
+    percentile, comparison, reference = query
+    index_type = "rebinning" if len(pctl_index[0]) == 1 else "conversion"
+    dtype = pctl_index[0][0][0].dtype
+
+    result: set[np.uint32] = set()
+
+    if "g" in comparison:
+        # We can only run <(=) with our cumsum index so we have to reqrite >(=) queries
+        percentile = 1.0 - percentile
+
+    bin_mode = 0
+    pctl_mode = 0
+    if ("g" in comparison and index_mode == "precision") or (
+        "l" in comparison and index_mode == "recall"
+    ):
+        if index_type == "rebinning":
+            bin_mode = 1
+        if index_type == "conversion":
+            pctl_mode = 1
+
+    for i, bins in enumerate(cluster_bins):
+        if bins[0] <= reference <= bins[-1]:
+            bin_index = (
+                np.clip(np.searchsorted(bins, reference, "left") - 1, 0, len(bins) - 1) + bin_mode
+            )
+            if "l" in comparison:
+                hist_index = np.searchsorted(
+                    pctl_index[i][pctl_mode][0][:, bin_index], dtype.type(percentile), "left"
+                )
+                result.update(pctl_index[i][pctl_mode][1][hist_index:, bin_index])
+            elif "g" in comparison:
+                hist_index = np.searchsorted(
+                    pctl_index[i][pctl_mode][0][:, bin_index], dtype.type(percentile), "right"
+                )
+                result.update(pctl_index[i][pctl_mode][1][:hist_index, bin_index])
+            else:
+                raise ValueError("Invalid comparison.")
+        else:
+            # Reference value not in cluster range
+            if (reference <= bins[0] and "g" in comparison) or (
+                reference >= bins[-1] and "l" in comparison
+            ):
+                result.update(pctl_index[i][pctl_mode][1][:, 0])
+
+    return result
+
+
+def query_hist_collection(
+    query: PercentileQuery,
+    hists: list[tuple[np.uint32, Histogram]],
+    density: bool = True,
+) -> set[np.uint32]:
+    return {
+        idx
+        for idx, hist in hists
+        if query_histogram(hist, estimation_mode="over", query=query, density=density)
+    }
