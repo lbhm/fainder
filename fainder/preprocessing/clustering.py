@@ -4,7 +4,7 @@ import time
 from functools import partial
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 from loguru import logger
@@ -28,7 +28,7 @@ from fainder.utils import (
 
 
 def compute_features(
-    hists: list[tuple[np.uint32, Histogram]],
+    hists: list[tuple[int | np.integer[Any], Histogram]],
     transform: Literal["standard", "robust", "quantile", "power"] | None,
     quantile_range: tuple[float, float] | None = (0.25, 0.75),
     seed: int | None = None,
@@ -159,7 +159,7 @@ def compute_clustering(
 
 
 def assign_histograms(
-    hists: list[tuple[np.uint32, Histogram]],
+    hists: list[tuple[int | np.integer[Any], Histogram]],
     clustering: NDArray[np.int32],
 ) -> list[list[tuple[np.uint32, Histogram]]]:
     clustered_hists: list[list[tuple[np.uint32, Histogram]]] = []
@@ -168,7 +168,7 @@ def assign_histograms(
         clustered_hists.append([])
         hash_map[id_] = i
     for i, (id_, hist) in enumerate(hists):
-        clustered_hists[hash_map[clustering[i]]].append((id_, hist))
+        clustered_hists[hash_map[clustering[i]]].append((np.uint32(id_), hist))
 
     return clustered_hists
 
@@ -331,7 +331,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def cluster_histograms(
-    hists: list[tuple[np.uint32, Histogram]],
+    hists: list[tuple[int | np.integer[Any], Histogram]],
     transform: Literal["standard", "robust", "quantile", "power"] | None,
     quantile_range: tuple[float, float] | None,
     algorithm: Literal["agglomerative", "hdbscan", "kmeans"],
