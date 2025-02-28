@@ -710,11 +710,11 @@ def query_index_single(
 
 def query_hist_collection(
     query: PercentileQuery,
-    hists: list[tuple[np.uint32, Histogram]],
+    hists: list[tuple[int | np.integer[Any], Histogram]],
     density: bool = True,
 ) -> set[np.uint32]:
     return {
-        idx
+        np.uint32(idx)
         for idx, hist in hists
         if query_histogram(hist, estimation_mode="over", query=query, density=density)
     }

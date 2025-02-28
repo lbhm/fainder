@@ -3,7 +3,7 @@ import sys
 from collections.abc import Container
 from multiprocessing import set_start_method
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, TypeVar
 
 import numpy as np
 import zstandard as zstd
@@ -24,11 +24,13 @@ from fainder.typing import (
 )
 
 ROUNDING_PRECISION = 4
+T = TypeVar("T")
 
 
 def filter_hists(
-    hists: list[tuple[np.uint32, Histogram]], filter_ids: Container[int | np.integer[Any]]
-) -> list[tuple[np.uint32, Histogram]]:
+    hists: list[tuple[T, Histogram]],
+    filter_ids: Container[T],
+) -> list[tuple[T, Histogram]]:
     return [hist for hist in hists if hist[0] in filter_ids]
 
 
