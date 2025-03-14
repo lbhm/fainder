@@ -10,19 +10,6 @@ from fainder.execution.percentile_queries import query_hist_collection, query_in
 from fainder.typing import Histogram
 from fainder.typing import PercentileIndex as PctlIndex
 from fainder.typing import PercentileQuery as PctlQuery
-from fainder.utils import filter_hists, filter_index
-
-
-def unpack_and_filter(
-    fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
-    id_filter: ArrayLike | None = None,
-) -> tuple[list[PctlIndex], list[NDArray[np.float64]]]:
-    pctl_index, cluster_bins = fainder_index
-    if id_filter is not None:
-        filter_start = time.perf_counter()
-        pctl_index, cluster_bins = filter_index(pctl_index, cluster_bins, id_filter)
-        logger.debug(f"Filtered index in {time.perf_counter() - filter_start:.5f}s")
-    return pctl_index, cluster_bins
 
 
 def run_approx(
@@ -32,11 +19,9 @@ def run_approx(
     id_filter: ArrayLike | None = None,
 ) -> tuple[set[np.uint32], float]:
     start = time.perf_counter()
-    pctl_index, cluster_bins = unpack_and_filter(fainder_index, id_filter)
-
-    result = query_index_single(query, pctl_index, cluster_bins, index_mode)
-
+    result = query_index_single(query, *fainder_index, index_mode=index_mode, id_filter=id_filter)
     end = time.perf_counter()
+
     return result, end - start
 
 
@@ -47,20 +32,24 @@ def run_exact(
     id_filter: ArrayLike | None = None,
 ) -> tuple[set[np.uint32], float]:
     start = time.perf_counter()
-    pctl_index, cluster_bins = unpack_and_filter(fainder_index, id_filter)
 
     # Stage 1
-    recall_result = query_index_single(query, pctl_index, cluster_bins, "recall")
+    recall_result = query_index_single(
+        query, *fainder_index, index_mode="recall", id_filter=id_filter
+    )
 
     # Stage 2
-    # NOTE: We could filter the index again before computing the precision result.
-    # We need to analyze if this is faster.
-    precision_result = query_index_single(query, pctl_index, cluster_bins, "precision")
+    # NOTE: We could extend the filter with the recall result before computing the precision result
+    # We need to analyze if this is faster or not
+    # if id_filter is not None:
+    #     id_filter = np.unique(np.concatenate([id_filter, list(recall_result)]))
+    precision_result = query_index_single(
+        query, *fainder_index, index_mode="precision", id_filter=id_filter
+    )
 
     # Stage 3
-    filtered_hists = filter_hists(hists, recall_result - precision_result)
     pscan_start = time.perf_counter()
-    pscan_result = query_hist_collection(query, filtered_hists)
+    pscan_result = query_hist_collection(query, hists, id_filter=recall_result - precision_result)
     logger.debug(f"profile-scan took {time.perf_counter() - pscan_start:.5f}s")
     result = pscan_result | precision_result
 

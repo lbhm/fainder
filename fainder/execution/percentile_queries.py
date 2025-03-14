@@ -1,12 +1,13 @@
 import itertools
 import time
-from collections.abc import Sequence
+from collections.abc import Container, Sequence
 from functools import partial
 from multiprocessing import Pool
 from typing import Any, Literal
 
 import numpy as np
 from loguru import logger
+from numpy.typing import ArrayLike
 from scipy.interpolate import CubicSpline
 
 from fainder.preprocessing.percentile_index import load_shm_index
@@ -238,8 +239,9 @@ def query_rebinned_collection(
             for i, bins in enumerate(cluster_bins):
                 if bins[0] <= reference <= bins[-1]:
                     for j, hist in enumerate(hists[i][1]):
+                        # NOTE: Suppressing the warning since this method is deprecated
                         if query_histogram(
-                            (hist, bins),
+                            (hist, bins),  # type: ignore
                             estimation_mode,
                             query,
                             density,
@@ -661,6 +663,7 @@ def query_index_single(
     pctl_index: list[PercentileIndex],
     cluster_bins: list[F64Array],
     index_mode: Literal["precision", "recall"],
+    id_filter: ArrayLike | None = None,
 ) -> set[np.uint32]:
     percentile, comparison, reference = query
     index_type = "rebinning" if len(pctl_index[0]) == 1 else "conversion"
@@ -691,12 +694,12 @@ def query_index_single(
                 hist_index = np.searchsorted(
                     pctl_index[i][pctl_mode][0][:, bin_index], dtype.type(percentile), "left"
                 )
-                result.update(pctl_index[i][pctl_mode][1][hist_index:, bin_index])
+                cluster_result = pctl_index[i][pctl_mode][1][hist_index:, bin_index]
             elif "g" in comparison:
                 hist_index = np.searchsorted(
                     pctl_index[i][pctl_mode][0][:, bin_index], dtype.type(percentile), "right"
                 )
-                result.update(pctl_index[i][pctl_mode][1][:hist_index, bin_index])
+                cluster_result = pctl_index[i][pctl_mode][1][:hist_index, bin_index]
             else:
                 raise ValueError("Invalid comparison.")
         else:
@@ -704,7 +707,13 @@ def query_index_single(
             if (reference <= bins[0] and "g" in comparison) or (
                 reference >= bins[-1] and "l" in comparison
             ):
-                result.update(pctl_index[i][pctl_mode][1][:, 0])
+                cluster_result = pctl_index[i][pctl_mode][1][:, 0]
+
+        if id_filter is None:
+            result.update(cluster_result)
+        else:
+            mask = np.isin(cluster_result, id_filter)
+            result.update(cluster_result[mask])
 
     return result
 
@@ -713,9 +722,18 @@ def query_hist_collection(
     query: PercentileQuery,
     hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     density: bool = True,
+    id_filter: Container[int | np.integer[Any]] | None = None,
 ) -> set[np.uint32]:
+    if id_filter is None:
+        return {
+            np.uint32(id_)
+            for id_, hist in hists
+            if query_histogram(hist, estimation_mode="over", query=query, density=density)
+        }
+
     return {
-        np.uint32(idx)
-        for idx, hist in hists
-        if query_histogram(hist, estimation_mode="over", query=query, density=density)
+        np.uint32(id_)
+        for id_, hist in hists
+        if id_ in id_filter
+        and query_histogram(hist, estimation_mode="over", query=query, density=density)
     }

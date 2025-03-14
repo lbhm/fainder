@@ -165,11 +165,11 @@ def assign_histograms(
 ) -> list[list[tuple[np.uint32, Histogram]]]:
     clustered_hists: list[list[tuple[np.uint32, Histogram]]] = []
     hash_map: dict[int, int] = {}
-    for i, id_ in enumerate(np.unique(clustering)):
+    for i, cluster_id in enumerate(np.unique(clustering)):
         clustered_hists.append([])
-        hash_map[id_] = i
-    for i, (id_, hist) in enumerate(hists):
-        clustered_hists[hash_map[clustering[i]]].append((np.uint32(id_), hist))
+        hash_map[int(cluster_id)] = i
+    for i, (hist_id, hist) in enumerate(hists):
+        clustered_hists[hash_map[clustering[i]]].append((np.uint32(hist_id), hist))
 
     return clustered_hists
 
