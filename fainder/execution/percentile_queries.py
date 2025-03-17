@@ -712,8 +712,7 @@ def query_index_single(
         if id_filter is None:
             result.update(cluster_result)
         else:
-            mask = np.isin(cluster_result, id_filter)
-            result.update(cluster_result[mask])
+            result.update(cluster_result[np.isin(cluster_result, id_filter, assume_unique=True)])
 
     return result
 
