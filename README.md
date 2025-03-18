@@ -14,7 +14,7 @@
 This repository contains the source code, experiment logs, and result analyses for our VLDB 2024
 paper **"Fainder: A Fast and Accurate Index for Distribution-Aware Dataset Search"**.
 
-**This branch contains changes to the original codebase in preparation for a demo of Fainder.**
+**This branch contains changes to the original codebase for a demo of Fainder.**
 See the `main` branch for the original codebase.
 
 The repository is structured as follows:
@@ -35,12 +35,12 @@ fainder/
 
 - Ubuntu >= 22.04
   - `fainder` is tested on amd64-based Ubuntu systems but other Linux systems might work as well
-- Python 3.10 - 3.12
+- Python 3.11 - 3.12
   - We use `pip` and `virtualenv` in this guide but this is not a hard requirement
 
 **Note:** The configuration in `pyproject.toml` defines flexible dependency specifiers to ensure
 maximum compatibility. If you want to reproduce the exact software dependencies we used for our
-experiments, refer to `pip.lock`.
+experiments, refer to `uv.lock`.
 
 ### Installation
 
