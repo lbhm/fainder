@@ -708,6 +708,8 @@ def query_index_single(
                 reference >= bins[-1] and "l" in comparison
             ):
                 cluster_result = pctl_index[i][pctl_mode][1][:, 0]
+            else:
+                cluster_result = np.array([], dtype=np.uint32)
 
         if id_filter is None:
             result.update(cluster_result)
