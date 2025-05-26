@@ -51,7 +51,7 @@ def run_exact_np(
 
     # Stage 3
     pscan_start = time.perf_counter()
-    pscan_result = query_hist_collection_np(query, hists, id_filter=set(np.setdiff1d(recall_result, precision_result)))
+    pscan_result = query_hist_collection_np(query, hists, id_filter=set(np.setdiff1d(recall_result, precision_result, assume_unique=True)))
     logger.debug(f"profile-scan took {time.perf_counter() - pscan_start:.5f}s")
     result = np.union1d(pscan_result, precision_result)
 

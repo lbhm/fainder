@@ -717,10 +717,8 @@ def query_index_single_np(query: PercentileQuery,
                 filtered_result = cluster_result[np.isin(cluster_result, id_filter, assume_unique=True)]
                 # Append the filtered result to the list
                 cluster_results.append(filtered_result)
-            else:
-                cluster_results.append(cluster_result)
 
-    return np.concatenate(cluster_results) if cluster_results else np.array([], dtype=np.uint32)
+    return np.concatenate(cluster_results, axis=None) if cluster_results else np.array([], dtype=np.uint32)
 
 
 def query_hist_collection_np(
