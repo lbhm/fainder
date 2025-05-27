@@ -12,7 +12,7 @@ from fainder.typing import PercentileIndex as PctlIndex
 from fainder.typing import PercentileQuery as PctlQuery
 
 
-def run_approx_np(
+def run_approx(
     fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
     query: PctlQuery,
     index_mode: Literal["precision", "recall"] = "recall",
@@ -25,7 +25,7 @@ def run_approx_np(
     return result, end - start
 
 
-def run_exact_np(
+def run_exact(
     fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
     hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     query: PctlQuery,
