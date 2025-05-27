@@ -17,7 +17,7 @@ def run_approx(
     query: PctlQuery,
     index_mode: Literal["precision", "recall"] = "recall",
     id_filter: ArrayLike | None = None,
-) -> tuple[set[np.uint32], float]:
+) -> tuple[NDArray[np.uint32], float]:
     start = time.perf_counter()
     result = query_index_single(query, *fainder_index, index_mode=index_mode, id_filter=id_filter)
     end = time.perf_counter()
@@ -30,7 +30,7 @@ def run_exact(
     hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     query: PctlQuery,
     id_filter: ArrayLike | None = None,
-) -> tuple[set[np.uint32], float]:
+) -> tuple[NDArray[np.uint32], float]:
     start = time.perf_counter()
 
     # Stage 1
@@ -49,9 +49,13 @@ def run_exact(
 
     # Stage 3
     pscan_start = time.perf_counter()
-    pscan_result = query_hist_collection(query, hists, id_filter=recall_result - precision_result)
+    pscan_result = query_hist_collection(
+        query,
+        hists,
+        id_filter=set(np.setdiff1d(recall_result, precision_result, assume_unique=True)),
+    )
     logger.debug(f"profile-scan took {time.perf_counter() - pscan_start:.5f}s")
-    result = pscan_result | precision_result
+    result = np.union1d(pscan_result, precision_result)
 
     end = time.perf_counter()
     return result, end - start

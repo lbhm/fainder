@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 import numpy as np
 from loguru import logger
-from numpy.typing import ArrayLike
+from numpy.typing import ArrayLike, NDArray
 from scipy.interpolate import CubicSpline
 
 from fainder.preprocessing.percentile_index import load_shm_index
@@ -664,12 +664,10 @@ def query_index_single(
     cluster_bins: list[F64Array],
     index_mode: Literal["precision", "recall"],
     id_filter: ArrayLike | None = None,
-) -> set[np.uint32]:
+) -> NDArray[np.uint32]:
     percentile, comparison, reference = query
     index_type = "rebinning" if len(pctl_index[0]) == 1 else "conversion"
     dtype = pctl_index[0][0][0].dtype
-
-    result: set[np.uint32] = set()
 
     if "g" in comparison:
         # We can only run <(=) with our cumsum index so we have to reqrite >(=) queries
@@ -685,6 +683,7 @@ def query_index_single(
         if index_type == "conversion":
             pctl_mode = 1
 
+    cluster_results: list[NDArray[np.uint32]] = []
     for i, bins in enumerate(cluster_bins):
         if bins[0] <= reference <= bins[-1]:
             bin_index = (
@@ -712,11 +711,22 @@ def query_index_single(
                 cluster_result = np.array([], dtype=np.uint32)
 
         if id_filter is None:
-            result.update(cluster_result)
+            cluster_results.append(cluster_result)
         else:
-            result.update(cluster_result[np.isin(cluster_result, id_filter, assume_unique=True)])
+            # Check if the cluster result is empty before filtering
+            if cluster_result.size > 0:
+                # Use np.isin to filter the cluster result based on id_filter
+                filtered_result = cluster_result[
+                    np.isin(cluster_result, id_filter, assume_unique=True)
+                ]
+                # Append the filtered result to the list
+                cluster_results.append(filtered_result)
 
-    return result
+    return (
+        np.concatenate(cluster_results, axis=None)
+        if cluster_results
+        else np.array([], dtype=np.uint32)
+    )
 
 
 def query_hist_collection(
@@ -724,17 +734,23 @@ def query_hist_collection(
     hists: Sequence[tuple[int | np.integer[Any], Histogram]],
     density: bool = True,
     id_filter: Container[int | np.integer[Any]] | None = None,
-) -> set[np.uint32]:
+) -> NDArray[np.uint32]:
     if id_filter is None:
-        return {
+        return np.fromiter(
+            (
+                np.uint32(id_)
+                for id_, hist in hists
+                if query_histogram(hist, estimation_mode="over", query=query, density=density)
+            ),
+            dtype=np.uint32,
+        )
+
+    return np.fromiter(
+        (
             np.uint32(id_)
             for id_, hist in hists
-            if query_histogram(hist, estimation_mode="over", query=query, density=density)
-        }
-
-    return {
-        np.uint32(id_)
-        for id_, hist in hists
-        if id_ in id_filter
-        and query_histogram(hist, estimation_mode="over", query=query, density=density)
-    }
+            if id_ in id_filter
+            and query_histogram(hist, estimation_mode="over", query=query, density=density)
+        ),
+        dtype=np.uint32,
+    )
