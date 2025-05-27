@@ -38,8 +38,9 @@ analysis = [
     "ipywidgets~=8.1",
     "nbformat~=5.9",
 ]
+
+[dependency-groups]
 dev = [
-    "fainder[analysis]",
     "mypy~=1.13",
     "pandas-stubs~=2.1",
     "pre-commit~=4.0",
