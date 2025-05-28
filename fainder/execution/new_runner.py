@@ -67,11 +67,10 @@ def run_exact(
     return result, end - start
 
 
-def run_exact_np_parallel(
+def run_exact_parallel(
     fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
     query: PctlQuery,
     parallel_processor: ParallelHistogramProcessor,
-    id_filter: ArrayLike | None = None,
 ) -> tuple[NDArray[np.uint32], float]:
     """Run an exact percentile query using parallel processing.
 
@@ -81,7 +80,6 @@ def run_exact_np_parallel(
         fainder_index: The index to query
         query: The percentile query to run
         parallel_processor: The initialized ParallelHistogramProcessor instance
-        id_filter: Optional filter to restrict which histograms are considered
 
     Returns:
         A tuple of (result array, runtime in seconds)
@@ -97,16 +95,12 @@ def run_exact_np_parallel(
     precision_result = query_index_single(query, *fainder_index, index_mode="precision")
 
     # Stage 3: Process histograms in parallel for the candidates
-    # This is the critical section that needs thread synchronization
     pscan_start = time.perf_counter()
     candidates = np.setdiff1d(recall_result, precision_result)
 
     if candidates.size > 0:
         # Synchronize access to the parallel processor
         with lock:
-            if id_filter is not None:
-                # If an id_filter is provided, we need to intersect it with the candidates
-                candidates = np.intersect1d(candidates, id_filter)
             pscan_result = parallel_processor.query(query, id_filter=candidates)
     else:
         pscan_result = np.array([], dtype=np.uint32)
