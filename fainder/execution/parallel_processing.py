@@ -2,9 +2,10 @@
 Module for parallel processing of histogram queries.
 """
 
+import atexit
 import multiprocessing as mp
 import os
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -20,53 +21,46 @@ class WorkerState:
     """Encapsulates the state for a worker process."""
 
     def __init__(self) -> None:
-        self.hists: list[tuple[int | np.integer[Any], Histogram]] | None = None
+        self.hists: dict[int | np.integer[Any], Histogram] = {}  # Loaded histograms
         self.worker_id: int | None = None
-        self.contiguous: bool = False  # Whether to use contiguous chunks
-        self.id_map: dict[int | np.integer[Any], int] = {}  # for round-robin distribution
-        self.start_idx: int | np.integer[Any] = 0  # Start index for contiguous chunks
-        self.end_idx: int | np.integer[Any] = 0  # End index for contiguous chunks
 
 
 # Process-local worker state
 _worker_state: WorkerState = WorkerState()
 
 
-def init_worker(worker_id: int, histogram_path: str | Path, contiguous: bool) -> None:
+def init_worker(worker_id: int, histogram_paths: list[Path]) -> None:
     """Initialize the worker process with its chunk of histograms.
 
     Args:
         worker_id: The ID of this worker process
-        histogram_path: Path to the histogram file or base directory for split files
+        histogram_paths: List of paths to histogram files to load
     """
     global _worker_state
     _worker_state = WorkerState()  # Reset worker state for this process
     _worker_state.worker_id = worker_id
-    _worker_state.contiguous = contiguous
 
-    _worker_state.hists = load_input(histogram_path, "histograms")
-    if _worker_state.hists is None:
-        logger.error(f"Worker {worker_id} failed to load histograms from {histogram_path}")
-        return
+    # Load histograms from all assigned chunks
+    for histogram_path in histogram_paths:
+        hists: list[tuple[int | np.integer[Any], Histogram]] = load_input(
+            histogram_path, "histograms"
+        )
+        if hists is None:
+            logger.error(f"Worker {worker_id} failed to load histograms from {histogram_path}")
+            continue
 
-    if contiguous:
-        _worker_state.start_idx = _worker_state.hists[0][
-            0
-        ]  # Use the first histogram ID as start index
-        _worker_state.end_idx = _worker_state.hists[-1][
-            0
-        ]  # Use the last histogram ID as end index
-    else:
-        # Build ID mapping
-        _worker_state.id_map = {}
-        for i, (hist_id, _) in enumerate(_worker_state.hists):
-            _worker_state.id_map[hist_id] = i
+        # Merge into worker's histogram dictionary
+        for id_, hist in hists:
+            _worker_state.hists[id_] = hist
 
-        logger.debug(f"Worker {worker_id} initialized with {len(_worker_state.hists)} histograms")
+    logger.info(
+        f"Worker {worker_id} initialized with {len(_worker_state.hists)}"
+        f" histograms from {len(histogram_paths)} chunks"
+    )
 
 
 def process_hist_chunk(
-    query: PercentileQuery, id_filter: NDArray[np.uint32] | None = None
+    query: PercentileQuery, id_filter: NDArray[np.uint32]
 ) -> NDArray[np.uint32]:
     """Process the chunk of histograms assigned to this worker."""
     global _worker_state
@@ -76,23 +70,10 @@ def process_hist_chunk(
         logger.error("Worker called without being initialized!")
         return np.array([], dtype=np.uint32)
 
-    # Filter histograms by ID if needed
-    filtered_hists = _worker_state.hists
-    if id_filter is not None:
-        filtered_hists = []
-        for id_f in id_filter:
-            if _worker_state.contiguous:
-                if _worker_state.start_idx <= id_f <= _worker_state.end_idx:
-                    filtered_hists.append(_worker_state.hists[id_f - _worker_state.start_idx])
-            else:
-                if id_f in _worker_state.id_map:
-                    filtered_hists.append(_worker_state.hists[_worker_state.id_map[id_f]])
-        if not filtered_hists:
-            logger.debug(
-                f"Worker {_worker_state.worker_id} found "
-                f"no histograms matching the filter {id_filter}"
-            )
-            return np.array([], dtype=np.uint32)
+    # Filter histograms by ID
+    filtered_hists: list[tuple[int | np.integer[Any], Histogram]] = [
+        (id_f, _worker_state.hists[id_f]) for id_f in id_filter if id_f in _worker_state.hists
+    ]
 
     # Process the histograms
     return np.fromiter(
@@ -147,19 +128,24 @@ class ParallelHistogramProcessor:
     """Class for parallel processing of histogram queries."""
 
     def __init__(
-        self, histogram_path: str | Path, num_workers: int | None = None, contiguous: bool = False
+        self,
+        histogram_path: str | Path,
+        num_workers: int | None = None,
+        num_chunks: int | None = None,
+        contiguous: bool = False,
     ) -> None:
         """Initialize the parallel processor with histograms.
 
         Args:
             histogram_path: Path to the histogram file or base file path for split files
             num_workers: Number of worker processes to use. If None, uses CPU count - 1.
+            num_chunks: Number of chunks to split the histograms into. If None, uses num_workers.
             contiguous: If True, use contiguous chunks of histograms;
                         if False, distribute in round-robin fashion
         """
         self.num_workers = (num_workers or os.cpu_count() or 2) - 1
         self.histogram_path = histogram_path
-        self.contiguous = contiguous
+        self.num_chunks = num_chunks or self.num_workers
 
         parent_path = (
             Path(histogram_path).parent
@@ -167,77 +153,83 @@ class ParallelHistogramProcessor:
             else histogram_path.parent
         )
 
-        # Store initialization parameters
-        self._init_params = []
-        for i in range(self.num_workers):
-            if contiguous:
-                hist_path = (
-                    parent_path
-                    / f"histograms_split_contiguous_{self.num_workers + 1}"
-                    / f"histograms_{i}.zst"
-                )
-            else:
-                hist_path = (
-                    parent_path
-                    / f"histograms_split_round_robin_{self.num_workers + 1}"
-                    / f"histograms_{i}.zst"
-                )
-            self._init_params.append((i, hist_path))
+        # Distribute chunks among workers
+        chunks_per_worker = self.num_chunks // self.num_workers
+        remaining_chunks = self.num_chunks % self.num_workers
 
-        # Initialize executor with fork start method to avoid copying objects in memory
-        mp_context = mp.get_context("fork")
+        # Store initialization parameters with multiple chunks per worker
+        self._init_params = []
+        chunk_idx = 0
+
+        for worker_id in range(self.num_workers):
+            # Calculate how many chunks this worker gets
+            worker_chunk_count = chunks_per_worker + (1 if worker_id < remaining_chunks else 0)
+
+            # Collect histogram paths for this worker
+            worker_hist_paths = []
+            for _ in range(worker_chunk_count):
+                if contiguous:
+                    hist_path = (
+                        parent_path
+                        / f"histograms_split_contiguous_{self.num_chunks}"
+                        / f"histograms_{chunk_idx}.zst"
+                    )
+                else:
+                    hist_path = (
+                        parent_path
+                        / f"histograms_split_round_robin_{self.num_chunks}"
+                        / f"histograms_{chunk_idx}.zst"
+                    )
+                worker_hist_paths.append(hist_path)
+                chunk_idx += 1
+
+            self._init_params.append((worker_id, worker_hist_paths))
+
+        # Initialize executor with fork server method to avoid copying objects in memory
+        mp_context = mp.get_context("forkserver")
         self.executor = ProcessPoolExecutor(
             max_workers=self.num_workers,
-            initializer=self._init_worker_wrapper,
-            initargs=(),
             mp_context=mp_context,
         )
+
+        # Register shutdown handler
+        atexit.register(self.shutdown)
 
         logger.info(f"Initializing {self.num_workers} workers for parallel histogram processing")
 
         # Initialize workers immediately
         futures = []
-        for worker_id, hist_path in self._init_params:
-            future = self.executor.submit(init_worker, worker_id, hist_path, self.contiguous)
+        for worker_id, hist_paths in self._init_params:
+            future = self.executor.submit(init_worker, worker_id, hist_paths)
             futures.append(future)
 
         # Wait for all workers to initialize
-        for future in futures:
+        for future in as_completed(futures):
             future.result()
 
         logger.info(f"Parallel histogram processor initialized with {self.num_workers} workers")
 
-    def _init_worker_wrapper(self) -> None:
-        """Wrapper to initialize worker with proper parameters."""
-        # This will be called once per worker process
+    def shutdown(self) -> None:
+        """Shutdown the executor."""
+        if hasattr(self, "executor"):
+            self.executor.shutdown(wait=True)
+            logger.debug("ParallelHistogramProcessor shutdown complete")
 
-    def query(
-        self, query: PercentileQuery, id_filter: NDArray[np.uint32] | None = None
-    ) -> NDArray[np.uint32]:
+    def query(self, query: PercentileQuery, id_filter: NDArray[np.uint32]) -> NDArray[np.uint32]:
         """Query histograms in parallel."""
         futures = [
             self.executor.submit(process_hist_chunk, query, id_filter)
             for _ in range(self.num_workers)
         ]
 
-        # Collect results from all workers
-        results = [future.result() for future in futures]
+        combined_result = np.array([], dtype=np.uint32)
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                combined_result = np.concatenate((combined_result, result))
+            except Exception as e:
+                logger.error(f"Worker failed with exception: {e}")
+                continue
 
-        # Combine results from all workers
-        combined_result = (
-            np.concatenate([r for r in results if r.size > 0], axis=None)
-            if results
-            else np.array([], dtype=np.uint32)
-        )
-        logger.info(f"Combined result size: {combined_result.size} from {len(results)} workers")
+        logger.info(f"Combined result size: {combined_result.size} from {len(futures)} workers")
         return combined_result
-
-    def shutdown(self) -> None:
-        """Shutdown the executor."""
-        if hasattr(self, "executor"):
-            self.executor.shutdown(wait=True)
-
-    def __del__(self) -> None:
-        """Ensure the executor is properly shutdown on deletion."""
-        self.shutdown()
-        logger.debug("ParallelHistogramProcessor shutdown complete")
