@@ -6,6 +6,7 @@ import atexit
 import multiprocessing as mp
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from enum import StrEnum, auto
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,11 @@ from numpy.typing import NDArray
 
 from fainder.typing import Histogram, PercentileQuery
 from fainder.utils import load_input
+
+
+class FainderChunkLayout(StrEnum):
+    CONTIGUOUS = auto()
+    ROUND_ROBIN = auto()
 
 
 class WorkerState:
@@ -87,7 +93,9 @@ def process_hist_chunk(
 
 
 def partition_histogram_ids(
-    hist_ids: list[int], num_partitions: int, contiguous: bool = False
+    hist_ids: list[int],
+    num_partitions: int,
+    chunk_layout: FainderChunkLayout = FainderChunkLayout.CONTIGUOUS,
 ) -> dict[int, set[int]]:
     """Partition histogram IDs into roughly equal chunks.
 
@@ -101,7 +109,7 @@ def partition_histogram_ids(
     """
     chunks: dict[int, set[int]] = {i: set() for i in range(num_partitions)}
 
-    if contiguous:
+    if chunk_layout == FainderChunkLayout.CONTIGUOUS:
         # Original contiguous chunking strategy
         chunk_size = len(hist_ids) // num_partitions
         remainder = len(hist_ids) % num_partitions
@@ -111,7 +119,7 @@ def partition_histogram_ids(
             end_idx = start_idx + chunk_size + (1 if i < remainder else 0)
             chunks[i] = set(hist_ids[start_idx:end_idx])
             start_idx = end_idx
-    else:
+    elif chunk_layout == FainderChunkLayout.ROUND_ROBIN:
         # Round-robin distribution for more balanced workload
         current_partition = 0
         for hist_id in hist_ids:
@@ -120,6 +128,8 @@ def partition_histogram_ids(
                 current_partition = 0
             else:
                 current_partition += 1
+    else:
+        raise ValueError(f"Unsupported chunk layout: {chunk_layout}")
 
     return chunks
 
