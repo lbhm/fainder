@@ -85,30 +85,29 @@ def run_exact_parallel(
         A tuple of (result array, runtime in seconds)
     """
     lock = _processor_lock
+    # Synchronize access to the parallel processor
+    with lock:
+        start = time.perf_counter()
 
-    start = time.perf_counter()
+        # Stage 1: Get recall results
+        recall_result = query_index_single(query, *fainder_index, index_mode="recall")
 
-    # Stage 1: Get recall results
-    recall_result = query_index_single(query, *fainder_index, index_mode="recall")
+        # Stage 2: Get precision results
+        precision_result = query_index_single(query, *fainder_index, index_mode="precision")
 
-    # Stage 2: Get precision results
-    precision_result = query_index_single(query, *fainder_index, index_mode="precision")
+        # Stage 3: Process histograms in parallel for the candidates
+        pscan_start = time.perf_counter()
+        candidates = np.setdiff1d(recall_result, precision_result)
 
-    # Stage 3: Process histograms in parallel for the candidates
-    pscan_start = time.perf_counter()
-    candidates = np.setdiff1d(recall_result, precision_result)
-
-    if candidates.size > 0:
-        # Synchronize access to the parallel processor
-        with lock:
+        if candidates.size > 0:
             pscan_result = parallel_processor.query(query, id_filter=candidates)
-    else:
-        pscan_result = np.array([], dtype=np.uint32)
+        else:
+            pscan_result = np.array([], dtype=np.uint32)
 
-    logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
+        logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
 
-    # Combine results
-    result = np.union1d(pscan_result, precision_result)
+        # Combine results
+        result = np.union1d(pscan_result, precision_result)
 
-    end = time.perf_counter()
-    return result, end - start
+        end = time.perf_counter()
+        return result, end - start

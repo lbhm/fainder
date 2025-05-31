@@ -69,7 +69,7 @@ def process_hist_chunk(
     query: PercentileQuery, id_filter: NDArray[np.uint32]
 ) -> NDArray[np.uint32]:
     """Process the chunk of histograms assigned to this worker."""
-    global _worker_state
+    global _worker_state  # noqa: PLW0602
     from fainder.execution.percentile_queries import query_histogram
 
     if _worker_state.hists is None:
@@ -142,7 +142,7 @@ class ParallelHistogramProcessor:
         histogram_path: str | Path,
         num_workers: int | None = None,
         num_chunks: int | None = None,
-        contiguous: bool = False,
+        chunk_layout: FainderChunkLayout = FainderChunkLayout.CONTIGUOUS,
     ) -> None:
         """Initialize the parallel processor with histograms.
 
@@ -178,18 +178,20 @@ class ParallelHistogramProcessor:
             # Collect histogram paths for this worker
             worker_hist_paths = []
             for _ in range(worker_chunk_count):
-                if contiguous:
+                if chunk_layout == FainderChunkLayout.CONTIGUOUS:
                     hist_path = (
                         parent_path
                         / f"histograms_split_contiguous_{self.num_chunks}"
                         / f"histograms_{chunk_idx}.zst"
                     )
-                else:
+                elif chunk_layout == FainderChunkLayout.ROUND_ROBIN:
                     hist_path = (
                         parent_path
                         / f"histograms_split_round_robin_{self.num_chunks}"
                         / f"histograms_{chunk_idx}.zst"
                     )
+                else:
+                    raise ValueError(f"Unsupported chunk layout: {chunk_layout}")
                 worker_hist_paths.append(hist_path)
                 chunk_idx += 1
 
