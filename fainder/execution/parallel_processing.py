@@ -102,7 +102,7 @@ def partition_histogram_ids(
     Args:
         hist_ids: List of histogram IDs to partition
         num_partitions: Number of partitions to create
-        contiguous: If True, use contiguous chunks; if False, distribute in round-robin fashion
+        chunk_layout: Layout strategy for partitioning
 
     Returns:
         Dictionary mapping partition ID to list of histogram IDs
@@ -124,10 +124,7 @@ def partition_histogram_ids(
         current_partition = 0
         for hist_id in hist_ids:
             chunks[current_partition].add(hist_id)
-            if current_partition == num_partitions - 1:
-                current_partition = 0
-            else:
-                current_partition += 1
+            current_partition = (current_partition + 1) % num_partitions
     else:
         raise ValueError(f"Unsupported chunk layout: {chunk_layout}")
 
@@ -150,8 +147,7 @@ class ParallelHistogramProcessor:
             histogram_path: Path to the histogram file or base file path for split files
             num_workers: Number of worker processes to use. Defaults to number of CPU cores - 1.
             num_chunks: Number of chunks to split the histograms into. If None, uses num_workers.
-            contiguous: If True, use contiguous chunks of histograms;
-                        if False, distribute in round-robin fashion
+            chunk_layout: Layout strategy for partitioning histograms into chunks.
         """
         self.num_workers = num_workers
         self.histogram_path = histogram_path
@@ -234,14 +230,17 @@ class ParallelHistogramProcessor:
             for _ in range(self.num_workers)
         ]
 
-        combined_result = np.array([], dtype=np.uint32)
+        combined_results = []
         for future in as_completed(futures):
             try:
                 result = future.result()
-                combined_result = np.concatenate((combined_result, result))
+                combined_results.append(result)
             except Exception as e:
                 logger.error(f"Worker failed with exception: {e}")
                 continue
-
+        # Combine results from all workers
+        combined_result = (
+            np.concatenate(combined_results) if combined_results else np.array([], dtype=np.uint32)
+        )
         logger.info(f"Combined result size: {combined_result.size} from {len(futures)} workers")
         return combined_result
