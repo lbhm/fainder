@@ -1,4 +1,3 @@
-import threading
 import time
 from collections.abc import Sequence
 from typing import Any, Literal
@@ -12,9 +11,6 @@ from fainder.execution.percentile_queries import query_hist_collection, query_in
 from fainder.typing import Histogram
 from fainder.typing import PercentileIndex as PctlIndex
 from fainder.typing import PercentileQuery as PctlQuery
-
-# Global lock for thread-safe access to ParallelHistogramProcessor
-_processor_lock = threading.RLock()
 
 
 def run_approx(
@@ -71,6 +67,7 @@ def run_exact_parallel(
     fainder_index: tuple[list[PctlIndex], list[NDArray[np.float64]]],
     query: PctlQuery,
     parallel_processor: ParallelHistogramProcessor,
+    id_filter: ArrayLike | None = None,
 ) -> tuple[NDArray[np.uint32], float]:
     """Run an exact percentile query using parallel processing.
 
@@ -84,30 +81,32 @@ def run_exact_parallel(
     Returns:
         A tuple of (result array, runtime in seconds)
     """
-    lock = _processor_lock
-    # Synchronize access to the parallel processor
-    with lock:
-        start = time.perf_counter()
 
-        # Stage 1: Get recall results
-        recall_result = query_index_single(query, *fainder_index, index_mode="recall")
+    start = time.perf_counter()
 
-        # Stage 2: Get precision results
-        precision_result = query_index_single(query, *fainder_index, index_mode="precision")
+    # Stage 1: Get recall results
+    recall_result = query_index_single(query, *fainder_index, index_mode="recall")
 
-        # Stage 3: Process histograms in parallel for the candidates
-        pscan_start = time.perf_counter()
-        candidates = np.setdiff1d(recall_result, precision_result)
+    # Stage 2: Get precision results
+    precision_result = query_index_single(query, *fainder_index, index_mode="precision")
 
-        if candidates.size > 0:
-            pscan_result = parallel_processor.query(query, id_filter=candidates)
-        else:
-            pscan_result = np.array([], dtype=np.uint32)
+    # Stage 3: Process histograms in parallel for the candidates
+    pscan_start = time.perf_counter()
+    candidates = np.setdiff1d(recall_result, precision_result)
 
-        logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
+    if candidates.size > 0:
+        if id_filter is not None:
+            candidates = np.intersect1d(candidates, id_filter, assume_unique=True)
+        pscan_result = parallel_processor.query(query, id_filter=candidates)
+    else:
+        pscan_result = np.array([], dtype=np.uint32)
 
-        # Combine results
-        result = np.union1d(pscan_result, precision_result)
+    logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
 
-        end = time.perf_counter()
-        return result, end - start
+    # Combine results
+    result = np.union1d(pscan_result, precision_result)
+    if id_filter is not None:
+        result = np.intersect1d(result, id_filter, assume_unique=True)
+
+    end = time.perf_counter()
+    return result, end - start

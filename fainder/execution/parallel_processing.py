@@ -140,7 +140,7 @@ class ParallelHistogramProcessor:
     def __init__(
         self,
         histogram_path: str | Path,
-        num_workers: int | None = None,
+        num_workers: int = (os.cpu_count() or 2) - 1,
         num_chunks: int | None = None,
         chunk_layout: FainderChunkLayout = FainderChunkLayout.CONTIGUOUS,
     ) -> None:
@@ -148,12 +148,12 @@ class ParallelHistogramProcessor:
 
         Args:
             histogram_path: Path to the histogram file or base file path for split files
-            num_workers: Number of worker processes to use. If None, uses CPU count - 1.
+            num_workers: Number of worker processes to use. Defaults to number of CPU cores - 1.
             num_chunks: Number of chunks to split the histograms into. If None, uses num_workers.
             contiguous: If True, use contiguous chunks of histograms;
                         if False, distribute in round-robin fashion
         """
-        self.num_workers = (num_workers or os.cpu_count() or 2) - 1
+        self.num_workers = num_workers
         self.histogram_path = histogram_path
         self.num_chunks = num_chunks or self.num_workers
 
