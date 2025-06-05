@@ -94,19 +94,20 @@ def run_exact_parallel(
     pscan_start = time.perf_counter()
     candidates = np.setdiff1d(recall_result, precision_result)
 
-    if candidates.size > 0:
-        if id_filter is not None:
-            candidates = np.intersect1d(candidates, id_filter, assume_unique=True)
-        pscan_result = parallel_processor.query(query, id_filter=candidates)
-    else:
+    if id_filter is not None:
+        candidates = np.intersect1d(candidates, id_filter, assume_unique=True)
+    if candidates.size <= 0:
         pscan_result = np.array([], dtype=np.uint32)
+    else:
+        pscan_result = parallel_processor.query(query, id_filter=candidates)
 
     logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
 
     # Combine results
-    result = np.union1d(pscan_result, precision_result)
     if id_filter is not None:
-        result = np.intersect1d(result, id_filter, assume_unique=True)
+        precision_result = np.intersect1d(precision_result, id_filter, assume_unique=True)
+
+    result = np.union1d(pscan_result, precision_result)
 
     end = time.perf_counter()
     return result, end - start
