@@ -82,14 +82,17 @@ def run_exact_parallel(
     Returns:
         A tuple of (result array, runtime in seconds)
     """
-
     start = time.perf_counter()
 
     # Stage 1: Get recall results
-    recall_result = query_index_single(query, *fainder_index, index_mode="recall", id_filter=id_filter)
+    recall_result = query_index_single(
+        query, *fainder_index, index_mode="recall", id_filter=id_filter
+    )
 
     # Stage 2: Get precision results
-    precision_result = query_index_single(query, *fainder_index, index_mode="precision", id_filter=id_filter)
+    precision_result = query_index_single(
+        query, *fainder_index, index_mode="precision", id_filter=id_filter
+    )
 
     # Stage 3: Process histograms in parallel for the candidates
     pscan_start = time.perf_counter()
