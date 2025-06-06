@@ -107,7 +107,7 @@ def compute_histogram(
                     if bin_range:
                         bins = min(
                             values.nunique() - 1,
-                            rng.integers(low=bin_range[0], high=bin_range[1] + 1),
+                            int(rng.integers(low=bin_range[0], high=bin_range[1] + 1)),
                         )
                         bin_counter += bins
                     else:
