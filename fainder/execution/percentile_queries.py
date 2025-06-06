@@ -710,22 +710,17 @@ def query_index_single(
             else:
                 cluster_result = np.array([], dtype=np.uint32)
 
-        if id_filter is None:
+        if cluster_result.size > 0:
             cluster_results.append(cluster_result)
-        else:
-            # Check if the cluster result is empty before filtering
-            if cluster_result.size > 0:
-                # Use np.intersect1d to filter the results based on id_filter
-                filtered_result = np.intersect1d(
-                    cluster_result, id_filter, assume_unique=True,
-                )
-                cluster_results.append(filtered_result)
 
-    return (
-        np.concatenate(cluster_results, axis=None)
-        if cluster_results
-        else np.array([], dtype=np.uint32)
-    )
+    if len(cluster_results) == 0:
+        return np.array([], dtype=np.uint32)
+
+    concat_cluster_results = np.concatenate(cluster_results, axis=None)
+    if id_filter is not None:
+        return np.intersect1d(concat_cluster_results, id_filter, assume_unique=True)
+
+    return concat_cluster_results
 
 
 def query_hist_collection(
