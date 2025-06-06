@@ -77,6 +77,7 @@ def run_exact_parallel(
         fainder_index: The index to query
         query: The percentile query to run
         parallel_processor: The initialized ParallelHistogramProcessor instance
+        id_filter: Optional filter for IDs to limit the candidates
 
     Returns:
         A tuple of (result array, runtime in seconds)
@@ -85,27 +86,21 @@ def run_exact_parallel(
     start = time.perf_counter()
 
     # Stage 1: Get recall results
-    recall_result = query_index_single(query, *fainder_index, index_mode="recall")
+    recall_result = query_index_single(query, *fainder_index, index_mode="recall", id_filter=id_filter)
 
     # Stage 2: Get precision results
-    precision_result = query_index_single(query, *fainder_index, index_mode="precision")
+    precision_result = query_index_single(query, *fainder_index, index_mode="precision", id_filter=id_filter)
 
     # Stage 3: Process histograms in parallel for the candidates
     pscan_start = time.perf_counter()
     candidates = np.setdiff1d(recall_result, precision_result)
 
-    if id_filter is not None:
-        candidates = np.intersect1d(candidates, id_filter, assume_unique=True)
     if candidates.size <= 0:
         pscan_result = np.array([], dtype=np.uint32)
     else:
         pscan_result = parallel_processor.query(query, id_filter=candidates)
 
     logger.debug(f"Parallel profile-scan took {time.perf_counter() - pscan_start:.5f}s")
-
-    # Combine results
-    if id_filter is not None:
-        precision_result = np.intersect1d(precision_result, id_filter, assume_unique=True)
 
     result = np.union1d(pscan_result, precision_result)
 

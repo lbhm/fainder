@@ -210,7 +210,7 @@ class ParallelHistogramProcessor:
         for worker_id, hist_paths in self._init_params:
             future = self.executor.submit(init_worker, worker_id, hist_paths)
             futures.append(future)
-
+        
         # Wait for all workers to initialize
         for future in as_completed(futures):
             future.result()

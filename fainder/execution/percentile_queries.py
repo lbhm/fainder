@@ -715,11 +715,10 @@ def query_index_single(
         else:
             # Check if the cluster result is empty before filtering
             if cluster_result.size > 0:
-                # Use np.isin to filter the cluster result based on id_filter
-                filtered_result = cluster_result[
-                    np.isin(cluster_result, id_filter, assume_unique=True)
-                ]
-                # Append the filtered result to the list
+                # Use np.intersect1d to filter the results based on id_filter
+                filtered_result = np.intersect1d(
+                    cluster_result, id_filter, assume_unique=True,
+                )
                 cluster_results.append(filtered_result)
 
     return (
