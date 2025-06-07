@@ -1,11 +1,6 @@
-"""
-Module for parallel processing of histogram queries.
-"""
-
 import atexit
 import multiprocessing as mp
 import os
-import threading
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from enum import StrEnum, auto
 from pathlib import Path
@@ -15,6 +10,7 @@ import numpy as np
 from loguru import logger
 from numpy.typing import NDArray
 
+from fainder.execution.percentile_queries import query_histogram
 from fainder.typing import Histogram, PercentileQuery
 from fainder.utils import load_input
 
@@ -25,69 +21,49 @@ class FainderChunkLayout(StrEnum):
 
 
 class WorkerState:
-    """Encapsulates the state for a worker process."""
-
     def __init__(self) -> None:
-        self.hists: dict[int | np.integer[Any], Histogram] = {}  # Loaded histograms
+        self.hists: dict[int | np.integer[Any], Histogram] = {}
         self.worker_id: int | None = None
 
 
-# Process-local worker state
 _worker_state: WorkerState = WorkerState()
 
 
-def init_worker(worker_id: int, histogram_paths: list[Path]) -> None:
-    """Initialize the worker process with its chunk of histograms.
-
-    Args:
-        worker_id: The ID of this worker process
-        histogram_paths: List of paths to histogram files to load
-    """
+def init_worker(worker_id: int, histogram_paths: list[Path]) -> tuple[int, NDArray[np.uint32]]:
     global _worker_state
-    _worker_state = WorkerState()  # Reset worker state for this process
+    _worker_state = WorkerState()
     _worker_state.worker_id = worker_id
-
-    # Load histograms from all assigned chunks
+    hist_ids: list[int] = []
     for histogram_path in histogram_paths:
-        hists: list[tuple[int | np.integer[Any], Histogram]] = load_input(
-            histogram_path, "histograms"
-        )
+        hists = load_input(histogram_path, "histograms")
         if hists is None:
             logger.error(f"Worker {worker_id} failed to load histograms from {histogram_path}")
             continue
-
-        # Merge into worker's histogram dictionary
         for id_, hist in hists:
             _worker_state.hists[id_] = hist
+            hist_ids.append(id_)
 
-    logger.info(
-        f"Worker {worker_id} initialized with {len(_worker_state.hists)}"
-        f" histograms from {len(histogram_paths)} chunks"
-    )
+    logger.info(f"Worker {worker_id} initialized with {len(_worker_state.hists)} histograms")
+
+    return worker_id, np.array(hist_ids, dtype=np.uint32)
 
 
 def process_hist_chunk(
     query: PercentileQuery, id_filter: NDArray[np.uint32]
 ) -> NDArray[np.uint32]:
-    """Process the chunk of histograms assigned to this worker."""
-    global _worker_state  # noqa: PLW0602
-    from fainder.execution.percentile_queries import query_histogram
+    global _worker_state
 
     if _worker_state.hists is None:
         logger.error("Worker called without being initialized!")
         return np.array([], dtype=np.uint32)
 
-    # Filter histograms by ID
-    filtered_hists: list[tuple[int | np.integer[Any], Histogram]] = [
-        (id_f, _worker_state.hists[id_f]) for id_f in id_filter if id_f in _worker_state.hists
-    ]
-
-    # Process the histograms
     return np.fromiter(
         (
             np.uint32(id_)
-            for id_, hist in filtered_hists
-            if query_histogram(hist, estimation_mode="over", query=query, density=True)
+            for id_ in id_filter
+            if query_histogram(
+                _worker_state.hists[id_], estimation_mode="over", query=query, density=True
+            )
         ),
         dtype=np.uint32,
     )
@@ -133,8 +109,6 @@ def partition_histogram_ids(
 
 
 class ParallelHistogramProcessor:
-    """Thread-safe class for parallel processing of histogram queries."""
-
     def __init__(
         self,
         histogram_path: str | Path,
@@ -142,15 +116,6 @@ class ParallelHistogramProcessor:
         num_chunks: int | None = None,
         chunk_layout: FainderChunkLayout = FainderChunkLayout.CONTIGUOUS,
     ) -> None:
-        """Initialize the parallel processor with histograms.
-
-        Args:
-            histogram_path: Path to the histogram file or base file path for split files
-            num_workers: Number of worker processes to use. Defaults to number of CPU cores - 1.
-            num_chunks: Number of chunks to split the histograms into. If None, uses num_workers.
-            chunk_layout: Layout strategy for partitioning histograms into chunks.
-        """
-        self._lock = threading.Lock()
         self.num_workers = num_workers
         self.histogram_path = histogram_path
         self.num_chunks = num_chunks or self.num_workers
@@ -195,44 +160,36 @@ class ParallelHistogramProcessor:
 
             self._init_params.append((worker_id, worker_hist_paths))
 
-        # Initialize executor with fork server method to avoid copying objects in memory
         mp_context = mp.get_context("forkserver")
-        self.executor = ProcessPoolExecutor(
-            max_workers=self.num_workers,
-            mp_context=mp_context,
-        )
-
-        # Register shutdown handler
+        self.executor = ProcessPoolExecutor(max_workers=self.num_workers, mp_context=mp_context)
         atexit.register(self.shutdown)
 
-        logger.info(f"Initializing {self.num_workers} workers for parallel histogram processing")
+        logger.info(f"Initializing {self.num_workers} workers")
+        futures = [
+            self.executor.submit(init_worker, worker_id, hist_paths)
+            for worker_id, hist_paths in self._init_params
+        ]
 
-        # Initialize workers immediately
-        futures = []
-        for worker_id, hist_paths in self._init_params:
-            future = self.executor.submit(init_worker, worker_id, hist_paths)
-            futures.append(future)
-
-        # Wait for all workers to initialize
+        self.worker_partitions: dict[int, NDArray[np.uint32]] = {}
+        # Collect results from worker initialization
         for future in as_completed(futures):
-            future.result()
+            worker_id, hist_ids = future.result()
+            self.worker_partitions[worker_id] = hist_ids
 
-        logger.info(f"Parallel histogram processor initialized with {self.num_workers} workers")
+        logger.info("ParallelHistogramProcessor initialized")
 
     def shutdown(self) -> None:
-        """Shutdown the executor."""
-        with self._lock:
-            if hasattr(self, "executor"):
-                self.executor.shutdown(wait=True)
-                logger.debug("ParallelHistogramProcessor shutdown complete")
+        self.executor.shutdown(wait=True)
+        logger.debug("ParallelHistogramProcessor shutdown complete")
 
     def query(self, query: PercentileQuery, id_filter: NDArray[np.uint32]) -> NDArray[np.uint32]:
-        """Query histograms in parallel."""
-        with self._lock:
-            futures = [
-                self.executor.submit(process_hist_chunk, query, id_filter)
-                for _ in range(self.num_workers)
-            ]
+        # Partition using the worker partitions
+        partition_filter = [
+            np.intersect1d(id_filter, worker_ids) for worker_ids in self.worker_partitions.values()
+        ]
+        futures = [
+            self.executor.submit(process_hist_chunk, query, part) for part in partition_filter
+        ]
 
         combined_results = []
         for future in as_completed(futures):
@@ -241,10 +198,7 @@ class ParallelHistogramProcessor:
                 combined_results.append(result)
             except Exception as e:
                 logger.error(f"Worker failed with exception: {e}")
-                continue
-        # Combine results from all workers
-        combined_result = (
+
+        return (
             np.concatenate(combined_results) if combined_results else np.array([], dtype=np.uint32)
         )
-        logger.info(f"Combined result size: {combined_result.size} from {len(futures)} workers")
-        return combined_result
