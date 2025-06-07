@@ -51,6 +51,13 @@ def init_worker(worker_id: int, histogram_paths: list[Path]) -> tuple[int, NDArr
 def process_hist_chunk(
     query: PercentileQuery, id_filter: NDArray[np.uint32]
 ) -> NDArray[np.uint32]:
+    """Process a chunk of histograms in parallel.
+    Args:
+        query: The percentile query to execute
+        id_filter: Filter of histogram IDs to process in this chunk
+    Returns:
+        Array of histogram IDs that match the query
+    """
     global _worker_state
 
     if _worker_state.hists is None:
@@ -161,35 +168,39 @@ class ParallelHistogramProcessor:
             self._init_params.append((worker_id, worker_hist_paths))
 
         mp_context = mp.get_context("forkserver")
-        self.executor = ProcessPoolExecutor(max_workers=self.num_workers, mp_context=mp_context)
+        self.executors = [
+            ProcessPoolExecutor(max_workers=1, mp_context=mp_context, max_tasks_per_child=10000)
+            for _ in range(self.num_workers)
+        ]
         atexit.register(self.shutdown)
 
         logger.info(f"Initializing {self.num_workers} workers")
         futures = [
-            self.executor.submit(init_worker, worker_id, hist_paths)
-            for worker_id, hist_paths in self._init_params
+            executor.submit(init_worker, worker_id, hist_paths)
+            for executor, (worker_id, hist_paths) in zip(
+                self.executors, self._init_params, strict=False
+            )
         ]
-
         self.worker_partitions: dict[int, NDArray[np.uint32]] = {}
-        # Collect results from worker initialization
         for future in as_completed(futures):
             worker_id, hist_ids = future.result()
             self.worker_partitions[worker_id] = hist_ids
-
         logger.info("ParallelHistogramProcessor initialized")
 
     def shutdown(self) -> None:
-        self.executor.shutdown(wait=True)
+        for executor in self.executors:
+            executor.shutdown(wait=True)
         logger.debug("ParallelHistogramProcessor shutdown complete")
 
     def query(self, query: PercentileQuery, id_filter: NDArray[np.uint32]) -> NDArray[np.uint32]:
         # Partition using the worker partitions
-        partition_filter = [
-            np.intersect1d(id_filter, worker_ids) for worker_ids in self.worker_partitions.values()
-        ]
-        futures = [
-            self.executor.submit(process_hist_chunk, query, part) for part in partition_filter
-        ]
+        futures = []
+        for worker_id, worker_ids in self.worker_partitions.items():
+            # Create a future for each worker
+            partition_filter = np.intersect1d(id_filter, worker_ids)
+            futures.append(
+                self.executors[worker_id].submit(process_hist_chunk, query, partition_filter)
+            )
 
         combined_results = []
         for future in as_completed(futures):
