@@ -5,6 +5,7 @@ Module for parallel processing of histogram queries.
 import atexit
 import multiprocessing as mp
 import os
+import threading
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from enum import StrEnum, auto
 from pathlib import Path
@@ -132,7 +133,7 @@ def partition_histogram_ids(
 
 
 class ParallelHistogramProcessor:
-    """Class for parallel processing of histogram queries."""
+    """Thread-safe class for parallel processing of histogram queries."""
 
     def __init__(
         self,
@@ -149,6 +150,7 @@ class ParallelHistogramProcessor:
             num_chunks: Number of chunks to split the histograms into. If None, uses num_workers.
             chunk_layout: Layout strategy for partitioning histograms into chunks.
         """
+        self._lock = threading.Lock()
         self.num_workers = num_workers
         self.histogram_path = histogram_path
         self.num_chunks = num_chunks or self.num_workers
@@ -219,16 +221,18 @@ class ParallelHistogramProcessor:
 
     def shutdown(self) -> None:
         """Shutdown the executor."""
-        if hasattr(self, "executor"):
-            self.executor.shutdown(wait=True)
-            logger.debug("ParallelHistogramProcessor shutdown complete")
+        with self._lock:
+            if hasattr(self, "executor"):
+                self.executor.shutdown(wait=True)
+                logger.debug("ParallelHistogramProcessor shutdown complete")
 
     def query(self, query: PercentileQuery, id_filter: NDArray[np.uint32]) -> NDArray[np.uint32]:
         """Query histograms in parallel."""
-        futures = [
-            self.executor.submit(process_hist_chunk, query, id_filter)
-            for _ in range(self.num_workers)
-        ]
+        with self._lock:
+            futures = [
+                self.executor.submit(process_hist_chunk, query, id_filter)
+                for _ in range(self.num_workers)
+            ]
 
         combined_results = []
         for future in as_completed(futures):

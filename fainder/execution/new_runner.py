@@ -71,12 +71,14 @@ def run_exact_parallel(
 ) -> tuple[NDArray[np.uint32], float]:
     """Run an exact percentile query using parallel processing.
 
-    This function is thread-safe and can be called from multiple threads simultaneously.
+    This function is thread-safe. Multiple threads can safely use the same
+    ParallelHistogramProcessor instance thanks to internal locking that
+    protects executor access during query submission.
 
     Args:
         fainder_index: The index to query
         query: The percentile query to run
-        parallel_processor: The initialized ParallelHistogramProcessor instance
+        parallel_processor: The ParallelHistogramProcessor instance (thread-safe)
         id_filter: Optional filter for IDs to limit the candidates
 
     Returns:
