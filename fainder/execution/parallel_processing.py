@@ -1,6 +1,4 @@
-"""
-Module for parallel processing of histogram queries.
-"""
+"""Module for parallel processing of histogram queries."""
 
 import atexit
 import multiprocessing as mp
@@ -38,9 +36,11 @@ _worker_state: WorkerState = WorkerState()
 
 def init_worker(worker_id: int, histogram_paths: list[Path]) -> tuple[int, NDArray[np.uint32]]:
     """Initialize the worker process with its chunk of histograms.
+
     Args:
         worker_id: The ID of this worker process
         histogram_paths: List of paths to histogram files to load
+
     Returns:
         Tuple containing worker ID and array of histogram IDs loaded
     """
@@ -57,10 +57,10 @@ def init_worker(worker_id: int, histogram_paths: list[Path]) -> tuple[int, NDArr
         if hists is None:
             logger.error(f"Worker {worker_id} failed to load histograms from {histogram_path}")
             continue
+
         # Merge into worker's histogram dictionary
-        for id_, hist in hists:
-            _worker_state.hists[id_] = hist
-            hist_ids.append(id_)
+        _worker_state.hists.update(hists)
+        hist_ids.extend(id_ for id_, _ in hists)
 
     logger.info(f"Worker {worker_id} initialized with {len(_worker_state.hists)} histograms")
 
@@ -71,9 +71,11 @@ def process_hist_chunk(
     query: PercentileQuery, id_filter: NDArray[np.uint32]
 ) -> NDArray[np.uint32]:
     """Process a chunk of histograms in parallel.
+
     Args:
         query: The percentile query to execute
         id_filter: Filter of histogram IDs to process in this chunk
+
     Returns:
         Array of histogram IDs that match the query
     """
@@ -145,6 +147,7 @@ class ParallelHistogramProcessor:
         chunk_layout: FainderChunkLayout = FainderChunkLayout.CONTIGUOUS,
     ) -> None:
         """Initialize the parallel processor with histograms.
+
         Args:
             histogram_path: Path to the histogram file or base file path for split files
             num_workers: Number of worker processes to use. Defaults to number of CPU cores - 1.
