@@ -198,7 +198,7 @@ class ParallelHistogramProcessor:
         mp_context = mp.get_context("forkserver")
         # Initialize the process pool executors for each worker
         self.executors = [
-            ProcessPoolExecutor(max_workers=1, mp_context=mp_context, max_tasks_per_child=10000)
+            ProcessPoolExecutor(max_workers=1, mp_context=mp_context)
             for _ in range(self.num_workers)
         ]
         # Register shutdown handler
