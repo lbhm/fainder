@@ -247,7 +247,7 @@ class ParallelHistogramProcessor:
                     logger.error(f"Worker failed with exception: {e}")
         except TimeoutError:
             logger.error("timeout in ParallelProcessor")
-            return []
+            return np.array([], dtype=np.uint32)
 
         return (
             np.concatenate(combined_results) if combined_results else np.array([], dtype=np.uint32)
