@@ -238,12 +238,16 @@ class ParallelHistogramProcessor:
             )
 
         combined_results = []
-        for future in as_completed(futures):
-            try:
-                result = future.result()
-                combined_results.append(result)
-            except Exception as e:
-                logger.error(f"Worker failed with exception: {e}")
+        try:
+            for future in as_completed(futures, 300):
+                try:
+                    result = future.result()
+                    combined_results.append(result)
+                except Exception as e:
+                    logger.error(f"Worker failed with exception: {e}")
+        except TimeoutError:
+            logger.error("timeout in ParallelProcessor")
+            return np.array([], dtype=np.uint32)
 
         return (
             np.concatenate(combined_results) if combined_results else np.array([], dtype=np.uint32)
